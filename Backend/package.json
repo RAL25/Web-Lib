@@ -1,0 +1,42 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Backend do projeto",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "tsx watch src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RAL25/Web-Lib.git"
+  },
+  "keywords": [
+    "lib",
+    "library",
+    "web-library"
+  ],
+  "author": "Rian Leal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RAL25/Web-Lib/issues"
+  },
+  "homepage": "https://github.com/RAL25/Web-Lib#readme",
+  "dependencies": {
+    "@prisma/adapter-mariadb": "^7.7.0",
+    "@prisma/client": "^7.7.0",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "mysql2": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.6.0",
+    "nodemon": "^3.1.14",
+    "prisma": "^7.7.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}

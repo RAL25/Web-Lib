@@ -1,0 +1,7 @@
+Backend/node_modules
+Backend/BD
+Backend/dist
+Backend/.env
+Backend/generated/prisma
+
+Backend/generated/prisma
