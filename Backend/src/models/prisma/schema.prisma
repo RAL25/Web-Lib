@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Usuario {
+  id    Int       @id @default(autoincrement())
+  nome  String    @db.VarChar(50)
+  email String?   @db.VarChar(20) @unique
+  senha String?   @db.VarChar(20)
+  // tipo         String   // Para facilitar saber o tipo sem precisar de joins (opcional)
+
+  // Relações 1:1 (Opcionais no objeto, pois um usuário é apenas UM desses)
+  cliente      Cliente?
+  funcionario  Funcionario?
+  // adm          Adm?
+}
+
+model Cliente {
+  id        Int   @id
+  cpf       String?   @db.VarChar(11)   @unique
+  telefone  String?   @db.VarChar(11)
+
+  usuario   Usuario @relation(fields: [id], references: [id])
+  emprestimos  Emprestimo[]
+}
+
+model Funcionario {
+  id               Int @id
+  salario          Decimal @db.Decimal(10, 2)
+  data_contratacao DateTime
+
+  usuario Usuario @relation(fields:[id], references: [id])
+}
+
+enum LivroStatus{
+  Disponivel
+  Emprestado
+}
+
+model Livro {
+  id      Int @id @default(autoincrement())
+  titulo  String @db.VarChar(50)
+  autor   String? @db.VarChar(50)
+  status  LivroStatus @default(Disponivel)
+
+  emprestimos  Emprestimo[]
+}
+
+model Emprestimo{
+  id Int @id @default(autoincrement())
+  id_livro Int 
+  id_cliente Int 
+  data_saida DateTime
+  data_devolucao DateTime
+
+  livro Livro @relation(fields:[id_livro], references: [id])
+  cliente Cliente @relation(fields:[id_cliente], references: [id])
+}
+
+// Futuramente criar enum para roles (user, funcionario, adm)
