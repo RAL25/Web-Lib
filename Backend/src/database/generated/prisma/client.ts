@@ -46,3 +46,23 @@ export { Prisma }
  * 
  */
 export type Usuario = Prisma.UsuarioModel
+/**
+ * Model Cliente
+ * 
+ */
+export type Cliente = Prisma.ClienteModel
+/**
+ * Model Funcionario
+ * 
+ */
+export type Funcionario = Prisma.FuncionarioModel
+/**
+ * Model Livro
+ * 
+ */
+export type Livro = Prisma.LivroModel
+/**
+ * Model Emprestimo
+ * 
+ */
+export type Emprestimo = Prisma.EmprestimoModel

@@ -68,3 +68,6 @@ model Emprestimo{
 }
 
 // Futuramente criar enum para roles (user, funcionario, adm)
+
+// Rodar as migrations: npx prisma migrate dev --name init
+// Gerar arquivos com modelos das migrations: npx prisma generate

@@ -51,7 +51,11 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Usuario: 'Usuario'
+  Usuario: 'Usuario',
+  Cliente: 'Cliente',
+  Funcionario: 'Funcionario',
+  Livro: 'Livro',
+  Emprestimo: 'Emprestimo'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -80,12 +84,59 @@ export const UsuarioScalarFieldEnum = {
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
+export const ClienteScalarFieldEnum = {
+  id: 'id',
+  cpf: 'cpf',
+  telefone: 'telefone'
+} as const
+
+export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
+
+
+export const FuncionarioScalarFieldEnum = {
+  id: 'id',
+  salario: 'salario',
+  data_contratacao: 'data_contratacao'
+} as const
+
+export type FuncionarioScalarFieldEnum = (typeof FuncionarioScalarFieldEnum)[keyof typeof FuncionarioScalarFieldEnum]
+
+
+export const LivroScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  autor: 'autor',
+  status: 'status'
+} as const
+
+export type LivroScalarFieldEnum = (typeof LivroScalarFieldEnum)[keyof typeof LivroScalarFieldEnum]
+
+
+export const EmprestimoScalarFieldEnum = {
+  id: 'id',
+  id_livro: 'id_livro',
+  id_cliente: 'id_cliente',
+  data_saida: 'data_saida',
+  data_devolucao: 'data_devolucao'
+} as const
+
+export type EmprestimoScalarFieldEnum = (typeof EmprestimoScalarFieldEnum)[keyof typeof EmprestimoScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 export const UsuarioOrderByRelevanceFieldEnum = {
@@ -95,4 +146,20 @@ export const UsuarioOrderByRelevanceFieldEnum = {
 } as const
 
 export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]
+
+
+export const ClienteOrderByRelevanceFieldEnum = {
+  cpf: 'cpf',
+  telefone: 'telefone'
+} as const
+
+export type ClienteOrderByRelevanceFieldEnum = (typeof ClienteOrderByRelevanceFieldEnum)[keyof typeof ClienteOrderByRelevanceFieldEnum]
+
+
+export const LivroOrderByRelevanceFieldEnum = {
+  titulo: 'titulo',
+  autor: 'autor'
+} as const
+
+export type LivroOrderByRelevanceFieldEnum = (typeof LivroOrderByRelevanceFieldEnum)[keyof typeof LivroOrderByRelevanceFieldEnum]
 

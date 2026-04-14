@@ -1,19 +1,20 @@
-import { prisma } from "./lib/prisma";
+import { prisma } from "./config/prisma-configDB";
 
 async function main() {
-  const user = await prisma.usuario.create({
+  const user = await prisma.cliente.create({
     data: {
-      nome: "Alice",
-      email: "alice@prisma.io",
-      senha: "1234",
+      id: 2,
+      cpf: "32165487609",
+      telefone: "99999999999",
     },
   });
-  console.log("Created user:", user);
+  console.log("Cliente criado:", user);
 
   // Fetch all users
-  const allUsers = await prisma.usuario.findMany({});
+  const allUsers = await prisma.cliente.findMany();
+  // const allUsers = await prisma.usuario.findMany({});
   //   const allUsers = await prisma.$queryRaw`SELECT * FROM Usuario`;
-  console.log("All users:", JSON.stringify(allUsers, null, 2));
+  console.log("Todos os clientes:", JSON.stringify(allUsers, null, 2));
 }
 
 main()
@@ -25,3 +26,5 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
+
+// npx tsx src/script.ts

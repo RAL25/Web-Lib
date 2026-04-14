@@ -9,4 +9,8 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Usuario'
+export type * from './models/Cliente'
+export type * from './models/Funcionario'
+export type * from './models/Livro'
+export type * from './models/Emprestimo'
 export type * from './commonInputTypes'
