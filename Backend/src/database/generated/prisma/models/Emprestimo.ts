@@ -43,6 +43,7 @@ export type EmprestimoMinAggregateOutputType = {
   id_livro: number | null
   id_cliente: number | null
   data_saida: Date | null
+  data_prazo: Date | null
   data_devolucao: Date | null
 }
 
@@ -51,6 +52,7 @@ export type EmprestimoMaxAggregateOutputType = {
   id_livro: number | null
   id_cliente: number | null
   data_saida: Date | null
+  data_prazo: Date | null
   data_devolucao: Date | null
 }
 
@@ -59,6 +61,7 @@ export type EmprestimoCountAggregateOutputType = {
   id_livro: number
   id_cliente: number
   data_saida: number
+  data_prazo: number
   data_devolucao: number
   _all: number
 }
@@ -81,6 +84,7 @@ export type EmprestimoMinAggregateInputType = {
   id_livro?: true
   id_cliente?: true
   data_saida?: true
+  data_prazo?: true
   data_devolucao?: true
 }
 
@@ -89,6 +93,7 @@ export type EmprestimoMaxAggregateInputType = {
   id_livro?: true
   id_cliente?: true
   data_saida?: true
+  data_prazo?: true
   data_devolucao?: true
 }
 
@@ -97,6 +102,7 @@ export type EmprestimoCountAggregateInputType = {
   id_livro?: true
   id_cliente?: true
   data_saida?: true
+  data_prazo?: true
   data_devolucao?: true
   _all?: true
 }
@@ -192,7 +198,8 @@ export type EmprestimoGroupByOutputType = {
   id_livro: number
   id_cliente: number
   data_saida: Date
-  data_devolucao: Date
+  data_prazo: Date
+  data_devolucao: Date | null
   _count: EmprestimoCountAggregateOutputType | null
   _avg: EmprestimoAvgAggregateOutputType | null
   _sum: EmprestimoSumAggregateOutputType | null
@@ -223,7 +230,8 @@ export type EmprestimoWhereInput = {
   id_livro?: Prisma.IntFilter<"Emprestimo"> | number
   id_cliente?: Prisma.IntFilter<"Emprestimo"> | number
   data_saida?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
-  data_devolucao?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
+  data_prazo?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
+  data_devolucao?: Prisma.DateTimeNullableFilter<"Emprestimo"> | Date | string | null
   livro?: Prisma.XOR<Prisma.LivroScalarRelationFilter, Prisma.LivroWhereInput>
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
 }
@@ -233,7 +241,8 @@ export type EmprestimoOrderByWithRelationInput = {
   id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
-  data_devolucao?: Prisma.SortOrder
+  data_prazo?: Prisma.SortOrder
+  data_devolucao?: Prisma.SortOrderInput | Prisma.SortOrder
   livro?: Prisma.LivroOrderByWithRelationInput
   cliente?: Prisma.ClienteOrderByWithRelationInput
 }
@@ -246,7 +255,8 @@ export type EmprestimoWhereUniqueInput = Prisma.AtLeast<{
   id_livro?: Prisma.IntFilter<"Emprestimo"> | number
   id_cliente?: Prisma.IntFilter<"Emprestimo"> | number
   data_saida?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
-  data_devolucao?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
+  data_prazo?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
+  data_devolucao?: Prisma.DateTimeNullableFilter<"Emprestimo"> | Date | string | null
   livro?: Prisma.XOR<Prisma.LivroScalarRelationFilter, Prisma.LivroWhereInput>
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
 }, "id">
@@ -256,7 +266,8 @@ export type EmprestimoOrderByWithAggregationInput = {
   id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
-  data_devolucao?: Prisma.SortOrder
+  data_prazo?: Prisma.SortOrder
+  data_devolucao?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EmprestimoCountOrderByAggregateInput
   _avg?: Prisma.EmprestimoAvgOrderByAggregateInput
   _max?: Prisma.EmprestimoMaxOrderByAggregateInput
@@ -272,12 +283,14 @@ export type EmprestimoScalarWhereWithAggregatesInput = {
   id_livro?: Prisma.IntWithAggregatesFilter<"Emprestimo"> | number
   id_cliente?: Prisma.IntWithAggregatesFilter<"Emprestimo"> | number
   data_saida?: Prisma.DateTimeWithAggregatesFilter<"Emprestimo"> | Date | string
-  data_devolucao?: Prisma.DateTimeWithAggregatesFilter<"Emprestimo"> | Date | string
+  data_prazo?: Prisma.DateTimeWithAggregatesFilter<"Emprestimo"> | Date | string
+  data_devolucao?: Prisma.DateTimeNullableWithAggregatesFilter<"Emprestimo"> | Date | string | null
 }
 
 export type EmprestimoCreateInput = {
   data_saida: Date | string
-  data_devolucao: Date | string
+  data_prazo: Date | string
+  data_devolucao?: Date | string | null
   livro: Prisma.LivroCreateNestedOneWithoutEmprestimosInput
   cliente: Prisma.ClienteCreateNestedOneWithoutEmprestimosInput
 }
@@ -287,12 +300,14 @@ export type EmprestimoUncheckedCreateInput = {
   id_livro: number
   id_cliente: number
   data_saida: Date | string
-  data_devolucao: Date | string
+  data_prazo: Date | string
+  data_devolucao?: Date | string | null
 }
 
 export type EmprestimoUpdateInput = {
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   livro?: Prisma.LivroUpdateOneRequiredWithoutEmprestimosNestedInput
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutEmprestimosNestedInput
 }
@@ -302,7 +317,8 @@ export type EmprestimoUncheckedUpdateInput = {
   id_livro?: Prisma.IntFieldUpdateOperationsInput | number
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type EmprestimoCreateManyInput = {
@@ -310,12 +326,14 @@ export type EmprestimoCreateManyInput = {
   id_livro: number
   id_cliente: number
   data_saida: Date | string
-  data_devolucao: Date | string
+  data_prazo: Date | string
+  data_devolucao?: Date | string | null
 }
 
 export type EmprestimoUpdateManyMutationInput = {
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type EmprestimoUncheckedUpdateManyInput = {
@@ -323,7 +341,8 @@ export type EmprestimoUncheckedUpdateManyInput = {
   id_livro?: Prisma.IntFieldUpdateOperationsInput | number
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type EmprestimoListRelationFilter = {
@@ -341,6 +360,7 @@ export type EmprestimoCountOrderByAggregateInput = {
   id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
+  data_prazo?: Prisma.SortOrder
   data_devolucao?: Prisma.SortOrder
 }
 
@@ -355,6 +375,7 @@ export type EmprestimoMaxOrderByAggregateInput = {
   id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
+  data_prazo?: Prisma.SortOrder
   data_devolucao?: Prisma.SortOrder
 }
 
@@ -363,6 +384,7 @@ export type EmprestimoMinOrderByAggregateInput = {
   id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
+  data_prazo?: Prisma.SortOrder
   data_devolucao?: Prisma.SortOrder
 }
 
@@ -456,9 +478,14 @@ export type EmprestimoUncheckedUpdateManyWithoutLivroNestedInput = {
   deleteMany?: Prisma.EmprestimoScalarWhereInput | Prisma.EmprestimoScalarWhereInput[]
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type EmprestimoCreateWithoutClienteInput = {
   data_saida: Date | string
-  data_devolucao: Date | string
+  data_prazo: Date | string
+  data_devolucao?: Date | string | null
   livro: Prisma.LivroCreateNestedOneWithoutEmprestimosInput
 }
 
@@ -466,7 +493,8 @@ export type EmprestimoUncheckedCreateWithoutClienteInput = {
   id?: number
   id_livro: number
   data_saida: Date | string
-  data_devolucao: Date | string
+  data_prazo: Date | string
+  data_devolucao?: Date | string | null
 }
 
 export type EmprestimoCreateOrConnectWithoutClienteInput = {
@@ -503,12 +531,14 @@ export type EmprestimoScalarWhereInput = {
   id_livro?: Prisma.IntFilter<"Emprestimo"> | number
   id_cliente?: Prisma.IntFilter<"Emprestimo"> | number
   data_saida?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
-  data_devolucao?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
+  data_prazo?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
+  data_devolucao?: Prisma.DateTimeNullableFilter<"Emprestimo"> | Date | string | null
 }
 
 export type EmprestimoCreateWithoutLivroInput = {
   data_saida: Date | string
-  data_devolucao: Date | string
+  data_prazo: Date | string
+  data_devolucao?: Date | string | null
   cliente: Prisma.ClienteCreateNestedOneWithoutEmprestimosInput
 }
 
@@ -516,7 +546,8 @@ export type EmprestimoUncheckedCreateWithoutLivroInput = {
   id?: number
   id_cliente: number
   data_saida: Date | string
-  data_devolucao: Date | string
+  data_prazo: Date | string
+  data_devolucao?: Date | string | null
 }
 
 export type EmprestimoCreateOrConnectWithoutLivroInput = {
@@ -549,12 +580,14 @@ export type EmprestimoCreateManyClienteInput = {
   id?: number
   id_livro: number
   data_saida: Date | string
-  data_devolucao: Date | string
+  data_prazo: Date | string
+  data_devolucao?: Date | string | null
 }
 
 export type EmprestimoUpdateWithoutClienteInput = {
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   livro?: Prisma.LivroUpdateOneRequiredWithoutEmprestimosNestedInput
 }
 
@@ -562,26 +595,30 @@ export type EmprestimoUncheckedUpdateWithoutClienteInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   id_livro?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type EmprestimoUncheckedUpdateManyWithoutClienteInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   id_livro?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type EmprestimoCreateManyLivroInput = {
   id?: number
   id_cliente: number
   data_saida: Date | string
-  data_devolucao: Date | string
+  data_prazo: Date | string
+  data_devolucao?: Date | string | null
 }
 
 export type EmprestimoUpdateWithoutLivroInput = {
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutEmprestimosNestedInput
 }
 
@@ -589,14 +626,16 @@ export type EmprestimoUncheckedUpdateWithoutLivroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type EmprestimoUncheckedUpdateManyWithoutLivroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -606,6 +645,7 @@ export type EmprestimoSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   id_livro?: boolean
   id_cliente?: boolean
   data_saida?: boolean
+  data_prazo?: boolean
   data_devolucao?: boolean
   livro?: boolean | Prisma.LivroDefaultArgs<ExtArgs>
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
@@ -618,10 +658,11 @@ export type EmprestimoSelectScalar = {
   id_livro?: boolean
   id_cliente?: boolean
   data_saida?: boolean
+  data_prazo?: boolean
   data_devolucao?: boolean
 }
 
-export type EmprestimoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "id_livro" | "id_cliente" | "data_saida" | "data_devolucao", ExtArgs["result"]["emprestimo"]>
+export type EmprestimoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "id_livro" | "id_cliente" | "data_saida" | "data_prazo" | "data_devolucao", ExtArgs["result"]["emprestimo"]>
 export type EmprestimoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   livro?: boolean | Prisma.LivroDefaultArgs<ExtArgs>
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
@@ -638,7 +679,8 @@ export type $EmprestimoPayload<ExtArgs extends runtime.Types.Extensions.Internal
     id_livro: number
     id_cliente: number
     data_saida: Date
-    data_devolucao: Date
+    data_prazo: Date
+    data_devolucao: Date | null
   }, ExtArgs["result"]["emprestimo"]>
   composites: {}
 }
@@ -1014,6 +1056,7 @@ export interface EmprestimoFieldRefs {
   readonly id_livro: Prisma.FieldRef<"Emprestimo", 'Int'>
   readonly id_cliente: Prisma.FieldRef<"Emprestimo", 'Int'>
   readonly data_saida: Prisma.FieldRef<"Emprestimo", 'DateTime'>
+  readonly data_prazo: Prisma.FieldRef<"Emprestimo", 'DateTime'>
   readonly data_devolucao: Prisma.FieldRef<"Emprestimo", 'DateTime'>
 }
     

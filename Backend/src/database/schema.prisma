@@ -57,17 +57,21 @@ model Livro {
 }
 
 model Emprestimo{
-  id Int @id @default(autoincrement())
-  id_livro Int 
-  id_cliente Int 
-  data_saida DateTime
-  data_devolucao DateTime
+  id              Int @id @default(autoincrement())
+  id_livro        Int 
+  id_cliente      Int 
+  data_saida      DateTime
+  data_prazo      DateTime    // Data para marcar o prazo de entrega  
+  data_devolucao  DateTime?   // Data para marcar o dia da entrega
 
   livro Livro @relation(fields:[id_livro], references: [id])
   cliente Cliente @relation(fields:[id_cliente], references: [id])
 }
 
+// TO DO:
 // Futuramente criar enum para roles (user, funcionario, adm)
+// Colocar um contador de quantidade de vezes que o cliente já adiou o prazo
 
-// Rodar as migrations: npx prisma migrate dev --name init
+// Rodar as migrations: npx prisma migrate dev --name nome_migration
 // Gerar arquivos com modelos das migrations: npx prisma generate
+// Para rodar as seeds: npx prisma db seed

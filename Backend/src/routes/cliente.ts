@@ -1,21 +1,15 @@
 import { Router, type Request, type Response } from "express";
+import * as clienteController from "../controllers/clienteController";
 const router = Router();
 
-router.get("/", (request: Request, response: Response) => {
-  response.json("index cliente");
-});
+router.get("/", clienteController.index);
 
-router.get("/:id", (request: Request, response: Response) => {
-  response.json(`buscando cliente com id: ${request.params.id}`);
-});
-router.post("/", (request: Request, response: Response) => {
-  response.json("criando cliente");
-});
-router.put("/", (request: Request, response: Response) => {
-  response.json("alterando cliente");
-});
-router.delete("/", (request: Request, response: Response) => {
-  response.json("deletando cliente");
-});
+router.get("/:id", clienteController.findCliente);
+
+router.post("/", clienteController.createCliente);
+
+router.put("/:id", clienteController.updateCliente);
+
+router.delete("/:id", clienteController.deleteCliente);
 
 export default router;

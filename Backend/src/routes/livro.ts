@@ -1,21 +1,15 @@
 import { Router, type Request, type Response } from "express";
+import * as livroController from "../controllers/livroController";
 const router = Router();
 
-router.get("/", (request: Request, response: Response) => {
-  response.json("index livro");
-});
+router.get("/", livroController.index);
 
-router.get("/:id", (request: Request, response: Response) => {
-  response.json(`buscando livro com id: ${request.params.id}`);
-});
-router.post("/", (request: Request, response: Response) => {
-  response.json("criando livro");
-});
-router.put("/", (request: Request, response: Response) => {
-  response.json("alterando livro");
-});
-router.delete("/", (request: Request, response: Response) => {
-  response.json("deletando livro");
-});
+router.get("/:id", livroController.findLivro);
+
+router.post("/", livroController.createLivro);
+
+router.put("/:id", livroController.updateLivro);
+
+router.delete("/:id", livroController.deleteLivro);
 
 export default router;

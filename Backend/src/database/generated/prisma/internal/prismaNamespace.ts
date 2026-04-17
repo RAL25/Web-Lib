@@ -820,6 +820,7 @@ export const EmprestimoScalarFieldEnum = {
   id_livro: 'id_livro',
   id_cliente: 'id_cliente',
   data_saida: 'data_saida',
+  data_prazo: 'data_prazo',
   data_devolucao: 'data_devolucao'
 } as const
 

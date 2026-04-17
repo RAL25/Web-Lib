@@ -3,6 +3,7 @@ import Usuario from "./usuario";
 import Cliente from "./cliente";
 import Funcionario from "./funcionario";
 import Livro from "./livro";
+import Emprestimo from "./emprestimo";
 const router = Router();
 
 router.get("/", (request: Request, response: Response) => {
@@ -14,5 +15,6 @@ router.use("/usuario", Usuario);
 router.use("/cliente", Cliente);
 router.use("/funcionario", Funcionario);
 router.use("/livro", Livro);
+router.use("/emprestimo", Emprestimo);
 
 export default router;
