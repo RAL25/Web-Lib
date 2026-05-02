@@ -4,7 +4,9 @@ const router = Router();
 
 router.get("/", emprestimoController.index);
 
-router.get("/realizar", emprestimoController.realizarEmprestimo);
+router.get("/itens/:id", emprestimoController.listarItens); // Lista os itens de um emprestimo
+
+router.post("/realizar", emprestimoController.realizarEmprestimo);
 
 router.put("/adiar/:id", emprestimoController.adiarEmprestimo);
 

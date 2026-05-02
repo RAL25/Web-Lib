@@ -28,82 +28,60 @@ export type AggregateEmprestimo = {
 
 export type EmprestimoAvgAggregateOutputType = {
   id: number | null
-  id_livro: number | null
   id_cliente: number | null
 }
 
 export type EmprestimoSumAggregateOutputType = {
   id: number | null
-  id_livro: number | null
   id_cliente: number | null
 }
 
 export type EmprestimoMinAggregateOutputType = {
   id: number | null
-  id_livro: number | null
   id_cliente: number | null
   data_saida: Date | null
-  data_prazo: Date | null
-  data_devolucao: Date | null
 }
 
 export type EmprestimoMaxAggregateOutputType = {
   id: number | null
-  id_livro: number | null
   id_cliente: number | null
   data_saida: Date | null
-  data_prazo: Date | null
-  data_devolucao: Date | null
 }
 
 export type EmprestimoCountAggregateOutputType = {
   id: number
-  id_livro: number
   id_cliente: number
   data_saida: number
-  data_prazo: number
-  data_devolucao: number
   _all: number
 }
 
 
 export type EmprestimoAvgAggregateInputType = {
   id?: true
-  id_livro?: true
   id_cliente?: true
 }
 
 export type EmprestimoSumAggregateInputType = {
   id?: true
-  id_livro?: true
   id_cliente?: true
 }
 
 export type EmprestimoMinAggregateInputType = {
   id?: true
-  id_livro?: true
   id_cliente?: true
   data_saida?: true
-  data_prazo?: true
-  data_devolucao?: true
 }
 
 export type EmprestimoMaxAggregateInputType = {
   id?: true
-  id_livro?: true
   id_cliente?: true
   data_saida?: true
-  data_prazo?: true
-  data_devolucao?: true
 }
 
 export type EmprestimoCountAggregateInputType = {
   id?: true
-  id_livro?: true
   id_cliente?: true
   data_saida?: true
-  data_prazo?: true
-  data_devolucao?: true
   _all?: true
 }
 
@@ -195,11 +173,8 @@ export type EmprestimoGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 
 export type EmprestimoGroupByOutputType = {
   id: number
-  id_livro: number
   id_cliente: number
   data_saida: Date
-  data_prazo: Date
-  data_devolucao: Date | null
   _count: EmprestimoCountAggregateOutputType | null
   _avg: EmprestimoAvgAggregateOutputType | null
   _sum: EmprestimoSumAggregateOutputType | null
@@ -227,23 +202,17 @@ export type EmprestimoWhereInput = {
   OR?: Prisma.EmprestimoWhereInput[]
   NOT?: Prisma.EmprestimoWhereInput | Prisma.EmprestimoWhereInput[]
   id?: Prisma.IntFilter<"Emprestimo"> | number
-  id_livro?: Prisma.IntFilter<"Emprestimo"> | number
   id_cliente?: Prisma.IntFilter<"Emprestimo"> | number
   data_saida?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
-  data_prazo?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
-  data_devolucao?: Prisma.DateTimeNullableFilter<"Emprestimo"> | Date | string | null
-  livro?: Prisma.XOR<Prisma.LivroScalarRelationFilter, Prisma.LivroWhereInput>
+  itens?: Prisma.ItemEmprestimoListRelationFilter
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
 }
 
 export type EmprestimoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
-  data_prazo?: Prisma.SortOrder
-  data_devolucao?: Prisma.SortOrderInput | Prisma.SortOrder
-  livro?: Prisma.LivroOrderByWithRelationInput
+  itens?: Prisma.ItemEmprestimoOrderByRelationAggregateInput
   cliente?: Prisma.ClienteOrderByWithRelationInput
 }
 
@@ -252,22 +221,16 @@ export type EmprestimoWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.EmprestimoWhereInput | Prisma.EmprestimoWhereInput[]
   OR?: Prisma.EmprestimoWhereInput[]
   NOT?: Prisma.EmprestimoWhereInput | Prisma.EmprestimoWhereInput[]
-  id_livro?: Prisma.IntFilter<"Emprestimo"> | number
   id_cliente?: Prisma.IntFilter<"Emprestimo"> | number
   data_saida?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
-  data_prazo?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
-  data_devolucao?: Prisma.DateTimeNullableFilter<"Emprestimo"> | Date | string | null
-  livro?: Prisma.XOR<Prisma.LivroScalarRelationFilter, Prisma.LivroWhereInput>
+  itens?: Prisma.ItemEmprestimoListRelationFilter
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
 }, "id">
 
 export type EmprestimoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
-  data_prazo?: Prisma.SortOrder
-  data_devolucao?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EmprestimoCountOrderByAggregateInput
   _avg?: Prisma.EmprestimoAvgOrderByAggregateInput
   _max?: Prisma.EmprestimoMaxOrderByAggregateInput
@@ -280,69 +243,50 @@ export type EmprestimoScalarWhereWithAggregatesInput = {
   OR?: Prisma.EmprestimoScalarWhereWithAggregatesInput[]
   NOT?: Prisma.EmprestimoScalarWhereWithAggregatesInput | Prisma.EmprestimoScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Emprestimo"> | number
-  id_livro?: Prisma.IntWithAggregatesFilter<"Emprestimo"> | number
   id_cliente?: Prisma.IntWithAggregatesFilter<"Emprestimo"> | number
   data_saida?: Prisma.DateTimeWithAggregatesFilter<"Emprestimo"> | Date | string
-  data_prazo?: Prisma.DateTimeWithAggregatesFilter<"Emprestimo"> | Date | string
-  data_devolucao?: Prisma.DateTimeNullableWithAggregatesFilter<"Emprestimo"> | Date | string | null
 }
 
 export type EmprestimoCreateInput = {
-  data_saida: Date | string
-  data_prazo: Date | string
-  data_devolucao?: Date | string | null
-  livro: Prisma.LivroCreateNestedOneWithoutEmprestimosInput
+  data_saida?: Date | string
+  itens?: Prisma.ItemEmprestimoCreateNestedManyWithoutEmprestimoInput
   cliente: Prisma.ClienteCreateNestedOneWithoutEmprestimosInput
 }
 
 export type EmprestimoUncheckedCreateInput = {
   id?: number
-  id_livro: number
   id_cliente: number
-  data_saida: Date | string
-  data_prazo: Date | string
-  data_devolucao?: Date | string | null
+  data_saida?: Date | string
+  itens?: Prisma.ItemEmprestimoUncheckedCreateNestedManyWithoutEmprestimoInput
 }
 
 export type EmprestimoUpdateInput = {
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  livro?: Prisma.LivroUpdateOneRequiredWithoutEmprestimosNestedInput
+  itens?: Prisma.ItemEmprestimoUpdateManyWithoutEmprestimoNestedInput
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutEmprestimosNestedInput
 }
 
 export type EmprestimoUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  id_livro?: Prisma.IntFieldUpdateOperationsInput | number
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  itens?: Prisma.ItemEmprestimoUncheckedUpdateManyWithoutEmprestimoNestedInput
 }
 
 export type EmprestimoCreateManyInput = {
   id?: number
-  id_livro: number
   id_cliente: number
-  data_saida: Date | string
-  data_prazo: Date | string
-  data_devolucao?: Date | string | null
+  data_saida?: Date | string
 }
 
 export type EmprestimoUpdateManyMutationInput = {
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type EmprestimoUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  id_livro?: Prisma.IntFieldUpdateOperationsInput | number
   id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type EmprestimoListRelationFilter = {
@@ -357,41 +301,35 @@ export type EmprestimoOrderByRelationAggregateInput = {
 
 export type EmprestimoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
-  data_prazo?: Prisma.SortOrder
-  data_devolucao?: Prisma.SortOrder
 }
 
 export type EmprestimoAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
 }
 
 export type EmprestimoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
-  data_prazo?: Prisma.SortOrder
-  data_devolucao?: Prisma.SortOrder
 }
 
 export type EmprestimoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
   data_saida?: Prisma.SortOrder
-  data_prazo?: Prisma.SortOrder
-  data_devolucao?: Prisma.SortOrder
 }
 
 export type EmprestimoSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  id_livro?: Prisma.SortOrder
   id_cliente?: Prisma.SortOrder
+}
+
+export type EmprestimoScalarRelationFilter = {
+  is?: Prisma.EmprestimoWhereInput
+  isNot?: Prisma.EmprestimoWhereInput
 }
 
 export type EmprestimoCreateNestedManyWithoutClienteInput = {
@@ -436,65 +374,29 @@ export type EmprestimoUncheckedUpdateManyWithoutClienteNestedInput = {
   deleteMany?: Prisma.EmprestimoScalarWhereInput | Prisma.EmprestimoScalarWhereInput[]
 }
 
-export type EmprestimoCreateNestedManyWithoutLivroInput = {
-  create?: Prisma.XOR<Prisma.EmprestimoCreateWithoutLivroInput, Prisma.EmprestimoUncheckedCreateWithoutLivroInput> | Prisma.EmprestimoCreateWithoutLivroInput[] | Prisma.EmprestimoUncheckedCreateWithoutLivroInput[]
-  connectOrCreate?: Prisma.EmprestimoCreateOrConnectWithoutLivroInput | Prisma.EmprestimoCreateOrConnectWithoutLivroInput[]
-  createMany?: Prisma.EmprestimoCreateManyLivroInputEnvelope
-  connect?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
+export type EmprestimoCreateNestedOneWithoutItensInput = {
+  create?: Prisma.XOR<Prisma.EmprestimoCreateWithoutItensInput, Prisma.EmprestimoUncheckedCreateWithoutItensInput>
+  connectOrCreate?: Prisma.EmprestimoCreateOrConnectWithoutItensInput
+  connect?: Prisma.EmprestimoWhereUniqueInput
 }
 
-export type EmprestimoUncheckedCreateNestedManyWithoutLivroInput = {
-  create?: Prisma.XOR<Prisma.EmprestimoCreateWithoutLivroInput, Prisma.EmprestimoUncheckedCreateWithoutLivroInput> | Prisma.EmprestimoCreateWithoutLivroInput[] | Prisma.EmprestimoUncheckedCreateWithoutLivroInput[]
-  connectOrCreate?: Prisma.EmprestimoCreateOrConnectWithoutLivroInput | Prisma.EmprestimoCreateOrConnectWithoutLivroInput[]
-  createMany?: Prisma.EmprestimoCreateManyLivroInputEnvelope
-  connect?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
-}
-
-export type EmprestimoUpdateManyWithoutLivroNestedInput = {
-  create?: Prisma.XOR<Prisma.EmprestimoCreateWithoutLivroInput, Prisma.EmprestimoUncheckedCreateWithoutLivroInput> | Prisma.EmprestimoCreateWithoutLivroInput[] | Prisma.EmprestimoUncheckedCreateWithoutLivroInput[]
-  connectOrCreate?: Prisma.EmprestimoCreateOrConnectWithoutLivroInput | Prisma.EmprestimoCreateOrConnectWithoutLivroInput[]
-  upsert?: Prisma.EmprestimoUpsertWithWhereUniqueWithoutLivroInput | Prisma.EmprestimoUpsertWithWhereUniqueWithoutLivroInput[]
-  createMany?: Prisma.EmprestimoCreateManyLivroInputEnvelope
-  set?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
-  disconnect?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
-  delete?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
-  connect?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
-  update?: Prisma.EmprestimoUpdateWithWhereUniqueWithoutLivroInput | Prisma.EmprestimoUpdateWithWhereUniqueWithoutLivroInput[]
-  updateMany?: Prisma.EmprestimoUpdateManyWithWhereWithoutLivroInput | Prisma.EmprestimoUpdateManyWithWhereWithoutLivroInput[]
-  deleteMany?: Prisma.EmprestimoScalarWhereInput | Prisma.EmprestimoScalarWhereInput[]
-}
-
-export type EmprestimoUncheckedUpdateManyWithoutLivroNestedInput = {
-  create?: Prisma.XOR<Prisma.EmprestimoCreateWithoutLivroInput, Prisma.EmprestimoUncheckedCreateWithoutLivroInput> | Prisma.EmprestimoCreateWithoutLivroInput[] | Prisma.EmprestimoUncheckedCreateWithoutLivroInput[]
-  connectOrCreate?: Prisma.EmprestimoCreateOrConnectWithoutLivroInput | Prisma.EmprestimoCreateOrConnectWithoutLivroInput[]
-  upsert?: Prisma.EmprestimoUpsertWithWhereUniqueWithoutLivroInput | Prisma.EmprestimoUpsertWithWhereUniqueWithoutLivroInput[]
-  createMany?: Prisma.EmprestimoCreateManyLivroInputEnvelope
-  set?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
-  disconnect?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
-  delete?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
-  connect?: Prisma.EmprestimoWhereUniqueInput | Prisma.EmprestimoWhereUniqueInput[]
-  update?: Prisma.EmprestimoUpdateWithWhereUniqueWithoutLivroInput | Prisma.EmprestimoUpdateWithWhereUniqueWithoutLivroInput[]
-  updateMany?: Prisma.EmprestimoUpdateManyWithWhereWithoutLivroInput | Prisma.EmprestimoUpdateManyWithWhereWithoutLivroInput[]
-  deleteMany?: Prisma.EmprestimoScalarWhereInput | Prisma.EmprestimoScalarWhereInput[]
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
+export type EmprestimoUpdateOneRequiredWithoutItensNestedInput = {
+  create?: Prisma.XOR<Prisma.EmprestimoCreateWithoutItensInput, Prisma.EmprestimoUncheckedCreateWithoutItensInput>
+  connectOrCreate?: Prisma.EmprestimoCreateOrConnectWithoutItensInput
+  upsert?: Prisma.EmprestimoUpsertWithoutItensInput
+  connect?: Prisma.EmprestimoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EmprestimoUpdateToOneWithWhereWithoutItensInput, Prisma.EmprestimoUpdateWithoutItensInput>, Prisma.EmprestimoUncheckedUpdateWithoutItensInput>
 }
 
 export type EmprestimoCreateWithoutClienteInput = {
-  data_saida: Date | string
-  data_prazo: Date | string
-  data_devolucao?: Date | string | null
-  livro: Prisma.LivroCreateNestedOneWithoutEmprestimosInput
+  data_saida?: Date | string
+  itens?: Prisma.ItemEmprestimoCreateNestedManyWithoutEmprestimoInput
 }
 
 export type EmprestimoUncheckedCreateWithoutClienteInput = {
   id?: number
-  id_livro: number
-  data_saida: Date | string
-  data_prazo: Date | string
-  data_devolucao?: Date | string | null
+  data_saida?: Date | string
+  itens?: Prisma.ItemEmprestimoUncheckedCreateNestedManyWithoutEmprestimoInput
 }
 
 export type EmprestimoCreateOrConnectWithoutClienteInput = {
@@ -528,159 +430,134 @@ export type EmprestimoScalarWhereInput = {
   OR?: Prisma.EmprestimoScalarWhereInput[]
   NOT?: Prisma.EmprestimoScalarWhereInput | Prisma.EmprestimoScalarWhereInput[]
   id?: Prisma.IntFilter<"Emprestimo"> | number
-  id_livro?: Prisma.IntFilter<"Emprestimo"> | number
   id_cliente?: Prisma.IntFilter<"Emprestimo"> | number
   data_saida?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
-  data_prazo?: Prisma.DateTimeFilter<"Emprestimo"> | Date | string
-  data_devolucao?: Prisma.DateTimeNullableFilter<"Emprestimo"> | Date | string | null
 }
 
-export type EmprestimoCreateWithoutLivroInput = {
-  data_saida: Date | string
-  data_prazo: Date | string
-  data_devolucao?: Date | string | null
+export type EmprestimoCreateWithoutItensInput = {
+  data_saida?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutEmprestimosInput
 }
 
-export type EmprestimoUncheckedCreateWithoutLivroInput = {
+export type EmprestimoUncheckedCreateWithoutItensInput = {
   id?: number
   id_cliente: number
-  data_saida: Date | string
-  data_prazo: Date | string
-  data_devolucao?: Date | string | null
+  data_saida?: Date | string
 }
 
-export type EmprestimoCreateOrConnectWithoutLivroInput = {
+export type EmprestimoCreateOrConnectWithoutItensInput = {
   where: Prisma.EmprestimoWhereUniqueInput
-  create: Prisma.XOR<Prisma.EmprestimoCreateWithoutLivroInput, Prisma.EmprestimoUncheckedCreateWithoutLivroInput>
+  create: Prisma.XOR<Prisma.EmprestimoCreateWithoutItensInput, Prisma.EmprestimoUncheckedCreateWithoutItensInput>
 }
 
-export type EmprestimoCreateManyLivroInputEnvelope = {
-  data: Prisma.EmprestimoCreateManyLivroInput | Prisma.EmprestimoCreateManyLivroInput[]
-  skipDuplicates?: boolean
+export type EmprestimoUpsertWithoutItensInput = {
+  update: Prisma.XOR<Prisma.EmprestimoUpdateWithoutItensInput, Prisma.EmprestimoUncheckedUpdateWithoutItensInput>
+  create: Prisma.XOR<Prisma.EmprestimoCreateWithoutItensInput, Prisma.EmprestimoUncheckedCreateWithoutItensInput>
+  where?: Prisma.EmprestimoWhereInput
 }
 
-export type EmprestimoUpsertWithWhereUniqueWithoutLivroInput = {
-  where: Prisma.EmprestimoWhereUniqueInput
-  update: Prisma.XOR<Prisma.EmprestimoUpdateWithoutLivroInput, Prisma.EmprestimoUncheckedUpdateWithoutLivroInput>
-  create: Prisma.XOR<Prisma.EmprestimoCreateWithoutLivroInput, Prisma.EmprestimoUncheckedCreateWithoutLivroInput>
+export type EmprestimoUpdateToOneWithWhereWithoutItensInput = {
+  where?: Prisma.EmprestimoWhereInput
+  data: Prisma.XOR<Prisma.EmprestimoUpdateWithoutItensInput, Prisma.EmprestimoUncheckedUpdateWithoutItensInput>
 }
 
-export type EmprestimoUpdateWithWhereUniqueWithoutLivroInput = {
-  where: Prisma.EmprestimoWhereUniqueInput
-  data: Prisma.XOR<Prisma.EmprestimoUpdateWithoutLivroInput, Prisma.EmprestimoUncheckedUpdateWithoutLivroInput>
+export type EmprestimoUpdateWithoutItensInput = {
+  data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cliente?: Prisma.ClienteUpdateOneRequiredWithoutEmprestimosNestedInput
 }
 
-export type EmprestimoUpdateManyWithWhereWithoutLivroInput = {
-  where: Prisma.EmprestimoScalarWhereInput
-  data: Prisma.XOR<Prisma.EmprestimoUpdateManyMutationInput, Prisma.EmprestimoUncheckedUpdateManyWithoutLivroInput>
+export type EmprestimoUncheckedUpdateWithoutItensInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
+  data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type EmprestimoCreateManyClienteInput = {
   id?: number
-  id_livro: number
-  data_saida: Date | string
-  data_prazo: Date | string
-  data_devolucao?: Date | string | null
+  data_saida?: Date | string
 }
 
 export type EmprestimoUpdateWithoutClienteInput = {
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  livro?: Prisma.LivroUpdateOneRequiredWithoutEmprestimosNestedInput
+  itens?: Prisma.ItemEmprestimoUpdateManyWithoutEmprestimoNestedInput
 }
 
 export type EmprestimoUncheckedUpdateWithoutClienteInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  id_livro?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  itens?: Prisma.ItemEmprestimoUncheckedUpdateManyWithoutEmprestimoNestedInput
 }
 
 export type EmprestimoUncheckedUpdateManyWithoutClienteInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  id_livro?: Prisma.IntFieldUpdateOperationsInput | number
   data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type EmprestimoCreateManyLivroInput = {
-  id?: number
-  id_cliente: number
-  data_saida: Date | string
-  data_prazo: Date | string
-  data_devolucao?: Date | string | null
+
+/**
+ * Count Type EmprestimoCountOutputType
+ */
+
+export type EmprestimoCountOutputType = {
+  itens: number
 }
 
-export type EmprestimoUpdateWithoutLivroInput = {
-  data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cliente?: Prisma.ClienteUpdateOneRequiredWithoutEmprestimosNestedInput
+export type EmprestimoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  itens?: boolean | EmprestimoCountOutputTypeCountItensArgs
 }
 
-export type EmprestimoUncheckedUpdateWithoutLivroInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
-  data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+/**
+ * EmprestimoCountOutputType without action
+ */
+export type EmprestimoCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmprestimoCountOutputType
+   */
+  select?: Prisma.EmprestimoCountOutputTypeSelect<ExtArgs> | null
 }
 
-export type EmprestimoUncheckedUpdateManyWithoutLivroInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  id_cliente?: Prisma.IntFieldUpdateOperationsInput | number
-  data_saida?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_prazo?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  data_devolucao?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+/**
+ * EmprestimoCountOutputType without action
+ */
+export type EmprestimoCountOutputTypeCountItensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ItemEmprestimoWhereInput
 }
-
 
 
 export type EmprestimoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  id_livro?: boolean
   id_cliente?: boolean
   data_saida?: boolean
-  data_prazo?: boolean
-  data_devolucao?: boolean
-  livro?: boolean | Prisma.LivroDefaultArgs<ExtArgs>
+  itens?: boolean | Prisma.Emprestimo$itensArgs<ExtArgs>
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.EmprestimoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["emprestimo"]>
 
 
 
 export type EmprestimoSelectScalar = {
   id?: boolean
-  id_livro?: boolean
   id_cliente?: boolean
   data_saida?: boolean
-  data_prazo?: boolean
-  data_devolucao?: boolean
 }
 
-export type EmprestimoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "id_livro" | "id_cliente" | "data_saida" | "data_prazo" | "data_devolucao", ExtArgs["result"]["emprestimo"]>
+export type EmprestimoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "id_cliente" | "data_saida", ExtArgs["result"]["emprestimo"]>
 export type EmprestimoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  livro?: boolean | Prisma.LivroDefaultArgs<ExtArgs>
+  itens?: boolean | Prisma.Emprestimo$itensArgs<ExtArgs>
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.EmprestimoCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $EmprestimoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Emprestimo"
   objects: {
-    livro: Prisma.$LivroPayload<ExtArgs>
+    itens: Prisma.$ItemEmprestimoPayload<ExtArgs>[]
     cliente: Prisma.$ClientePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    id_livro: number
     id_cliente: number
     data_saida: Date
-    data_prazo: Date
-    data_devolucao: Date | null
   }, ExtArgs["result"]["emprestimo"]>
   composites: {}
 }
@@ -1021,7 +898,7 @@ readonly fields: EmprestimoFieldRefs;
  */
 export interface Prisma__EmprestimoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  livro<T extends Prisma.LivroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LivroDefaultArgs<ExtArgs>>): Prisma.Prisma__LivroClient<runtime.Types.Result.GetResult<Prisma.$LivroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  itens<T extends Prisma.Emprestimo$itensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Emprestimo$itensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemEmprestimoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cliente<T extends Prisma.ClienteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClienteDefaultArgs<ExtArgs>>): Prisma.Prisma__ClienteClient<runtime.Types.Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1053,11 +930,8 @@ export interface Prisma__EmprestimoClient<T, Null = never, ExtArgs extends runti
  */
 export interface EmprestimoFieldRefs {
   readonly id: Prisma.FieldRef<"Emprestimo", 'Int'>
-  readonly id_livro: Prisma.FieldRef<"Emprestimo", 'Int'>
   readonly id_cliente: Prisma.FieldRef<"Emprestimo", 'Int'>
   readonly data_saida: Prisma.FieldRef<"Emprestimo", 'DateTime'>
-  readonly data_prazo: Prisma.FieldRef<"Emprestimo", 'DateTime'>
-  readonly data_devolucao: Prisma.FieldRef<"Emprestimo", 'DateTime'>
 }
     
 
@@ -1403,6 +1277,30 @@ export type EmprestimoDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many Emprestimos to delete.
    */
   limit?: number
+}
+
+/**
+ * Emprestimo.itens
+ */
+export type Emprestimo$itensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ItemEmprestimo
+   */
+  select?: Prisma.ItemEmprestimoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ItemEmprestimo
+   */
+  omit?: Prisma.ItemEmprestimoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ItemEmprestimoInclude<ExtArgs> | null
+  where?: Prisma.ItemEmprestimoWhereInput
+  orderBy?: Prisma.ItemEmprestimoOrderByWithRelationInput | Prisma.ItemEmprestimoOrderByWithRelationInput[]
+  cursor?: Prisma.ItemEmprestimoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ItemEmprestimoScalarFieldEnum | Prisma.ItemEmprestimoScalarFieldEnum[]
 }
 
 /**

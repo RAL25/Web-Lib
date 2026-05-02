@@ -13,3 +13,4 @@ app.listen(PORT, () =>
 );
 
 // npx tsx src/script-route.ts
+// npx tsx watch src/script-route.ts  (atualiza sem precisar parar de rodar o server)

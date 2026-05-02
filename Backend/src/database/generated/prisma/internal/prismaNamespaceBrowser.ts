@@ -55,7 +55,10 @@ export const ModelName = {
   Cliente: 'Cliente',
   Funcionario: 'Funcionario',
   Livro: 'Livro',
-  Emprestimo: 'Emprestimo'
+  ExemplarLivro: 'ExemplarLivro',
+  Emprestimo: 'Emprestimo',
+  ItemEmprestimo: 'ItemEmprestimo',
+  Configuracao: 'Configuracao'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -87,7 +90,8 @@ export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeo
 export const ClienteScalarFieldEnum = {
   id: 'id',
   cpf: 'cpf',
-  telefone: 'telefone'
+  telefone: 'telefone',
+  data_penalidade: 'data_penalidade'
 } as const
 
 export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
@@ -105,23 +109,51 @@ export type FuncionarioScalarFieldEnum = (typeof FuncionarioScalarFieldEnum)[key
 export const LivroScalarFieldEnum = {
   id: 'id',
   titulo: 'titulo',
-  autor: 'autor',
-  status: 'status'
+  autor: 'autor'
 } as const
 
 export type LivroScalarFieldEnum = (typeof LivroScalarFieldEnum)[keyof typeof LivroScalarFieldEnum]
 
 
+export const ExemplarLivroScalarFieldEnum = {
+  id: 'id',
+  livroId: 'livroId',
+  status: 'status'
+} as const
+
+export type ExemplarLivroScalarFieldEnum = (typeof ExemplarLivroScalarFieldEnum)[keyof typeof ExemplarLivroScalarFieldEnum]
+
+
 export const EmprestimoScalarFieldEnum = {
   id: 'id',
-  id_livro: 'id_livro',
   id_cliente: 'id_cliente',
-  data_saida: 'data_saida',
+  data_saida: 'data_saida'
+} as const
+
+export type EmprestimoScalarFieldEnum = (typeof EmprestimoScalarFieldEnum)[keyof typeof EmprestimoScalarFieldEnum]
+
+
+export const ItemEmprestimoScalarFieldEnum = {
+  id: 'id',
+  emprestimoId: 'emprestimoId',
+  exemplarId: 'exemplarId',
+  count_adiar: 'count_adiar',
   data_prazo: 'data_prazo',
   data_devolucao: 'data_devolucao'
 } as const
 
-export type EmprestimoScalarFieldEnum = (typeof EmprestimoScalarFieldEnum)[keyof typeof EmprestimoScalarFieldEnum]
+export type ItemEmprestimoScalarFieldEnum = (typeof ItemEmprestimoScalarFieldEnum)[keyof typeof ItemEmprestimoScalarFieldEnum]
+
+
+export const ConfiguracaoScalarFieldEnum = {
+  id: 'id',
+  limite_global: 'limite_global',
+  limite_por_titulo: 'limite_por_titulo',
+  prazo_padrao_dias: 'prazo_padrao_dias',
+  dias_penalidade: 'dias_penalidade'
+} as const
+
+export type ConfiguracaoScalarFieldEnum = (typeof ConfiguracaoScalarFieldEnum)[keyof typeof ConfiguracaoScalarFieldEnum]
 
 
 export const SortOrder = {

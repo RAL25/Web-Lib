@@ -9,7 +9,7 @@ export async function index(
   try {
     response.status(200).json(funcionarios);
   } catch (error) {
-    response.status(204).end();
+    response.status(404).end();
   }
 }
 

@@ -4,9 +4,13 @@ const router = Router();
 
 router.get("/", livroController.index);
 
+router.get("/exemplar/", livroController.indexExemplar);
+
 router.get("/:id", livroController.findLivro);
 
-router.post("/", livroController.createLivro);
+router.get("/exemplar/:id", livroController.findExemplarLivro);
+
+router.post("/", livroController.cadastrarLivro);
 
 router.put("/:id", livroController.updateLivro);
 

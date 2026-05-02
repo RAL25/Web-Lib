@@ -4,6 +4,7 @@ import Cliente from "./cliente";
 import Funcionario from "./funcionario";
 import Livro from "./livro";
 import Emprestimo from "./emprestimo";
+import Configuracao from "./config";
 const router = Router();
 
 router.get("/", (request: Request, response: Response) => {
@@ -16,5 +17,6 @@ router.use("/cliente", Cliente);
 router.use("/funcionario", Funcionario);
 router.use("/livro", Livro);
 router.use("/emprestimo", Emprestimo);
+router.use("/configuracao", Configuracao);
 
 export default router;

@@ -62,7 +62,22 @@ export type Funcionario = Prisma.FuncionarioModel
  */
 export type Livro = Prisma.LivroModel
 /**
+ * Model ExemplarLivro
+ * 
+ */
+export type ExemplarLivro = Prisma.ExemplarLivroModel
+/**
  * Model Emprestimo
  * 
  */
 export type Emprestimo = Prisma.EmprestimoModel
+/**
+ * Model ItemEmprestimo
+ * 
+ */
+export type ItemEmprestimo = Prisma.ItemEmprestimoModel
+/**
+ * Model Configuracao
+ * 
+ */
+export type Configuracao = Prisma.ConfiguracaoModel
