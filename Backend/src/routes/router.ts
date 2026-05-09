@@ -5,18 +5,29 @@ import Funcionario from "./funcionario";
 import Livro from "./livro";
 import Emprestimo from "./emprestimo";
 import Configuracao from "./config";
+import { login } from "../controllers/authController";
+import { autorizar, admin } from "../middleware/authMiddleware";
 const router = Router();
 
 router.get("/", (request: Request, response: Response) => {
   response.json("index do router");
 });
 
-// Outras rotas
+// Rotas públicas
+router.post("/login", login);
+router.use("/livro", Livro);
 router.use("/usuario", Usuario);
 router.use("/cliente", Cliente);
-router.use("/funcionario", Funcionario);
-router.use("/livro", Livro);
+
+// Rotas para usuários logados
+router.use(autorizar);
 router.use("/emprestimo", Emprestimo);
+
+// Rota só para funcionario e admin
+router.use("/funcionario", Funcionario);
+
+// Rota para usuários com role admin
+router.use(admin);
 router.use("/configuracao", Configuracao);
 
 export default router;

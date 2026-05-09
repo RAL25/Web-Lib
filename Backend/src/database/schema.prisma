@@ -12,17 +12,24 @@ datasource db {
   provider = "mysql"
 }
 
+// Esquemas
+
+enum Role{
+  Cliente
+  Funcionario
+  Admin
+}
+
 model Usuario {
   id    Int       @id @default(autoincrement())
   nome  String    @db.VarChar(50)
   email String?   @db.VarChar(100) @unique
   senha String?   @db.VarChar(255)
-  // tipo         String   // Para facilitar saber o tipo sem precisar de joins (opcional)
+  role  Role      @default(Cliente)
 
   // Relações 1:1 (Opcionais no objeto, pois um usuário é apenas UM desses)
   cliente      Cliente?
   funcionario  Funcionario?
-  // adm          Adm?
 }
 
 model Cliente {
@@ -30,8 +37,9 @@ model Cliente {
   cpf             String?   @db.VarChar(11)   @unique
   telefone        String?   @db.VarChar(11)
   data_penalidade DateTime?   // Data de penalidade do cliente
+  emailVerificado Boolean   @default(false)
 
-  usuario   Usuario @relation(fields: [id], references: [id])
+  usuario   Usuario @relation(fields: [id], references: [id], onDelete: Cascade)
   emprestimos  Emprestimo[]
 }
 
@@ -40,7 +48,7 @@ model Funcionario {
   salario          Decimal @db.Decimal(10, 2)
   data_contratacao DateTime
 
-  usuario Usuario @relation(fields:[id], references: [id])
+  usuario Usuario @relation(fields:[id], references: [id], onDelete: Cascade)
 }
 
 //-----------Início parte livros
@@ -86,7 +94,7 @@ model ItemEmprestimo {
   data_prazo      DateTime    // Data para marcar o prazo de entrega  
   data_devolucao  DateTime?   // Data para marcar o dia da entrega
 
-  emprestimo      Emprestimo      @relation(fields: [emprestimoId], references: [id])
+  emprestimo      Emprestimo      @relation(fields: [emprestimoId], references: [id], onDelete: Cascade)
   exemplarLivro   ExemplarLivro   @relation(fields: [exemplarId], references: [id])
 }
 
@@ -99,7 +107,6 @@ model Configuracao {
 }
 
 // TO DO:
-// Futuramente criar enum para roles (user, funcionario, adm)
 
 // Rodar as migrations: npx prisma migrate dev --name nome_migration
 // Gerar arquivos com modelos das migrations: npx prisma generate

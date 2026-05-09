@@ -16,7 +16,12 @@ export async function index(
   request: Request,
   response: Response,
 ): Promise<void> {
-  const emprestimos = await prisma.emprestimo.findMany();
+  const id_cliente = (request as any).usuarioLogado.id; //Pega o id do cliente no token para buscar todos os seus emprestimos
+  const emprestimos = await prisma.emprestimo.findMany({
+    where: {
+      id_cliente: id_cliente,
+    },
+  });
   try {
     response.status(200).json(emprestimos);
   } catch (error) {
@@ -42,7 +47,8 @@ export async function listarItens(
 }
 
 export async function realizarEmprestimo(req: Request, res: Response) {
-  const { id_exemplares, id_cliente } = req.body; // id_exemplares é um array [10, 22, 45]
+  const { id_exemplares } = req.body; // id_exemplares é um array [10, 22, 45]
+  const id_cliente = (req as any).usuarioLogado.id; // Pegando o id do token
 
   try {
     const resultado = await prisma.$transaction(async (tx) => {

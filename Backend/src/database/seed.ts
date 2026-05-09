@@ -1,32 +1,32 @@
 import "dotenv/config";
-import { livros } from "../../BD/seeds-livros";
-import { usuarios } from "../../BD/seeds-usuarios";
-import { clientes } from "../../BD/seeds-clientes";
-import { emprestimo } from "../../BD/seeds-emprestimo";
+import * as seeds from "../../BD/seeds";
 import { prisma } from "../config/prisma-configDB";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 
 async function main() {
-  // // populando a tabela livros
-  // await prisma.livro.createMany({
-  //   data: livros,
-  // });
+  // populando a tabela livros
+  for (const livro of seeds.livros) {
+    await prisma.livro.create({
+      data: {
+        titulo: livro.titulo,
+        autor: livro.autor,
+        exemplares: {
+          create: Array.from({ length: livro.qtd_exemplar }).map(() => ({})),
+        },
+      },
+    });
+  }
 
+  // Populando a tabela exemplares
   // // populando a tabela usuários
   // await prisma.usuario.createMany({
   //   data: usuarios,
   // });
-
   // // populando a tabela clientes
   // await prisma.cliente.createMany({
   //   data: clientes,
   // });
-
-  // populando a tabela emprestimo
-  await prisma.emprestimo.create({
-    data: emprestimo,
-  });
 }
 
 main()
@@ -40,3 +40,4 @@ main()
   });
 
 // Para rodar as seeds: npx prisma db seed
+// Para resetar as seeds (e o banco também): npx prisma migrate reset

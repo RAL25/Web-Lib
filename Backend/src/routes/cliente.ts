@@ -1,15 +1,26 @@
 import { Router, type Request, type Response } from "express";
 import * as clienteController from "../controllers/clienteController";
+import {
+  autorizar,
+  funcionario,
+  usuarioOuAdmin,
+  // admin,
+} from "../middleware/authMiddleware";
 const router = Router();
-
-router.get("/", clienteController.index);
-
-router.get("/:id", clienteController.findCliente);
 
 router.post("/", clienteController.createCliente);
 
-router.put("/:id", clienteController.updateCliente);
+// Usuário logado pode acessar ou funcionario
+router.get("/:id", autorizar, usuarioOuAdmin, clienteController.findCliente);
+router.put("/:id", autorizar, usuarioOuAdmin, clienteController.updateCliente);
+router.delete(
+  "/:id",
+  autorizar,
+  usuarioOuAdmin,
+  clienteController.deleteCliente,
+);
 
-router.delete("/:id", clienteController.deleteCliente);
+// Apenas administradores ou funcionarios podem acessar
+router.get("/", autorizar, funcionario, clienteController.index);
 
 export default router;

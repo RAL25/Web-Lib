@@ -39,6 +39,7 @@ export type ClienteMinAggregateOutputType = {
   cpf: string | null
   telefone: string | null
   data_penalidade: Date | null
+  emailVerificado: boolean | null
 }
 
 export type ClienteMaxAggregateOutputType = {
@@ -46,6 +47,7 @@ export type ClienteMaxAggregateOutputType = {
   cpf: string | null
   telefone: string | null
   data_penalidade: Date | null
+  emailVerificado: boolean | null
 }
 
 export type ClienteCountAggregateOutputType = {
@@ -53,6 +55,7 @@ export type ClienteCountAggregateOutputType = {
   cpf: number
   telefone: number
   data_penalidade: number
+  emailVerificado: number
   _all: number
 }
 
@@ -70,6 +73,7 @@ export type ClienteMinAggregateInputType = {
   cpf?: true
   telefone?: true
   data_penalidade?: true
+  emailVerificado?: true
 }
 
 export type ClienteMaxAggregateInputType = {
@@ -77,6 +81,7 @@ export type ClienteMaxAggregateInputType = {
   cpf?: true
   telefone?: true
   data_penalidade?: true
+  emailVerificado?: true
 }
 
 export type ClienteCountAggregateInputType = {
@@ -84,6 +89,7 @@ export type ClienteCountAggregateInputType = {
   cpf?: true
   telefone?: true
   data_penalidade?: true
+  emailVerificado?: true
   _all?: true
 }
 
@@ -178,6 +184,7 @@ export type ClienteGroupByOutputType = {
   cpf: string | null
   telefone: string | null
   data_penalidade: Date | null
+  emailVerificado: boolean
   _count: ClienteCountAggregateOutputType | null
   _avg: ClienteAvgAggregateOutputType | null
   _sum: ClienteSumAggregateOutputType | null
@@ -208,6 +215,7 @@ export type ClienteWhereInput = {
   cpf?: Prisma.StringNullableFilter<"Cliente"> | string | null
   telefone?: Prisma.StringNullableFilter<"Cliente"> | string | null
   data_penalidade?: Prisma.DateTimeNullableFilter<"Cliente"> | Date | string | null
+  emailVerificado?: Prisma.BoolFilter<"Cliente"> | boolean
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   emprestimos?: Prisma.EmprestimoListRelationFilter
 }
@@ -217,6 +225,7 @@ export type ClienteOrderByWithRelationInput = {
   cpf?: Prisma.SortOrderInput | Prisma.SortOrder
   telefone?: Prisma.SortOrderInput | Prisma.SortOrder
   data_penalidade?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerificado?: Prisma.SortOrder
   usuario?: Prisma.UsuarioOrderByWithRelationInput
   emprestimos?: Prisma.EmprestimoOrderByRelationAggregateInput
   _relevance?: Prisma.ClienteOrderByRelevanceInput
@@ -230,6 +239,7 @@ export type ClienteWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ClienteWhereInput | Prisma.ClienteWhereInput[]
   telefone?: Prisma.StringNullableFilter<"Cliente"> | string | null
   data_penalidade?: Prisma.DateTimeNullableFilter<"Cliente"> | Date | string | null
+  emailVerificado?: Prisma.BoolFilter<"Cliente"> | boolean
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   emprestimos?: Prisma.EmprestimoListRelationFilter
 }, "id" | "cpf">
@@ -239,6 +249,7 @@ export type ClienteOrderByWithAggregationInput = {
   cpf?: Prisma.SortOrderInput | Prisma.SortOrder
   telefone?: Prisma.SortOrderInput | Prisma.SortOrder
   data_penalidade?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerificado?: Prisma.SortOrder
   _count?: Prisma.ClienteCountOrderByAggregateInput
   _avg?: Prisma.ClienteAvgOrderByAggregateInput
   _max?: Prisma.ClienteMaxOrderByAggregateInput
@@ -254,12 +265,14 @@ export type ClienteScalarWhereWithAggregatesInput = {
   cpf?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   telefone?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   data_penalidade?: Prisma.DateTimeNullableWithAggregatesFilter<"Cliente"> | Date | string | null
+  emailVerificado?: Prisma.BoolWithAggregatesFilter<"Cliente"> | boolean
 }
 
 export type ClienteCreateInput = {
   cpf?: string | null
   telefone?: string | null
   data_penalidade?: Date | string | null
+  emailVerificado?: boolean
   usuario: Prisma.UsuarioCreateNestedOneWithoutClienteInput
   emprestimos?: Prisma.EmprestimoCreateNestedManyWithoutClienteInput
 }
@@ -269,6 +282,7 @@ export type ClienteUncheckedCreateInput = {
   cpf?: string | null
   telefone?: string | null
   data_penalidade?: Date | string | null
+  emailVerificado?: boolean
   emprestimos?: Prisma.EmprestimoUncheckedCreateNestedManyWithoutClienteInput
 }
 
@@ -276,6 +290,7 @@ export type ClienteUpdateInput = {
   cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   data_penalidade?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutClienteNestedInput
   emprestimos?: Prisma.EmprestimoUpdateManyWithoutClienteNestedInput
 }
@@ -285,6 +300,7 @@ export type ClienteUncheckedUpdateInput = {
   cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   data_penalidade?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emprestimos?: Prisma.EmprestimoUncheckedUpdateManyWithoutClienteNestedInput
 }
 
@@ -293,12 +309,14 @@ export type ClienteCreateManyInput = {
   cpf?: string | null
   telefone?: string | null
   data_penalidade?: Date | string | null
+  emailVerificado?: boolean
 }
 
 export type ClienteUpdateManyMutationInput = {
   cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   data_penalidade?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ClienteUncheckedUpdateManyInput = {
@@ -306,6 +324,7 @@ export type ClienteUncheckedUpdateManyInput = {
   cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   data_penalidade?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ClienteNullableScalarRelationFilter = {
@@ -324,6 +343,7 @@ export type ClienteCountOrderByAggregateInput = {
   cpf?: Prisma.SortOrder
   telefone?: Prisma.SortOrder
   data_penalidade?: Prisma.SortOrder
+  emailVerificado?: Prisma.SortOrder
 }
 
 export type ClienteAvgOrderByAggregateInput = {
@@ -335,6 +355,7 @@ export type ClienteMaxOrderByAggregateInput = {
   cpf?: Prisma.SortOrder
   telefone?: Prisma.SortOrder
   data_penalidade?: Prisma.SortOrder
+  emailVerificado?: Prisma.SortOrder
 }
 
 export type ClienteMinOrderByAggregateInput = {
@@ -342,6 +363,7 @@ export type ClienteMinOrderByAggregateInput = {
   cpf?: Prisma.SortOrder
   telefone?: Prisma.SortOrder
   data_penalidade?: Prisma.SortOrder
+  emailVerificado?: Prisma.SortOrder
 }
 
 export type ClienteSumOrderByAggregateInput = {
@@ -389,6 +411,10 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type ClienteCreateNestedOneWithoutEmprestimosInput = {
   create?: Prisma.XOR<Prisma.ClienteCreateWithoutEmprestimosInput, Prisma.ClienteUncheckedCreateWithoutEmprestimosInput>
   connectOrCreate?: Prisma.ClienteCreateOrConnectWithoutEmprestimosInput
@@ -407,6 +433,7 @@ export type ClienteCreateWithoutUsuarioInput = {
   cpf?: string | null
   telefone?: string | null
   data_penalidade?: Date | string | null
+  emailVerificado?: boolean
   emprestimos?: Prisma.EmprestimoCreateNestedManyWithoutClienteInput
 }
 
@@ -414,6 +441,7 @@ export type ClienteUncheckedCreateWithoutUsuarioInput = {
   cpf?: string | null
   telefone?: string | null
   data_penalidade?: Date | string | null
+  emailVerificado?: boolean
   emprestimos?: Prisma.EmprestimoUncheckedCreateNestedManyWithoutClienteInput
 }
 
@@ -437,6 +465,7 @@ export type ClienteUpdateWithoutUsuarioInput = {
   cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   data_penalidade?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emprestimos?: Prisma.EmprestimoUpdateManyWithoutClienteNestedInput
 }
 
@@ -444,6 +473,7 @@ export type ClienteUncheckedUpdateWithoutUsuarioInput = {
   cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   data_penalidade?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emprestimos?: Prisma.EmprestimoUncheckedUpdateManyWithoutClienteNestedInput
 }
 
@@ -451,6 +481,7 @@ export type ClienteCreateWithoutEmprestimosInput = {
   cpf?: string | null
   telefone?: string | null
   data_penalidade?: Date | string | null
+  emailVerificado?: boolean
   usuario: Prisma.UsuarioCreateNestedOneWithoutClienteInput
 }
 
@@ -459,6 +490,7 @@ export type ClienteUncheckedCreateWithoutEmprestimosInput = {
   cpf?: string | null
   telefone?: string | null
   data_penalidade?: Date | string | null
+  emailVerificado?: boolean
 }
 
 export type ClienteCreateOrConnectWithoutEmprestimosInput = {
@@ -481,6 +513,7 @@ export type ClienteUpdateWithoutEmprestimosInput = {
   cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   data_penalidade?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutClienteNestedInput
 }
 
@@ -489,6 +522,7 @@ export type ClienteUncheckedUpdateWithoutEmprestimosInput = {
   cpf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   data_penalidade?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -527,6 +561,7 @@ export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   cpf?: boolean
   telefone?: boolean
   data_penalidade?: boolean
+  emailVerificado?: boolean
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   emprestimos?: boolean | Prisma.Cliente$emprestimosArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
@@ -539,9 +574,10 @@ export type ClienteSelectScalar = {
   cpf?: boolean
   telefone?: boolean
   data_penalidade?: boolean
+  emailVerificado?: boolean
 }
 
-export type ClienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cpf" | "telefone" | "data_penalidade", ExtArgs["result"]["cliente"]>
+export type ClienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cpf" | "telefone" | "data_penalidade" | "emailVerificado", ExtArgs["result"]["cliente"]>
 export type ClienteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   emprestimos?: boolean | Prisma.Cliente$emprestimosArgs<ExtArgs>
@@ -559,6 +595,7 @@ export type $ClientePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     cpf: string | null
     telefone: string | null
     data_penalidade: Date | null
+    emailVerificado: boolean
   }, ExtArgs["result"]["cliente"]>
   composites: {}
 }
@@ -934,6 +971,7 @@ export interface ClienteFieldRefs {
   readonly cpf: Prisma.FieldRef<"Cliente", 'String'>
   readonly telefone: Prisma.FieldRef<"Cliente", 'String'>
   readonly data_penalidade: Prisma.FieldRef<"Cliente", 'DateTime'>
+  readonly emailVerificado: Prisma.FieldRef<"Cliente", 'Boolean'>
 }
     
 
