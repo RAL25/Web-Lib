@@ -4,4 +4,9 @@ Backend/dist
 Backend/.env
 Backend/generated/prisma
 
-Backend/generated/prisma
+
+Frontend/node_modules
+Frontend/BD
+Frontend/dist
+Frontend/.env
+Frontend/generated/prisma

@@ -27,7 +27,7 @@ O projeto foi construído seguindo as melhores práticas de Engenharia de Softwa
 
 ---
 
-## 🚀 Funcionalidades Principais
+## 🚀 Principais Funcionalidades
 
 - **Autenticação e Controle de Acesso (RBAC):** Sistema com diferentes níveis de privilégios onde rotas sensíveis são protegidas de acordo com a função do usuário (Cliente, Funcionário ou Administrador).
 - **Fluxo de Verificação de E-mail:** Registro de novos clientes dispara um e-mail de confirmação dinâmico com um link contendo um token JWT de expiração curta (1 hora).
@@ -53,6 +53,77 @@ A API está organizada sob os seguintes caminhos principais de endpoints:
 | `/configuracao`    | `GET`        | Apenas Administrador   | Ajustes globais do sistema de biblioteca.        |
 
 ---
+
+## Arquitetura de Dados (Diagrama ER)
+
+```mermaid
+erDiagram
+USUARIOS {
+    int id PK "AUTO_INCREMENT"
+    string nome "VARCHAR(50)"
+    string email UK "VARCHAR(100)"
+    string senha "VARCHAR(255)"
+    enum cargo "'ADMIN', 'FUNCIONARIO', 'CLIENTE'"
+    timestamp criado_em "DEFAULT NOW()"
+}
+
+CLIENTES {
+    int id PK "AUTO_INCREMENT"
+    int usuario_id FK,UK "INT"
+    string cpf UK "VARCHAR(14)"
+    string telefone "VARCHAR(20)"
+    boolean email_verificado "DEFAULT false"
+}
+
+FUNCIONARIOS {
+    int id PK "AUTO_INCREMENT"
+    int usuario_id FK,UK "INT"
+    string matricula UK "VARCHAR(20)"
+    string cargo_interno "VARCHAR(50)"
+}
+
+LIVROS {
+    int id PK "AUTO_INCREMENT"
+    string titulo "VARCHAR(255)"
+    string autor "VARCHAR(255)"
+    string isbn UK "VARCHAR(20)"
+    string editora "VARCHAR(100)"
+    int ano_publicacao "INT"
+    timestamp criado_em "DEFAULT NOW()"
+}
+
+EXEMPLARES {
+    int id PK "AUTO_INCREMENT"
+    int livro_id FK "INT"
+    string codigo_exemplar UK "VARCHAR(50)"
+    enum status "'DISPONIVEL', 'EMPRESTADO', 'MANUTENCAO', 'PERDIDO'"
+}
+
+EMPRESTIMOS {
+    int id PK "AUTO_INCREMENT"
+    int cliente_id FK "INT"
+    int exemplar_id FK "INT"
+    int funcionario_id FK "INT"
+    timestamp data_emprestimo "DEFAULT NOW()"
+    timestamp data_devolucao_prevista "TIMESTAMP"
+    timestamp data_devolucao_real "TIMESTAMP"
+    enum status "'ATIVO', 'DEVOLVIDO', 'ATRASADO'"
+}
+
+CONFIGURACOES {
+    int id PK "AUTO_INCREMENT"
+    string chave UK "VARCHAR(100)"
+    string valor "VARCHAR(255)"
+}
+
+    USUARIOS ||--o| CLIENTES : "extende"
+    USUARIOS ||--o| FUNCIONARIOS : "extende"
+    LIVROS ||--|{ EXEMPLARES : "possui"
+    CLIENTES ||--o{ EMPRESTIMOS : "solicita"
+    EXEMPLARES ||--o{ EMPRESTIMOS : "objeto de"
+    FUNCIONARIOS ||--o{ EMPRESTIMOS : "registra"
+
+```
 
 ## 💻 Como Rodar o Projeto Localmente
 
