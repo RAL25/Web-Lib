@@ -4,8 +4,8 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
 }
 
 datasource db {
@@ -105,8 +105,6 @@ model Configuracao {
   prazo_padrao_dias   Int    @default(7)  // Quantos dias dura o empréstimo
   dias_penalidade     Int    @default(7)  // Quanto tempo dura o bloqueio por atraso
 }
-
-// TO DO:
 
 // Rodar as migrations: npx prisma migrate dev --name nome_migration
 // Gerar arquivos com modelos das migrations: npx prisma generate

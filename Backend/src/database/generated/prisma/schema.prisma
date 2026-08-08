@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// Esquemas
+
+enum Role {
+  Cliente
+  Funcionario
+  Admin
+}
+
+model Usuario {
+  id    Int     @id @default(autoincrement())
+  nome  String  @db.VarChar(50)
+  email String? @unique @db.VarChar(100)
+  senha String? @db.VarChar(255)
+  role  Role    @default(Cliente)
+
+  // Relações 1:1 (Opcionais no objeto, pois um usuário é apenas UM desses)
+  cliente     Cliente?
+  funcionario Funcionario?
+}
+
+model Cliente {
+  id              Int       @id
+  cpf             String?   @unique @db.VarChar(11)
+  telefone        String?   @db.VarChar(11)
+  data_penalidade DateTime? // Data de penalidade do cliente
+  emailVerificado Boolean   @default(false)
+
+  usuario     Usuario      @relation(fields: [id], references: [id], onDelete: Cascade)
+  emprestimos Emprestimo[]
+}
+
+model Funcionario {
+  id               Int      @id
+  salario          Decimal  @db.Decimal(10, 2)
+  data_contratacao DateTime
+
+  usuario Usuario @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+//-----------Início parte livros
+enum LivroStatus {
+  Disponivel
+  Emprestado
+  // futuramente: Manutencao (caso o livro esteja danificado), Reservado
+}
+
+model Livro {
+  id     Int     @id @default(autoincrement())
+  titulo String  @db.VarChar(50)
+  autor  String? @db.VarChar(50)
+
+  exemplares ExemplarLivro[]
+}
+
+model ExemplarLivro {
+  id      Int         @id @default(autoincrement())
+  livroId Int
+  status  LivroStatus @default(Disponivel)
+
+  livro Livro            @relation(fields: [livroId], references: [id])
+  itens ItemEmprestimo[]
+}
+
+//-----------Fim parte livros
+
+model Emprestimo {
+  id         Int      @id @default(autoincrement())
+  id_cliente Int
+  data_saida DateTime @default(now())
+
+  // Um empréstimo pode ter vários itens (livros diferentes)
+  itens   ItemEmprestimo[]
+  cliente Cliente          @relation(fields: [id_cliente], references: [id])
+}
+
+model ItemEmprestimo {
+  id             Int       @id @default(autoincrement())
+  emprestimoId   Int
+  exemplarId     Int
+  count_adiar    Int       @default(5) // Quantidade de vezes que o cliente pode adiar o emprestimo
+  data_prazo     DateTime // Data para marcar o prazo de entrega  
+  data_devolucao DateTime? // Data para marcar o dia da entrega
+
+  emprestimo    Emprestimo    @relation(fields: [emprestimoId], references: [id], onDelete: Cascade)
+  exemplarLivro ExemplarLivro @relation(fields: [exemplarId], references: [id])
+}
+
+model Configuracao {
+  id                Int @id @default(1)
+  limite_global     Int @default(5) // Total de livros na sacola
+  limite_por_titulo Int @default(2) // Total de cópias do mesmo livro
+  prazo_padrao_dias Int @default(7) // Quantos dias dura o empréstimo
+  dias_penalidade   Int @default(7) // Quanto tempo dura o bloqueio por atraso
+}
+
+// Rodar as migrations: npx prisma migrate dev --name nome_migration
+// Gerar arquivos com modelos das migrations: npx prisma generate
+// Para rodar as seeds: npx prisma db seed

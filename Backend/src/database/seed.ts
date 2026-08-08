@@ -1,43 +1,63 @@
 import "dotenv/config";
-import * as seeds from "../../BD/seeds";
-import { prisma } from "../config/prisma-configDB";
+import mariadb from "mariadb";
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaClient } from "./generated/prisma/client";
+import { seedConfiguracoes } from "./seeds/Configuracaos";
+import { seedUsuarios } from "./seeds/Usuarios";
+import { seedFuncionarios } from "./seeds/Funcionarios";
+import { seedClientes } from "./seeds/Clientes";
+import { seedLivros } from "./seeds/Livros";
+import { seedExemplarLivros } from "./seeds/ExemplarLivros";
+import { seedEmprestimos } from "./seeds/Emprestimos";
+import { seedItemEmprestimos } from "./seeds/ItemEmprestimos";
 
-const connectionString = `${process.env.DATABASE_URL}`;
+const adapter = new PrismaMariaDb(process.env.DATABASE_URL!);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  // populando a tabela livros
-  for (const livro of seeds.livros) {
-    await prisma.livro.create({
-      data: {
-        titulo: livro.titulo,
-        autor: livro.autor,
-        exemplares: {
-          create: Array.from({ length: livro.qtd_exemplar }).map(() => ({})),
-        },
-      },
-    });
-  }
+  console.log("🧹 Limpando dados antigos...");
 
-  // Populando a tabela exemplares
-  // // populando a tabela usuários
-  // await prisma.usuario.createMany({
-  //   data: usuarios,
-  // });
-  // // populando a tabela clientes
-  // await prisma.cliente.createMany({
-  //   data: clientes,
-  // });
+  // Limpeza em ordem reversa de dependência
+  await prisma.itemEmprestimo.deleteMany();
+  await prisma.emprestimo.deleteMany();
+  await prisma.exemplarLivro.deleteMany();
+  await prisma.livro.deleteMany();
+  await prisma.cliente.deleteMany();
+  await prisma.funcionario.deleteMany();
+  await prisma.usuario.deleteMany();
+  await prisma.configuracao.deleteMany();
+
+  console.log("🚀 Iniciando execução das seeds...");
+
+  // 1. Configurações
+  await seedConfiguracoes(prisma);
+
+  // 2. Usuários (Admin, Funcionário, Cliente)
+  const usuarios = await seedUsuarios(prisma);
+
+  // 3. Perfis estendidos (usam o id do usuário correspondente)
+  await seedFuncionarios(prisma, usuarios.funcionario.id);
+  await seedClientes(prisma, usuarios.cliente.id);
+
+  // 4. Catalógo e acervo
+  const livros = await seedLivros(prisma);
+  const exemplares = await seedExemplarLivros(prisma, {
+    livro1Id: livros.livro1.id,
+    livro2Id: livros.livro2.id,
+  });
+
+  // 5. Circulação (Empréstimos e Itens)
+  const emprestimo = await seedEmprestimos(prisma, usuarios.cliente.id);
+  await seedItemEmprestimos(prisma, emprestimo.id, exemplares.exemplar1.id);
+
+  console.log("✨ Povoamento concluído com sucesso!");
 }
 
 main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
+  .catch((e) => {
+    console.error("❌ Erro na execução das seeds:", e);
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });
-
-// Para rodar as seeds: npx prisma db seed
-// Para resetar as seeds (e o banco também): npx prisma migrate reset
