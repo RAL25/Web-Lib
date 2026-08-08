@@ -27,7 +27,7 @@ O projeto foi construído seguindo as melhores práticas de Engenharia de Softwa
 
 ---
 
-## 🚀 Funcionalidades Principais
+## 🚀 Principais Funcionalidades
 
 - **Autenticação e Controle de Acesso (RBAC):** Sistema com diferentes níveis de privilégios onde rotas sensíveis são protegidas de acordo com a função do usuário (Cliente, Funcionário ou Administrador).
 - **Fluxo de Verificação de E-mail:** Registro de novos clientes dispara um e-mail de confirmação dinâmico com um link contendo um token JWT de expiração curta (1 hora).
@@ -53,6 +53,76 @@ A API está organizada sob os seguintes caminhos principais de endpoints:
 | `/configuracao`    | `GET`        | Apenas Administrador   | Ajustes globais do sistema de biblioteca.        |
 
 ---
+
+## Arquitetura de Dados (Banco de Dados)
+
+```mermaid
+
+erDiagram
+USUARIOS {
+    int id PK "AUTO_INCREMENT"
+    string nome "VARCHAR(50)"
+    string email UK "VARCHAR(100) - OPCIONAL"
+    string senha "VARCHAR(255) - OPCIONAL"
+    enum role "'Cliente', 'Funcionario', 'Admin' DEFAULT 'Cliente'"
+}
+
+CLIENTES {
+    int id PK,FK "INT (Chave herdada de USUARIOS.id)"
+    string cpf UK "VARCHAR(11) - OPCIONAL"
+    string telefone "VARCHAR(11) - OPCIONAL"
+    datetime data_penalidade "DATETIME - OPCIONAL"
+    boolean emailVerificado "DEFAULT false"
+}
+
+FUNCIONARIOS {
+    int id PK,FK "INT (Chave herdada de USUARIOS.id)"
+    decimal salario "DECIMAL(10,2)"
+    datetime data_contratacao "DATETIME"
+}
+
+LIVROS {
+    int id PK "AUTO_INCREMENT"
+    string titulo "VARCHAR(50)"
+    string autor "VARCHAR(50) - OPCIONAL"
+}
+
+EXEMPLARES_LIVRO {
+    int id PK "AUTO_INCREMENT"
+    int livroId FK "INT"
+    enum status "'Disponivel', 'Emprestado' DEFAULT 'Disponivel'"
+}
+
+EMPRESTIMOS {
+    int id PK "AUTO_INCREMENT"
+    int id_cliente FK "INT"
+    datetime data_saida "DEFAULT NOW()"
+}
+
+ITENS_EMPRESTIMO {
+    int id PK "AUTO_INCREMENT"
+    int emprestimoId FK "INT"
+    int exemplarId FK "INT"
+    int count_adiar "DEFAULT 5"
+    datetime data_prazo "DATETIME"
+    datetime data_devolucao "DATETIME - OPCIONAL"
+}
+
+CONFIGURACOES {
+    int id PK "DEFAULT 1"
+    int limite_global "DEFAULT 5"
+    int limite_por_titulo "DEFAULT 2"
+    int prazo_padrao_dias "DEFAULT 7"
+    int dias_penalidade "DEFAULT 7"
+}
+
+    USUARIOS ||--o| CLIENTES : "extende"
+    USUARIOS ||--o| FUNCIONARIOS : "extende"
+    LIVROS ||--|{ EXEMPLARES_LIVRO : "possui"
+    CLIENTES ||--o{ EMPRESTIMOS : "realiza"
+    EMPRESTIMOS ||--|{ ITENS_EMPRESTIMO : "contém"
+    EXEMPLARES_LIVRO ||--o{ ITENS_EMPRESTIMO : "incluído em"
+```
 
 ## 💻 Como Rodar o Projeto Localmente
 
