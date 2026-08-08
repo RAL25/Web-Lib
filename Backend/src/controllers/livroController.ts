@@ -78,25 +78,25 @@ export async function cadastrarLivro(
   request: Request,
   response: Response,
 ): Promise<void> {
-  const body = request.body;
-  let livro = await prisma.livro.findFirst({
-    where: { titulo: body.titulo, autor: body.autor },
-  });
-
-  if (!livro) {
-    // Cria o livro que ainda não existe no banco
-    livro = await prisma.livro.create({
-      data: {
-        titulo: body.titulo,
-        autor: body.autor,
-      },
-    });
-  }
-
-  // Adiciona os exemplares
-  await cadastrarExemplar(livro.id, body.quantidade);
-
   try {
+    const body = request.body;
+    let livro = await prisma.livro.findFirst({
+      where: { titulo: body.titulo, autor: body.autor },
+    });
+
+    if (!livro) {
+      // Cria o livro que ainda não existe no banco
+      livro = await prisma.livro.create({
+        data: {
+          titulo: body.titulo,
+          autor: body.autor,
+        },
+      });
+    }
+
+    // Adiciona os exemplares
+    await cadastrarExemplar(livro.id, body.quantidade);
+
     response.status(201).json({
       message: `${body.quantidade} exemplar(es) cadastrado(s) com sucesso.`,
     });

@@ -11,16 +11,18 @@ const router = Router();
 router.post("/", usuarioController.createUsuarioPublico);
 
 // Verificar se o cliente já confirmou o email de cadastro
-router.post("/verifica-email/:token", usuarioController.verificarEmail);
+router.get("/verifica_email/:token", usuarioController.verificarEmail);
 
-// Somento o próprio usuário pode acessar a sua conta ou o administrador
+// Somente o próprio usuário pode acessar a sua conta ou o administrador
 router.get("/perfil", autorizar, usuarioOuAdmin, usuarioController.findUsuario);
+
 router.put(
   "/alterar",
   autorizar,
   usuarioOuAdmin,
   usuarioController.updateUsuario,
 );
+
 router.delete(
   "/deletar",
   autorizar,

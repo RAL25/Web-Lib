@@ -3,5 +3,11 @@ Backend/BD
 Backend/dist
 Backend/.env
 Backend/generated/prisma
+Backend/teste
 
-Backend/generated/prisma
+Frontend/node_modules
+Frontend/BD
+Frontend/dist
+Frontend/.env
+Frontend/generated/prisma
+Frontend/teste

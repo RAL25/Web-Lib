@@ -50,6 +50,7 @@ export function funcionario(
   if (usuario?.role === "Cliente") {
     return response.status(403).json({ erro: "Acesso negado." });
   }
+  next();
 }
 
 // Verifica se é Administrador

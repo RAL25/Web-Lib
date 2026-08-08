@@ -58,36 +58,36 @@ export async function createUsuarioPublico(
   request: Request,
   response: Response,
 ): Promise<void> {
-  const body = request.body; // Nesse create será preciso também o cpf e telefone
-  const senhaHash = await bcrypt.hash(body.senha, 10);
-  const usuario = await prisma.usuario.create({
-    data: {
-      nome: body.nome,
-      email: body.email,
-      senha: senhaHash,
-      cliente: {
-        create: {
-          cpf: body.cpf,
-          telefone: body.telefone,
-          emailVerificado: false,
+  try {
+    const body = request.body; // Nesse create será preciso também o cpf e telefone
+    const senhaHash = await bcrypt.hash(body.senha, 10);
+    const usuario = await prisma.usuario.create({
+      data: {
+        nome: body.nome,
+        email: body.email,
+        senha: senhaHash,
+        cliente: {
+          create: {
+            cpf: body.cpf,
+            telefone: body.telefone,
+            emailVerificado: false,
+          },
         },
       },
-    },
-  });
+    });
 
-  const tokenVerificacao = jwt.sign(
-    { id: usuario.id },
-    process.env.JWT_SECRET as string,
-    { expiresIn: "1h" },
-  );
+    const tokenVerificacao = jwt.sign(
+      { id: usuario.id },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "1h" },
+    );
 
-  const link = `http://localhost:3000/usuario/verifica-email/${tokenVerificacao}`;
+    const link = `http://localhost:3001/api/lib/usuario/verifica_email/${tokenVerificacao}`;
 
-  if (usuario.email) {
-    await enviarEmailVerificacao(usuario.email, link);
-  }
+    if (usuario.email) {
+      await enviarEmailVerificacao(usuario.email, link);
+    }
 
-  try {
     response.status(201).json({
       mensagem:
         "Usuário criado! Por favor, verifique sua caixa de entrada para confirmar o e-mail.",
