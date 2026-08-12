@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../../services/api"; // Importa a configuração do axios
+import { Link } from "react-router-dom";
 
 interface Livro {
   id: number;
@@ -10,6 +11,7 @@ interface Livro {
 export default function CatalogoLivros() {
   const [livros, setLivros] = useState<Livro[]>([]);
   const [carregando, setCarregando] = useState<boolean>(true);
+  const token = localStorage.getItem("token");
   const [erro, setErro] = useState<string>("");
 
   useEffect(() => {
@@ -45,8 +47,15 @@ export default function CatalogoLivros() {
             <li key={livro.id}>
               <strong>Título:</strong> {livro.titulo} <br />
               <strong>Autor:</strong> {livro.autor} <br />
+              {token && (
+                <Link to={`/realizar-emprestimo?livroId=${livro.id}`}>
+                  {" "}
+                  <button>Solicitar Empréstimo</button>
+                  {/* (Solicitar Empréstimo) */}
+                </Link>
+              )}
               {/* Espaço reservado para futuros botões, como "Solicitar Empréstimo" ou "Ver Detalhes" */}
-              <button disabled>Ver Detalhes</button>
+              {/* <button disabled>Ver Detalhes</button> */}
               <br />
               <br />
             </li>
@@ -57,28 +66,26 @@ export default function CatalogoLivros() {
   );
 }
 
-/*
-interface Livro {
-  id: number;
-  titulo: string;
-  autor: string;
-}
+// interface Livro {
+//   id: number;
+//   titulo: string;
+//   autor: string;
+// }
 
-interface CatalogoLivrosProps {
-  livros: Livro[];
-}
+// interface CatalogoLivrosProps {
+//   livros: Livro[];
+// }
 
-export default function CatalogoLivros({ livros }: CatalogoLivrosProps) {
-  if (livros.length === 0) return <p>Nenhum livro disponível no momento.</p>;
+// export default function CatalogoLivros({ livros }: CatalogoLivrosProps) {
+//   if (livros.length === 0) return <p>Nenhum livro disponível no momento.</p>;
 
-  return (
-    <ul>
-      {livros.map((livro) => (
-        <li key={livro.id}>
-          <strong>{livro.titulo}</strong> - {livro.autor}
-        </li>
-      ))}
-    </ul>
-  );
-}
-*/
+//   return (
+//     <ul>
+//       {livros.map((livro) => (
+//         <li key={livro.id}>
+//           <strong>{livro.titulo}</strong> - {livro.autor}
+//         </li>
+//       ))}
+//     </ul>
+//   );
+// }

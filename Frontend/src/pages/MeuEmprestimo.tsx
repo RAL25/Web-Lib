@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import MenuLateral from "../components/common/MenuLateral";
 
 export default function MeuEmprestimo() {
   const [emprestimos, setEmprestimos] = useState<any[]>([]);
@@ -32,6 +33,8 @@ export default function MeuEmprestimo() {
     <div>
       <h1>Meus Empréstimos Ativos</h1>
       {mensagem && <p>{mensagem}</p>}
+
+      <MenuLateral />
 
       {emprestimos.length === 0 ? (
         <p>Você não possui livros emprestados no momento.</p>

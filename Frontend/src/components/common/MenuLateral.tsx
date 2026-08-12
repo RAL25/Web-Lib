@@ -34,10 +34,13 @@ export default function MenuLateral() {
               <Link to="/realizar-emprestimo">Buscar Livros</Link>
             </li>
             <li>
-              <Link to="/meus-emprestimos">Meus Empréstimos</Link>
+              <Link to="/meu-emprestimo">Meus Empréstimos</Link>
             </li>
             <li>
               <Link to="/historico">Histórico</Link>
+            </li>
+            <li>
+              <Link to="/carrinho">Carrinho</Link>
             </li>
           </>
         )}

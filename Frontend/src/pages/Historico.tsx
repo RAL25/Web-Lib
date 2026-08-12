@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import MenuLateral from "../components/common/MenuLateral";
 
 export default function Historico() {
   const [historico, setHistorico] = useState<any[]>([]);
@@ -19,6 +20,7 @@ export default function Historico() {
   return (
     <div>
       <h1>Histórico de Leitura</h1>
+      <MenuLateral />
       <ul>
         {historico.map((item) => (
           <li key={item.id}>

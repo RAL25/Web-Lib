@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import MenuLateral from "../components/common/MenuLateral";
 
 export default function Dashboard() {
   const [metricas, setMetricas] = useState({
@@ -24,6 +25,7 @@ export default function Dashboard() {
   return (
     <div>
       <h1>Painel Administrativo</h1>
+      <MenuLateral />
       <ul>
         <li>Total de Livros no Acervo: {metricas.totalLivros}</li>
         <li>Empréstimos em Andamento: {metricas.emprestimosAtivos}</li>

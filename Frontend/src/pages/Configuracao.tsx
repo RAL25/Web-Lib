@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import MenuLateral from "../components/common/MenuLateral";
 
 export default function Configuracao() {
   const [configs, setConfigs] = useState({
@@ -34,6 +35,7 @@ export default function Configuracao() {
     <div>
       <h1>Configurações do Sistema</h1>
       {mensagem && <p>{mensagem}</p>}
+      <MenuLateral />
       <form onSubmit={salvarConfigs}>
         <label>Prazo de Empréstimo (Dias): </label>
         <input

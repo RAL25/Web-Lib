@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import MenuLateral from "../components/common/MenuLateral";
 
 export default function Perfil() {
   const [dados, setDados] = useState({ nome: "", email: "", telefone: "" });
@@ -35,6 +36,7 @@ export default function Perfil() {
     <div>
       <h1>Meu Perfil</h1>
       {mensagem && <p>{mensagem}</p>}
+      <MenuLateral />
       <form onSubmit={salvarAlteracoes}>
         <label>Nome:</label>
         <input

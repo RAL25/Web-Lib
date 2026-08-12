@@ -11,7 +11,13 @@ router.get("/exemplar/", livroController.indexExemplar);
 router.use(autorizar);
 
 router.get("/:id", livroController.findLivro);
-router.get("/exemplar/:id", livroController.findExemplarLivro);
+
+// Rota para buscar exemplares disponíveis diretamente por busca
+router.get(
+  "/exemplares/disponiveis",
+  livroController.buscarExemplaresDisponiveis,
+);
+// router.get("/exemplar/:id", livroController.findExemplarLivro);
 
 // Apenas usuários logados com autorização (funcionários)
 router.use(funcionario);

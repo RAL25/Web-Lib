@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 export async function seedUsuarios(prisma: PrismaClient) {
   const senhaHash = await bcrypt.hash("123456", 10);
 
+  // TODO: Resolver problema do administrador estar com ROle de usuário ao invés de Admin
   const admin = await prisma.usuario.upsert({
     where: { email: "admin@biblioteca.com" },
     update: {},

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
+import MenuLateral from "../components/common/MenuLateral";
 
 export default function GerenciarUsuarios() {
   const [usuarios, setUsuarios] = useState<any[]>([]);
@@ -19,6 +20,7 @@ export default function GerenciarUsuarios() {
   return (
     <div>
       <h1>Gerenciar Usuários</h1>
+      <MenuLateral />
       <button>Cadastrar Novo Usuário (Balcão)</button>
       <table border={1}>
         <thead>
@@ -37,7 +39,7 @@ export default function GerenciarUsuarios() {
               <td>{user.email}</td>
               <td>
                 <button>Editar</button>
-                <button>Bloquear</button>
+                <button>Apagar</button>
               </td>
             </tr>
           ))}

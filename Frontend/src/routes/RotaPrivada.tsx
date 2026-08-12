@@ -1,9 +1,9 @@
-import { useContext } from "react";
+import { useContext, type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 interface RotaPrivadaProps {
-  children: JSX.Element;
+  children: ReactNode;
   rolesPermitidas?: string[]; // Ex: ["Admin", "Funcionario"]
 }
 

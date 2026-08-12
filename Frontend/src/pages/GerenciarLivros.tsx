@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../services/api";
+import MenuLateral from "../components/common/MenuLateral";
 
 export default function GerenciarLivros() {
   const [livros, setLivros] = useState<any[]>([]);
@@ -32,7 +33,8 @@ export default function GerenciarLivros() {
   return (
     <div>
       <h1>Gerenciamento de Acervo</h1>
-      <Link to="/cadastro-livro">
+      <MenuLateral />
+      <Link to="/cadastrar-livro">
         <button>+ Novo Livro</button>
       </Link>
       <ul>

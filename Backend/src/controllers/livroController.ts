@@ -13,6 +13,35 @@ export async function index(
   }
 }
 
+// Função para mostrar os exemplares disponíveis de um livro
+export async function buscarExemplaresDisponiveis(
+  request: Request,
+  response: Response,
+): Promise<void> {
+  try {
+    const busca = (request.query.busca as string) || "";
+
+    const exemplares = await prisma.exemplarLivro.findMany({
+      where: {
+        status: "Disponivel",
+        livro: {
+          OR: [{ titulo: { contains: busca } }, { autor: { contains: busca } }],
+        },
+      },
+      include: {
+        livro: true, // Traz os dados do Livro (titulo, autor) junto com o exemplar
+      },
+    });
+
+    response.status(200).json(exemplares);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .json({ error: "Erro ao buscar exemplares disponíveis." });
+  }
+}
+
 export async function indexExemplar(
   request: Request,
   response: Response,
@@ -29,13 +58,13 @@ export async function findLivro(
   request: Request,
   response: Response,
 ): Promise<void> {
-  const livro_id = Number(request.params.id);
-  const livro = await prisma.livro.findUnique({
-    where: {
-      id: livro_id,
-    },
-  });
   try {
+    const livro_id = Number(request.params.id);
+    const livro = await prisma.livro.findUnique({
+      where: {
+        id: livro_id,
+      },
+    });
     response.status(200).json(livro);
   } catch (error) {
     response.status(404).end();

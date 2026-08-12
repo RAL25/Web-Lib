@@ -15,7 +15,7 @@ export async function login(req: Request, res: Response) {
     // 2. Buscar o usuário no banco de dados pelo e-mail
     const usuario = await prisma.usuario.findUnique({
       where: { email: email },
-      // Trazendo as relações para saber se ele é funcionário ou cliente
+      // Trazendo as relações para saber se ele é funcionário, cliente ou administrador
       include: {
         cliente: true,
         funcionario: true,
@@ -36,12 +36,11 @@ export async function login(req: Request, res: Response) {
     }
 
     // 5. Descobrir qual é o "perfil" da pessoa logada
-    let role = "usuario";
-    if (usuario.funcionario) role = "Funcionario";
-    if (usuario.cliente) role = "Cliente";
+    // OBS: Pega o valor da role direto do campo do usuário ("Cliente" | "Funcionario" | "Admin")
+    let role = usuario.role;
 
     // Verificar se o cliente já confirmou o seu email
-    if (role === "Cliente") {
+    if (role === "Cliente" && usuario.cliente) {
       if (!usuario.cliente!.emailVerificado) {
         return res.status(403).json({
           erro: "Você precisa confirmar seu e-mail antes de fazer login.",
@@ -72,7 +71,7 @@ export async function login(req: Request, res: Response) {
         id: usuario.id,
         nome: usuario.nome,
         email: usuario.email,
-        // tipo: role,
+        tipo: role,
       },
       token: token,
     });

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../services/api";
@@ -16,6 +16,19 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
+
+  // Efeito para limpar o erro automaticamente após 5 segundos
+  useEffect(() => {
+    if (!erro) return;
+
+    // Define o tempo de exibição em milissegundos (5000ms = 5 segundos)
+    const timer = setTimeout(() => {
+      setErro("");
+    }, 5000);
+
+    // Função de limpeza para evitar vazamento de memória se o componente for desmontado
+    return () => clearTimeout(timer);
+  }, [erro]);
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
