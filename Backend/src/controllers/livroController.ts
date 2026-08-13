@@ -46,8 +46,8 @@ export async function indexExemplar(
   request: Request,
   response: Response,
 ): Promise<void> {
-  const exemplares = await prisma.exemplarLivro.findMany();
   try {
+    const exemplares = await prisma.exemplarLivro.findMany();
     response.status(200).json(exemplares);
   } catch (error) {
     response.status(204).end();

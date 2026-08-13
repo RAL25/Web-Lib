@@ -16,15 +16,28 @@ router.get("/verifica_email/:token", usuarioController.verificarEmail);
 // Somente o próprio usuário pode acessar a sua conta ou o administrador
 router.get("/perfil", autorizar, usuarioOuAdmin, usuarioController.findUsuario);
 
-router.put(
-  "/alterar",
+// O usuário altera os seus próprios dados
+router.put("/alterar", autorizar, usuarioController.updateUsuario);
+
+// Administrador pode criar qualquer usuário
+router.post(
+  "/adicionar_usuario",
   autorizar,
   usuarioOuAdmin,
-  usuarioController.updateUsuario,
+  usuarioController.createUsuarioAdmin,
+);
+
+router.get("/:id", autorizar, usuarioOuAdmin, usuarioController.buscarUsuario);
+
+router.put(
+  "/alterar/:id",
+  autorizar,
+  usuarioOuAdmin,
+  usuarioController.updateUsuarioAdmin,
 );
 
 router.delete(
-  "/deletar",
+  "/deletar/:id",
   autorizar,
   usuarioOuAdmin,
   usuarioController.deleteUsuario,
