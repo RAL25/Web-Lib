@@ -26,6 +26,7 @@ export async function findUsuario(
     where: {
       id: usuario_id,
     },
+    include: { cliente: true, funcionario: true },
   });
   try {
     response.status(200).json(usuario);
@@ -43,6 +44,7 @@ export async function buscarUsuario(
     where: {
       id: usuario_id,
     },
+    include: { cliente: true, funcionario: true },
   });
   try {
     response.status(200).json(usuario);
