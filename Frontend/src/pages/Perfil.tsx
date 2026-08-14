@@ -9,7 +9,7 @@ export default function Perfil() {
   useEffect(() => {
     const carregarPerfil = async () => {
       try {
-        const response = await api.get("/usuario/me");
+        const response = await api.get("/usuario/perfil");
         setDados({
           nome: response.data.nome,
           email: response.data.email,
@@ -25,7 +25,7 @@ export default function Perfil() {
   const salvarAlteracoes = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.put("/usuario/me", dados);
+      await api.put("/usuario/alterar", dados);
       setMensagem("Perfil atualizado com sucesso!");
     } catch (error: any) {
       setMensagem(error.response?.data?.erro || "Erro ao atualizar.");

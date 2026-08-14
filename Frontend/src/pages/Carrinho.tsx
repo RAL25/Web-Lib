@@ -38,7 +38,7 @@ export default function Carrinho() {
 
   return (
     <div>
-      <h1>Minha Sacola de Empréstimos</h1>
+      <h1>Carrinho</h1>
       <MenuLateral />
 
       {mensagem && (
@@ -47,13 +47,13 @@ export default function Carrinho() {
       {erro && <p style={{ color: "red", fontWeight: "bold" }}>{erro}</p>}
 
       {itens.length === 0 ? (
-        <p>Sua sacola está vazia.</p>
+        <p>O carrinho está vazio.</p>
       ) : (
         <>
           <table
             border={1}
             cellPadding={8}
-            style={{ borderCollapse: "collapse", width: "100%" }}
+            style={{ borderCollapse: "collapse", width: "60%" }}
           >
             <thead>
               <tr>

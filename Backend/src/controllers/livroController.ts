@@ -23,7 +23,7 @@ export async function buscarExemplaresDisponiveis(
 
     const exemplares = await prisma.exemplarLivro.findMany({
       where: {
-        status: "Disponivel",
+        // status: "Disponivel",
         livro: {
           OR: [{ titulo: { contains: busca } }, { autor: { contains: busca } }],
         },

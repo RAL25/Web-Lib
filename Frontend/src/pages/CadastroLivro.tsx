@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "../services/api";
+import MenuLateral from "../components/common/MenuLateral";
 
 export default function CadastroLivro() {
   const [titulo, setTitulo] = useState("");
@@ -54,9 +55,10 @@ export default function CadastroLivro() {
   return (
     <div>
       <h1>Cadastrar Novo Livro</h1>
-      <p>
+      {/* <p>
         <em>Acesso restrito a Funcionários e Administradores</em>
-      </p>
+      </p> */}
+      <MenuLateral />
 
       {erro && <p style={{ color: "red" }}>{erro}</p>}
       {sucesso && <p style={{ color: "green" }}>{sucesso}</p>}

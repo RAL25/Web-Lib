@@ -15,6 +15,8 @@ import Configuracao from "../pages/Configuracao";
 import CadastroLivro from "../pages/CadastroLivro";
 import Carrinho from "../pages/Carrinho";
 import ExemplaresLivro from "../pages/ExemplaresLivro";
+import CadastrarUsuario from "../pages/CadastrarUsuario";
+import EditarUsuario from "../pages/EditarUsuario";
 // Importe Perfil e outras telas futuramente...
 
 export function AppRoutes() {
@@ -109,19 +111,38 @@ export function AppRoutes() {
       />
 
       <Route
-        path="/gerenciar-usuarios"
+        path="/configuracao"
         element={
           <RotaPrivada rolesPermitidas={["Admin", "Funcionario"]}>
+            <Configuracao />
+          </RotaPrivada>
+        }
+      />
+
+      {/* Só Admin */}
+      <Route
+        path="/gerenciar-usuarios"
+        element={
+          <RotaPrivada rolesPermitidas={["Admin"]}>
             <GerenciarUsuarios />
           </RotaPrivada>
         }
       />
 
       <Route
-        path="/configuracao"
+        path="/cadastrar-usuario"
         element={
-          <RotaPrivada rolesPermitidas={["Admin", "Funcionario"]}>
-            <Configuracao />
+          <RotaPrivada rolesPermitidas={["Admin"]}>
+            <CadastrarUsuario />
+          </RotaPrivada>
+        }
+      />
+
+      <Route
+        path="/editar-usuario/:id"
+        element={
+          <RotaPrivada rolesPermitidas={["Admin"]}>
+            <EditarUsuario />
           </RotaPrivada>
         }
       />
