@@ -1,66 +1,160 @@
 import { type Request, type Response } from "express";
 import { prisma } from "../config/prisma-configDB";
-import { PrismaClient, LivroStatus } from "../database/generated/prisma/client";
+import { LivroStatus } from "../database/generated/prisma/client";
 
-/*
-    Para o index: mostra todos os emprestimos feitos
-    Para realizar um emprestimo;
-    Para adiar o prazo de entrega: soma mais 7 dias para a próxima data de entrega
-    Para a devolução:   adiciona a data da devolução no emprestimo;
-                        atualiza o status do livro para disponível;
-                        verifica se a data da entrega foi maior do que o prazo:
-                            se for, então bloqueia o cliente para não poder pegar um novo livro por 7 dias.
-*/
-
+/**
+ * GET /listar_itens
+ * Retorna apenas os itens em posse do cliente (que ainda não foram devolvidos).
+ * Calcula as regras de bloqueio de botão de renovar para o frontend.
+ */
 export async function index(
   request: Request,
   response: Response,
 ): Promise<void> {
-  const id_cliente = (request as any).usuarioLogado.id; //Pega o id do cliente no token para buscar todos os seus emprestimos
-  const emprestimos = await prisma.emprestimo.findMany({
-    where: {
-      id_cliente: id_cliente,
-    },
-  });
+  const id_cliente = (request as any).usuarioLogado.id;
+  const dataAtual = new Date();
+
   try {
-    response.status(200).json(emprestimos);
+    const config = await prisma.configuracao.findFirst();
+    const prazoPadrao = config?.prazo_padrao_dias ?? 7;
+
+    const itensEmprestados = await prisma.itemEmprestimo.findMany({
+      where: {
+        emprestimo: { id_cliente: id_cliente },
+        data_devolucao: null,
+      },
+      include: {
+        emprestimo: {
+          select: { data_saida: true },
+        },
+        exemplarLivro: {
+          include: {
+            livro: true,
+          },
+        },
+      },
+      orderBy: {
+        data_prazo: "asc",
+      },
+    });
+
+    const resultado = itensEmprestados.map((item) => {
+      const dataPrazo = new Date(item.data_prazo);
+      const atrasado = dataPrazo < dataAtual;
+
+      // Cálculo de dias decorridos desde a última renovação/empréstimo
+      const diffTempoMs = dataPrazo.getTime() - dataAtual.getTime();
+      const diasRestantes = diffTempoMs / (1000 * 60 * 60 * 24);
+      const diasPassados = prazoPadrao - diasRestantes;
+
+      // Regra 1: Bloqueia se a última renovação ocorreu há menos de 3 dias
+      const bloqueadoPorIntervalo = diasPassados < 3;
+
+      // Regra 2 & Definição do status de renovação
+      let pode_renovar = true;
+      let motivo_bloqueio = "";
+
+      if (atrasado) {
+        // REGRA 2: Bloqueia renovação se estiver em atraso
+        pode_renovar = false;
+        motivo_bloqueio = "Empréstimo em atraso";
+      } else if (item.count_adiar === 0) {
+        pode_renovar = false;
+        motivo_bloqueio = "Sem renovações restantes";
+      } else if (bloqueadoPorIntervalo) {
+        // REGRA 1: Bloqueia por pelo menos 3 dias
+        pode_renovar = false;
+        const diasFaltantes = Math.ceil(3 - diasPassados);
+        motivo_bloqueio = `Aguarde ${diasFaltantes} dia(s) para renovar novamente`;
+      }
+
+      return {
+        id: item.id,
+        exemplarId: item.exemplarId,
+        titulo: item.exemplarLivro.livro.titulo,
+        autor: item.exemplarLivro.livro.autor,
+        data_emprestimo: item.emprestimo.data_saida,
+        data_prazo: item.data_prazo,
+        renovacoes_disponiveis: item.count_adiar,
+        atrasado: atrasado,
+        status_prazo: atrasado ? "Atrasado" : "Em dia",
+        pode_renovar: pode_renovar,
+        motivo_bloqueio: motivo_bloqueio,
+      };
+    });
+
+    response.status(200).json(resultado);
   } catch (error) {
-    response.status(404).end();
+    console.error(error);
+    response
+      .status(500)
+      .json({ error: "Erro ao listar os itens dos empréstimos ativos." });
   }
 }
 
-export async function listarItens(
+/**
+ * GET /historico_emprestimo
+ */
+export async function HistoricoEmprestimo(
   request: Request,
   response: Response,
 ): Promise<void> {
-  const id_emprestimo = Number(request.params.id);
+  const id_cliente = (request as any).usuarioLogado.id;
 
-  const itens = await prisma.itemEmprestimo.findMany({
-    where: { emprestimoId: id_emprestimo },
-  });
   try {
-    response.status(200).json(itens);
+    const historicoItens = await prisma.itemEmprestimo.findMany({
+      where: {
+        emprestimo: { id_cliente: id_cliente },
+        data_devolucao: { not: null },
+      },
+      include: {
+        emprestimo: {
+          select: { data_saida: true },
+        },
+        exemplarLivro: {
+          include: {
+            livro: true,
+          },
+        },
+      },
+      orderBy: {
+        data_devolucao: "desc",
+      },
+    });
+
+    const resultado = historicoItens.map((item) => ({
+      id: item.id,
+      exemplarId: item.exemplarId,
+      titulo: item.exemplarLivro.livro.titulo,
+      autor: item.exemplarLivro.livro.autor,
+      data_emprestimo: item.emprestimo.data_saida,
+      data_devolucao: item.data_devolucao,
+    }));
+
+    response.status(200).json(resultado);
   } catch (error) {
     console.error(error);
-    response.status(404).json({ error: "Erro ao listar os itens." });
+    response
+      .status(500)
+      .json({ error: "Erro ao listar o histórico de empréstimos." });
   }
 }
 
+/**
+ * POST /realizar
+ */
 export async function realizarEmprestimo(req: Request, res: Response) {
-  const { id_exemplares } = req.body; // id_exemplares é um array [10, 22, 45]
-  const id_cliente = (req as any).usuarioLogado.id; // Pegando o id do token
+  const { id_exemplares } = req.body;
+  const id_cliente = (req as any).usuarioLogado.id;
 
   try {
     const resultado = await prisma.$transaction(async (tx) => {
-      // Carregar as regras salvas do banco de dados
       const config = await tx.configuracao.findFirst();
 
-      // Valores de segurança
       const limiteGlobal = config?.limite_global ?? 5;
       const limitePorTitulo = config?.limite_por_titulo ?? 2;
       const prazoDias = config?.prazo_padrao_dias ?? 7;
 
-      // Verifica se o cliente existe
       const cliente = await tx.cliente.findUnique({
         where: { id: id_cliente },
       });
@@ -68,14 +162,14 @@ export async function realizarEmprestimo(req: Request, res: Response) {
         throw new Error("Cliente não encontrado.");
       }
 
-      // Verificar se o cliente está penalizado
+      // Verifica se o cliente possui penalidade por atraso ativa
       if (cliente.data_penalidade) {
         const data_atual = new Date();
         if (cliente.data_penalidade > data_atual) {
           const dataFormatada =
-            cliente.data_penalidade.toLocaleDateString("pt-Br");
+            cliente.data_penalidade.toLocaleDateString("pt-BR");
           throw new Error(
-            `Não é possível realizar emprestimo. Conta bloqueada até o dia ${dataFormatada}`,
+            `Não é possível realizar empréstimo. Conta bloqueada por atraso até ${dataFormatada}`,
           );
         } else {
           await tx.cliente.update({
@@ -85,7 +179,6 @@ export async function realizarEmprestimo(req: Request, res: Response) {
         }
       }
 
-      // Verfica quais livros já foram emprestados
       let exemplaresSolicitados = await tx.exemplarLivro.findMany({
         where: { id: { in: id_exemplares } },
       });
@@ -97,18 +190,16 @@ export async function realizarEmprestimo(req: Request, res: Response) {
       if (indisponiveis.length > 0) {
         const titulos = indisponiveis.map((e) => e.id).join(", ");
         throw new Error(
-          `Os seguintes exemplares já estão emprestados ou indisponíveis: ${titulos}`,
+          `Os seguintes exemplares já estão empréstados: ${titulos}`,
         );
       }
 
-      // Verifica se a quantidade é maior que definida nas configurações padrão
       if (id_exemplares.length > limiteGlobal) {
         throw new Error(
           `Você só pode pegar até ${limiteGlobal} livros por vez.`,
         );
       }
 
-      // Verificar quantos livros o cliente já tem em mãos
       const itens = await tx.itemEmprestimo.count({
         where: {
           emprestimo: { id_cliente: id_cliente },
@@ -120,8 +211,6 @@ export async function realizarEmprestimo(req: Request, res: Response) {
         throw new Error(`Não é possível pegar mais de ${limiteGlobal} livros.`);
       }
 
-      // Verificar quantos exemplares do mesmo livro o cliente pode pegar
-      // Buscar detalhes e agrupar o pedido atual
       exemplaresSolicitados = await tx.exemplarLivro.findMany({
         where: { id: { in: id_exemplares } },
         include: { livro: true },
@@ -131,34 +220,15 @@ export async function realizarEmprestimo(req: Request, res: Response) {
 
       for (const exemplar of exemplaresSolicitados) {
         if (!contagemSolicitada[exemplar.livroId]) {
-          contagemSolicitada[exemplar.livroId] = {
-            qtdSendoPedida: 0,
-          };
+          contagemSolicitada[exemplar.livroId] = { qtdSendoPedida: 0 };
         }
+        contagemSolicitada[exemplar.livroId]!.qtdSendoPedida++;
       }
 
-      if (contagemSolicitada) {
-        for (const exemplar of exemplaresSolicitados) {
-          // 1. Tenta pegar a contagem atual
-          let contagem = contagemSolicitada[exemplar.livroId];
-
-          // 2. Se não existir, inicializa e guarda de volta no dicionário
-          if (!contagem) {
-            contagem = { qtdSendoPedida: 0 };
-            contagemSolicitada[exemplar.livroId] = contagem;
-          }
-
-          // 3. Incrementa com segurança (o TS agora tem certeza que 'contagem' existe)
-          contagem.qtdSendoPedida++;
-        }
-      }
-
-      // Aplicar o limite fixo
       for (const livroIdStr in contagemSolicitada) {
         const livroId = Number(livroIdStr);
         const contagem = contagemSolicitada[livroId];
 
-        // A) Quantos exemplares desta obra o cliente JÁ TEM em casa?
         const exemplaresJaEmprestados = await tx.itemEmprestimo.count({
           where: {
             emprestimo: { id_cliente: id_cliente },
@@ -167,22 +237,16 @@ export async function realizarEmprestimo(req: Request, res: Response) {
           },
         });
 
-        // B) Somar o que ele já tem com o que ele quer pegar agora
-        let totalAposEmprestimo = exemplaresJaEmprestados + 0;
-        if (contagem) {
-          totalAposEmprestimo =
-            exemplaresJaEmprestados + contagem.qtdSendoPedida;
-        }
+        const totalAposEmprestimo =
+          exemplaresJaEmprestados + contagem!.qtdSendoPedida;
 
-        // C) Bloquear se ultrapassar o limite fixo
         if (totalAposEmprestimo > limitePorTitulo) {
           throw new Error(
-            `Você não pode pegar ${totalAposEmprestimo} cópias. O limite é de ${limitePorTitulo} exemplar(es) por obra.`,
+            `Limite de ${limitePorTitulo} exemplar(es) por obra excedido.`,
           );
         }
       }
 
-      // Criar o empréstimo em uma única transação
       const dataPrazo = new Date();
       dataPrazo.setDate(dataPrazo.getDate() + prazoDias);
 
@@ -198,7 +262,6 @@ export async function realizarEmprestimo(req: Request, res: Response) {
         },
       });
 
-      // Atualizar o status dos livros para emprestado
       await tx.exemplarLivro.updateMany({
         where: { id: { in: id_exemplares } },
         data: { status: "Emprestado" },
@@ -214,40 +277,62 @@ export async function realizarEmprestimo(req: Request, res: Response) {
   }
 }
 
+/**
+ * PUT /adiar/:id
+ */
 export async function adiarEmprestimo(request: Request, response: Response) {
   const id_itemEmprestimo = Number(request.params.id);
   try {
     const resultado = await prisma.$transaction(async (tx) => {
-      // Carregar as regras salvas do banco de dados
       const config = await tx.configuracao.findFirst();
 
       const itemEmprestimo = await tx.itemEmprestimo.findUnique({
         where: { id: id_itemEmprestimo },
       });
 
-      const data_atual = Number(new Date());
-      const data_prazo = Number(itemEmprestimo?.data_prazo);
-      const prazo_padrao = config?.prazo_padrao_dias ?? 7;
-
       if (!itemEmprestimo) {
-        throw new Error("Emprestimo não encontrado");
+        throw new Error("Empréstimo não encontrado.");
       } else if (itemEmprestimo.data_devolucao !== null) {
-        throw new Error("Emprestimo finalizado, livro devolvido.");
-      } else if (
-        (data_prazo - data_atual) / (24 * 60 * 60 * 1000) >=
-        prazo_padrao
-      ) {
-        throw new Error("Ainda não pode aumentar o prazo. Leia mais um pouco.");
-      } else if (itemEmprestimo.count_adiar === 0) {
-        throw new Error("Não é possível adiar mais.");
+        throw new Error("Empréstimo finalizado, livro já devolvido.");
       }
 
-      //Adiando a data de devolução (prazo)
+      const data_atual = new Date();
+      const data_prazo = new Date(itemEmprestimo.data_prazo);
+      const prazo_padrao = config?.prazo_padrao_dias ?? 7;
+
+      // REGRA 2: Bloqueio caso esteja atrasado
+      if (data_atual > data_prazo) {
+        throw new Error(
+          "Não é possível renovar um empréstimo em atraso. Por favor, faça a devolução.",
+        );
+      }
+
+      if (itemEmprestimo.count_adiar === 0) {
+        throw new Error("Limite de renovações para este item esgotado.");
+      }
+
+      // REGRA 1: Bloqueia a renovação se foi feita há menos de 3 dias
+      const diffTempoMs = data_prazo.getTime() - data_atual.getTime();
+      const diasRestantes = diffTempoMs / (1000 * 60 * 60 * 24);
+      const diasPassados = prazo_padrao - diasRestantes;
+
+      if (diasPassados < 3) {
+        const diasFaltantes = Math.ceil(3 - diasPassados);
+        throw new Error(
+          `Você deve aguardar pelo menos 3 dias após a renovação para adiar novamente. Tente em ${diasFaltantes} dia(s).`,
+        );
+      }
+
+      // Estendendo a data de entrega e decrementando o contador
+      const novoPrazo = new Date(
+        Date.now() + prazo_padrao * 24 * 60 * 60 * 1000,
+      );
+
       const adiaEmprestimo = await tx.itemEmprestimo.update({
         where: { id: id_itemEmprestimo },
         data: {
-          data_prazo: new Date(Date.now() + prazo_padrao * 24 * 60 * 60 * 1000), // Atualiza a data para os próximos dias conforme a configuração
-          count_adiar: itemEmprestimo.count_adiar - 1, // Decrementa o contador de adiamentos em 1
+          data_prazo: novoPrazo,
+          count_adiar: itemEmprestimo.count_adiar - 1,
         },
       });
 
@@ -256,36 +341,56 @@ export async function adiarEmprestimo(request: Request, response: Response) {
 
     response.status(200).json(resultado);
   } catch (error: any) {
-    response.status(404).json({ erro: error.message });
+    response.status(400).json({ erro: error.message });
   }
 }
 
+/**
+ * PUT /devolver/:id
+ */
 export async function devolverLivro(request: Request, response: Response) {
   const id_itemEmprestimo = Number(request.params.id);
 
   try {
     const resultado = await prisma.$transaction(async (tx) => {
-      const emprestimo = await tx.itemEmprestimo.findUnique({
+      const itemEmprestimo = await tx.itemEmprestimo.findUnique({
         where: { id: id_itemEmprestimo },
+        include: { emprestimo: true }, // Inclui a relação para pegar o id_cliente
       });
 
-      if (!emprestimo) {
-        throw new Error("Emprestimo não encontrado.");
-      } else if (emprestimo.data_devolucao) {
-        throw new Error("Emprestimo já devolvido.");
+      if (!itemEmprestimo) {
+        throw new Error("Empréstimo não encontrado.");
+      } else if (itemEmprestimo.data_devolucao) {
+        throw new Error("Empréstimo já devolvido.");
       }
 
-      // Atualizando a data de devolução do livro
+      const dataAtual = new Date();
+
+      // Atualiza data de devolução do item
       const atualizaEmprestimo = await tx.itemEmprestimo.update({
         where: { id: id_itemEmprestimo },
-        data: { data_devolucao: new Date() },
+        data: { data_devolucao: dataAtual },
       });
 
-      // Tornando o livro disponível novamente
+      // Libera o exemplar
       await tx.exemplarLivro.update({
-        where: { id: emprestimo.exemplarId },
+        where: { id: itemEmprestimo.exemplarId },
         data: { status: LivroStatus.Disponivel },
       });
+
+      // REGRA 3: Devolução com atraso gera penalidade de 7 dias
+      if (dataAtual > itemEmprestimo.data_prazo) {
+        const config = await tx.configuracao.findFirst();
+        const diasPenalidade = config?.dias_penalidade ?? 7;
+
+        const dataPenalidade = new Date();
+        dataPenalidade.setDate(dataPenalidade.getDate() + diasPenalidade);
+
+        await tx.cliente.update({
+          where: { id: itemEmprestimo.emprestimo.id_cliente },
+          data: { data_penalidade: dataPenalidade },
+        });
+      }
 
       return atualizaEmprestimo;
     });
