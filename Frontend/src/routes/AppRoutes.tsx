@@ -17,7 +17,6 @@ import Carrinho from "../pages/Carrinho";
 import ExemplaresLivro from "../pages/ExemplaresLivro";
 import CadastrarUsuario from "../pages/CadastrarUsuario";
 import EditarUsuario from "../pages/EditarUsuario";
-// Importe Perfil e outras telas futuramente...
 
 export function AppRoutes() {
   return (
