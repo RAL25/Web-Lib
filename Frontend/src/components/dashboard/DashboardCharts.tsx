@@ -32,35 +32,47 @@ interface DashboardChartsProps {
 }
 
 export default function DashboardCharts({ data }: DashboardChartsProps) {
-  // Truncar títulos longos para o gráfico horizontal
   const topLivrosFormatados = data.topLivros.map((item, index) => ({
     ...item,
     ranking: `#${index + 1}`,
     tituloAbreviado:
-      item.titulo.length > 20 ? `${item.titulo.slice(0, 18)}...` : item.titulo,
+      item.titulo.length > 22 ? `${item.titulo.slice(0, 20)}...` : item.titulo,
   }));
 
   return (
-    <div className="dashboard-column">
+    <div className="space-y-6">
       {/* 1. Fluxo Mensal (Empréstimos vs Devoluções) */}
-      <div className="chart-card">
-        <div className="chart-header">
-          <h2 className="chart-title">
-            <span>📈</span> Fluxo Mensal (Últimos 6 Meses)
-          </h2>
-          <span className="sub-badge">Comparativo</span>
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-soft">
+        <div className="flex items-center justify-between border-b border-outline-variant pb-4 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-[22px]">
+              trending_up
+            </span>
+            <h2 className="font-headline-md text-headline-md font-bold text-on-surface">
+              Fluxo Mensal
+            </h2>
+          </div>
+          <span className="text-[11px] font-bold uppercase tracking-wider bg-surface-container-low px-2.5 py-1 rounded-full text-on-surface-variant">
+            Últimos 6 Meses
+          </span>
         </div>
 
-        <div className="chart-wrapper">
+        <div className="h-72 w-full">
           {data.fluxoMensal.length === 0 ? (
-            <p className="empty-state">Sem dados de movimentação no período.</p>
+            <div className="h-full flex items-center justify-center text-outline text-body-sm italic">
+              Sem dados de movimentação no período.
+            </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={data.fluxoMensal}
                 margin={{ top: 10, right: 10, left: -15, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="#e2e8f0"
+                />
                 <XAxis
                   dataKey="mes"
                   tick={{ fill: "#64748b", fontSize: 12 }}
@@ -74,26 +86,26 @@ export default function DashboardCharts({ data }: DashboardChartsProps) {
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#ffffff",
-                    border: "1px solid #e2e8f0",
-                    borderRadius: "8px",
-                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                    border: "1px solid #bdc9c6",
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
                     fontSize: "12px",
                   }}
                 />
                 <Legend
-                  wrapperStyle={{ paddingTop: "10px", fontSize: "12px" }}
+                  wrapperStyle={{ paddingTop: "12px", fontSize: "12px" }}
                 />
                 <Bar
                   dataKey="emprestimos"
                   name="Empréstimos"
-                  fill="#024935"
-                  radius={[4, 4, 0, 0]}
+                  fill="#005c55"
+                  radius={[6, 6, 0, 0]}
                 />
                 <Bar
                   dataKey="devolucoes"
                   name="Devoluções"
                   fill="#0284c7"
-                  radius={[4, 4, 0, 0]}
+                  radius={[6, 6, 0, 0]}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -102,17 +114,26 @@ export default function DashboardCharts({ data }: DashboardChartsProps) {
       </div>
 
       {/* 2. Top 5 Livros Mais Populares */}
-      <div className="chart-card">
-        <div className="chart-header">
-          <h2 className="chart-title">
-            <span>🏆</span> Top 5 Livros Mais Populares
-          </h2>
-          <span className="sub-badge">Mais Emprestados</span>
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-soft">
+        <div className="flex items-center justify-between border-b border-outline-variant pb-4 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#F59E0B] text-[22px]">
+              emoji_events
+            </span>
+            <h2 className="font-headline-md text-headline-md font-bold text-on-surface">
+              Top 5 Livros Mais Populares
+            </h2>
+          </div>
+          <span className="text-[11px] font-bold uppercase tracking-wider bg-surface-container-low px-2.5 py-1 rounded-full text-on-surface-variant">
+            Mais Emprestados
+          </span>
         </div>
 
-        <div className="chart-wrapper">
+        <div className="h-72 w-full">
           {topLivrosFormatados.length === 0 ? (
-            <p className="empty-state">Nenhum dado de empréstimo disponível.</p>
+            <div className="h-full flex items-center justify-center text-outline text-body-sm italic">
+              Nenhum dado de empréstimo disponível.
+            </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
@@ -120,7 +141,11 @@ export default function DashboardCharts({ data }: DashboardChartsProps) {
                 data={topLivrosFormatados}
                 margin={{ top: 10, right: 20, left: 10, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  horizontal={false}
+                  stroke="#e2e8f0"
+                />
                 <XAxis
                   type="number"
                   allowDecimals={false}
@@ -130,8 +155,8 @@ export default function DashboardCharts({ data }: DashboardChartsProps) {
                 <YAxis
                   type="category"
                   dataKey="tituloAbreviado"
-                  width={110}
-                  tick={{ fill: "#0f172a", fontSize: 12, fontWeight: 500 }}
+                  width={120}
+                  tick={{ fill: "#191c1e", fontSize: 12, fontWeight: 500 }}
                   axisLine={{ stroke: "#cbd5e1" }}
                 />
                 <Tooltip
@@ -148,9 +173,9 @@ export default function DashboardCharts({ data }: DashboardChartsProps) {
                   }}
                   contentStyle={{
                     backgroundColor: "#ffffff",
-                    border: "1px solid #e2e8f0",
-                    borderRadius: "8px",
-                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                    border: "1px solid #bdc9c6",
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
                     fontSize: "12px",
                   }}
                 />
@@ -158,7 +183,7 @@ export default function DashboardCharts({ data }: DashboardChartsProps) {
                   dataKey="totalEmprestimos"
                   name="Empréstimos"
                   fill="#059669"
-                  radius={[0, 4, 4, 0]}
+                  radius={[0, 6, 6, 0]}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -168,3 +193,4 @@ export default function DashboardCharts({ data }: DashboardChartsProps) {
     </div>
   );
 }
+

@@ -18,97 +18,132 @@ interface KpiCardsProps {
 
 export default function KpiCards({ data }: KpiCardsProps) {
   return (
-    <div className="kpi-grid">
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       {/* 1. Total do Acervo */}
-      <div className="kpi-card">
-        <div className="kpi-header">
-          <span className="kpi-title">Total do Acervo</span>
-          <span className="kpi-icon">📚</span>
-        </div>
-        <div className="kpi-body">
-          <div className="kpi-value">{data.totalTitulos}</div>
-          <div className="kpi-description">
-            {data.totalTitulos === 1 ? "Título" : "Títulos"} (
-            <strong>{data.totalExemplares}</strong>{" "}
-            {data.totalExemplares === 1 ? "exemplar" : "exemplares"} no total)
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 shadow-soft flex flex-col justify-between hover:shadow-md transition-all">
+        <div className="flex items-center justify-between mb-3">
+          <span className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+            Total de Títulos
+          </span>
+          <div className="w-10 h-10 rounded-xl bg-primary-container/15 text-primary flex items-center justify-center">
+            <span className="material-symbols-outlined text-[22px]">library_books</span>
           </div>
+        </div>
+        <div>
+          <div className="font-headline-lg text-headline-lg font-bold text-on-surface">
+            {data.totalTitulos}
+          </div>
+          <p className="font-body-sm text-xs text-on-surface-variant mt-1">
+            <strong>{data.totalExemplares}</strong> exemplares físicos
+          </p>
         </div>
       </div>
 
       {/* 2. Empréstimos Ativos */}
-      <div className="kpi-card">
-        <div className="kpi-header">
-          <span className="kpi-title">Empréstimos Ativos</span>
-          <span className="kpi-icon">🔄</span>
-        </div>
-        <div className="kpi-body">
-          <div className="kpi-value">{data.emprestimosAtivos}</div>
-          <div className="kpi-description">
-            {data.emprestimosAtivos === 1
-              ? "Livro atualmente emprestado"
-              : "Livros atualmente emprestados"}
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 shadow-soft flex flex-col justify-between hover:shadow-md transition-all">
+        <div className="flex items-center justify-between mb-3">
+          <span className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+            Empréstimos Ativos
+          </span>
+          <div className="w-10 h-10 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center">
+            <span className="material-symbols-outlined text-[22px]">sync_alt</span>
           </div>
+        </div>
+        <div>
+          <div className="font-headline-lg text-headline-lg font-bold text-on-surface">
+            {data.emprestimosAtivos}
+          </div>
+          <p className="font-body-sm text-xs text-secondary font-medium mt-1">
+            Livros em circulação
+          </p>
         </div>
       </div>
 
-      {/* 3. Devoluções em Atraso (Destaque visual com --danger) */}
+      {/* 3. Devoluções em Atraso */}
       <div
-        className={`kpi-card ${data.devolucoesAtrasadas > 0 ? "kpi-danger" : ""}`}
+        className={`bg-surface-container-lowest border rounded-2xl p-5 shadow-soft flex flex-col justify-between hover:shadow-md transition-all ${
+          data.devolucoesAtrasadas > 0
+            ? "border-error/40 bg-error-container/10"
+            : "border-outline-variant"
+        }`}
       >
-        <div className="kpi-header">
-          <span className="kpi-title">Devoluções em Atraso</span>
-          <span className="kpi-icon">⚠️</span>
-        </div>
-        <div className="kpi-body">
-          <div className="kpi-value">{data.devolucoesAtrasadas}</div>
-          <div className="kpi-description">
-            {data.devolucoesAtrasadas > 0 ? (
-              <span style={{ color: "var(--danger)", fontWeight: 600 }}>
-                {data.devolucoesAtrasadas === 1
-                  ? "Requer atenção imediata"
-                  : "Requerem atenção imediata"}
-              </span>
-            ) : (
-              "Nenhum atraso registrado"
-            )}
+        <div className="flex items-center justify-between mb-3">
+          <span className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+            Atrasos
+          </span>
+          <div
+            className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+              data.devolucoesAtrasadas > 0
+                ? "bg-error-container text-error"
+                : "bg-surface-container text-outline"
+            }`}
+          >
+            <span className="material-symbols-outlined text-[22px]">warning</span>
           </div>
+        </div>
+        <div>
+          <div
+            className={`font-headline-lg text-headline-lg font-bold ${
+              data.devolucoesAtrasadas > 0 ? "text-error" : "text-on-surface"
+            }`}
+          >
+            {data.devolucoesAtrasadas}
+          </div>
+          <p className="font-body-sm text-xs text-on-surface-variant mt-1">
+            {data.devolucoesAtrasadas > 0 ? (
+              <span className="text-error font-semibold">Atenção requerida</span>
+            ) : (
+              "Nenhum atraso"
+            )}
+          </p>
         </div>
       </div>
 
-      {/* 4. Total de Usuários (Com Sub-badges por perfil) */}
-      <div className="kpi-card">
-        <div className="kpi-header">
-          <span className="kpi-title">Total de Usuários</span>
-          <span className="kpi-icon">👥</span>
+      {/* 4. Total de Usuários */}
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 shadow-soft flex flex-col justify-between hover:shadow-md transition-all">
+        <div className="flex items-center justify-between mb-3">
+          <span className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+            Usuários
+          </span>
+          <div className="w-10 h-10 rounded-xl bg-surface-container text-primary flex items-center justify-center">
+            <span className="material-symbols-outlined text-[22px]">group</span>
+          </div>
         </div>
-        <div className="kpi-body">
-          <div className="kpi-value">{data.totalUsuarios.total}</div>
-          <div className="kpi-badges">
-            <span className="sub-badge sub-badge-client">
+        <div>
+          <div className="font-headline-lg text-headline-lg font-bold text-on-surface">
+            {data.totalUsuarios.total}
+          </div>
+          <div className="flex gap-1.5 mt-1.5 flex-wrap">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-container/60 text-on-secondary-container">
               {data.totalUsuarios.clientes} Leitores
             </span>
-            <span className="sub-badge sub-badge-admin">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-container/20 text-primary">
               {data.totalUsuarios.admins} Admins
             </span>
           </div>
         </div>
       </div>
 
-      {/* 5. Usuários Penalizados / Bloqueados */}
-      <div className="kpi-card">
-        <div className="kpi-header">
-          <span className="kpi-title">Bloqueados</span>
-          <span className="kpi-icon">🚫</span>
-        </div>
-        <div className="kpi-body">
-          <div className="kpi-value">{data.usuariosPenalizados}</div>
-          <div className="kpi-description">
-            {data.usuariosPenalizados === 1
-              ? "Usuário com conta bloqueada"
-              : "Usuários com conta bloqueada"}
+      {/* 5. Bloqueados / Penalizados */}
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 shadow-soft flex flex-col justify-between hover:shadow-md transition-all">
+        <div className="flex items-center justify-between mb-3">
+          <span className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+            Bloqueados
+          </span>
+          <div className="w-10 h-10 rounded-xl bg-surface-container text-error flex items-center justify-center">
+            <span className="material-symbols-outlined text-[22px]">block</span>
           </div>
         </div>
+        <div>
+          <div className="font-headline-lg text-headline-lg font-bold text-on-surface">
+            {data.usuariosPenalizados}
+          </div>
+          <p className="font-body-sm text-xs text-on-surface-variant mt-1">
+            Contas suspensas
+          </p>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
+

@@ -8,7 +8,9 @@ function App() {
     <AuthProvider>
       <CarrinhoProvider>
         <Router>
-          <AppRoutes />
+          <div className="w-full min-h-screen flex flex-col">
+            <AppRoutes />
+          </div>
         </Router>
       </CarrinhoProvider>
     </AuthProvider>

@@ -50,51 +50,72 @@ export default function MonitoringSection({ data }: MonitoringSectionProps) {
   };
 
   return (
-    <div className="dashboard-column">
+    <div className="space-y-6">
       {/* 1. Devoluções Pendentes (Urgentes) */}
-      <div className="monitoring-card">
-        <div className="monitoring-header">
-          <h2 className="monitoring-title">
-            <span>🚨</span> Devoluções Pendentes (Urgentes)
-          </h2>
-          <span className="badge badge-danger">
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-soft">
+        <div className="flex items-center justify-between border-b border-outline-variant pb-4 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-error text-[22px]">
+              notification_important
+            </span>
+            <h2 className="font-headline-md text-headline-md font-bold text-on-surface">
+              Devoluções Pendentes
+            </h2>
+          </div>
+          <span
+            className={`px-2.5 py-1 rounded-full text-label-md font-bold ${
+              data.devolucoesPendentes.length > 0
+                ? "bg-error-container text-error"
+                : "bg-surface-container text-outline"
+            }`}
+          >
             {data.devolucoesPendentes.length} pendente(s)
           </span>
         </div>
 
         {data.devolucoesPendentes.length === 0 ? (
-          <p className="empty-state">
-            Nenhum empréstimo atrasado no momento. Parabéns! 🎉
-          </p>
+          <div className="p-6 text-center text-body-sm text-on-surface-variant bg-surface-container-low rounded-xl">
+            <span className="material-symbols-outlined text-3xl text-emerald-600 mb-1">
+              verified
+            </span>
+            <p>Nenhum empréstimo atrasado no momento. Tudo em dia!</p>
+          </div>
         ) : (
-          <div style={{ overflowX: "auto" }}>
-            <table className="monitoring-table">
-              <thead>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead className="bg-surface-container-low border-b border-outline-variant">
                 <tr>
-                  <th>Cliente</th>
-                  <th>Livro</th>
-                  <th>Dias de Atraso</th>
+                  <th className="p-2.5 font-label-md text-[11px] text-outline uppercase">
+                    Cliente
+                  </th>
+                  <th className="p-2.5 font-label-md text-[11px] text-outline uppercase">
+                    Livro
+                  </th>
+                  <th className="p-2.5 font-label-md text-[11px] text-outline uppercase text-right">
+                    Atraso
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-outline-variant font-body-sm text-xs">
                 {data.devolucoesPendentes.map((item) => (
-                  <tr key={item.id}>
-                    <td>
-                      <strong>{item.clienteNome}</strong>
-                      <div style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+                  <tr key={item.id} className="hover:bg-error-container/10">
+                    <td className="p-2.5 font-medium text-on-surface">
+                      <div>{item.clienteNome}</div>
+                      <div className="text-[10px] text-outline">
                         CPF: {item.clienteCpf}
                       </div>
                     </td>
-                    <td>
-                      <span>{item.livroTitulo}</span>
-                      <div style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+                    <td className="p-2.5">
+                      <div className="text-on-surface truncate max-w-[140px]">
+                        {item.livroTitulo}
+                      </div>
+                      <div className="text-[10px] text-outline">
                         Exemplar #{item.exemplarId}
                       </div>
                     </td>
-                    <td>
-                      <span className="badge badge-danger">
-                        {item.diasAtraso}{" "}
-                        {item.diasAtraso === 1 ? "dia" : "dias"}
+                    <td className="p-2.5 text-right">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full font-bold bg-error-container text-error">
+                        +{item.diasAtraso}d
                       </span>
                     </td>
                   </tr>
@@ -106,86 +127,119 @@ export default function MonitoringSection({ data }: MonitoringSectionProps) {
       </div>
 
       {/* 2. Últimas Movimentações */}
-      <div className="monitoring-card">
-        <div className="monitoring-header">
-          <h2 className="monitoring-title">
-            <span>🕒</span> Últimas Movimentações
-          </h2>
-          <span className="sub-badge">Recentes</span>
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-soft">
+        <div className="flex items-center justify-between border-b border-outline-variant pb-4 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-[22px]">
+              history
+            </span>
+            <h2 className="font-headline-md text-headline-md font-bold text-on-surface">
+              Últimas Movimentações
+            </h2>
+          </div>
+          <span className="text-[11px] font-bold uppercase tracking-wider bg-surface-container-low px-2.5 py-1 rounded-full text-on-surface-variant">
+            Recentes
+          </span>
         </div>
 
         {data.ultimasMovimentacoes.length === 0 ? (
-          <p className="empty-state">Nenhuma movimentação recente registrada.</p>
+          <p className="p-6 text-center text-body-sm text-outline italic">
+            Nenhuma movimentação recente registrada.
+          </p>
         ) : (
-          <div className="activity-feed">
+          <div className="divide-y divide-outline-variant">
             {data.ultimasMovimentacoes.map((item) => (
               <div
                 key={item.id}
-                className={`activity-item ${
-                  item.tipo === "Devolução" ? "activity-devolucao" : ""
-                }`}
+                className="py-3 flex items-start justify-between gap-3 first:pt-0 last:pb-0"
               >
-                <div className="activity-main">
-                  <div>
-                    <span
-                      className={`badge ${
-                        item.tipo === "Empréstimo"
-                          ? "badge-success"
-                          : "sub-badge-client"
-                      }`}
-                      style={{ marginRight: "8px" }}
-                    >
-                      {item.tipo}
+                <div className="flex items-start gap-2.5 min-w-0">
+                  <div
+                    className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
+                      item.tipo === "Empréstimo"
+                        ? "bg-secondary-container text-on-secondary-container"
+                        : "bg-primary-container/20 text-primary"
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[16px]">
+                      {item.tipo === "Empréstimo" ? "arrow_outward" : "arrow_downward"}
                     </span>
-                    <span className="activity-user">{item.usuarioNome}</span>
                   </div>
-                  <span className="activity-book">Livro: {item.livroTitulo}</span>
+
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-body-sm text-xs font-bold text-on-surface">
+                        {item.usuarioNome}
+                      </span>
+                      <span className="text-[10px] text-outline uppercase font-semibold">
+                        ({item.tipo})
+                      </span>
+                    </div>
+                    <p className="font-body-sm text-xs text-on-surface-variant truncate">
+                      {item.livroTitulo}
+                    </p>
+                  </div>
                 </div>
-                <div className="activity-time">{formatarDataHora(item.data)}</div>
+
+                <span className="text-[10px] text-outline shrink-0">
+                  {formatarDataHora(item.data)}
+                </span>
               </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* 3. Bloco de Estoque Zerado */}
-      <div className="monitoring-card zero-stock-card">
-        <div className="monitoring-header">
-          <h2 className="monitoring-title" style={{ color: "var(--danger)" }}>
-            <span>📦</span> Aviso de Estoque Zerado
-          </h2>
-          <span className="badge badge-danger">
+      {/* 3. Aviso de Estoque Zerado */}
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-soft">
+        <div className="flex items-center justify-between border-b border-outline-variant pb-4 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-amber-600 text-[22px]">
+              inventory
+            </span>
+            <h2 className="font-headline-md text-headline-md font-bold text-on-surface">
+              Estoque Zerado
+            </h2>
+          </div>
+          <span
+            className={`px-2.5 py-1 rounded-full text-label-md font-bold ${
+              data.estoqueZerado.length > 0
+                ? "bg-amber-100 text-amber-800"
+                : "bg-emerald-100 text-emerald-800"
+            }`}
+          >
             {data.estoqueZerado.length} esgotado(s)
           </span>
         </div>
 
         {data.estoqueZerado.length === 0 ? (
-          <p className="empty-state">
-            Todos os livros do acervo possuem exemplares disponíveis na estante! 👍
-          </p>
+          <div className="p-4 bg-emerald-50 text-emerald-800 rounded-xl text-xs flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px]">check_circle</span>
+            <span>Todos os títulos possuem exemplares na estante!</span>
+          </div>
         ) : (
-          <div className="zero-stock-list">
+          <div className="space-y-2">
             {data.estoqueZerado.map((livro) => (
-              <div key={livro.id} className="zero-stock-item">
-                <div>
-                  <div className="zero-stock-title">{livro.titulo}</div>
-                  <div className="zero-stock-author">{livro.autor}</div>
+              <div
+                key={livro.id}
+                className="p-3 bg-surface-container-low border border-outline-variant rounded-xl flex items-center justify-between gap-3"
+              >
+                <div className="min-w-0">
+                  <p className="font-body-sm text-xs font-bold text-on-surface truncate">
+                    {livro.titulo}
+                  </p>
+                  <p className="text-[10px] text-on-surface-variant truncate">
+                    {livro.autor}
+                  </p>
                 </div>
-                <div style={{ textAlign: "right" }}>
-                  <span
-                    className="badge badge-danger"
-                    style={{ marginBottom: "4px" }}
+
+                <div className="text-right shrink-0">
+                  <Link
+                    to={`/exemplares-livro/${livro.id}`}
+                    className="text-[11px] font-bold text-primary hover:underline"
                   >
-                    0 disponíveis
-                  </span>
-                  <div style={{ fontSize: "11px" }}>
-                    <Link
-                      to={`/exemplares-livro/${livro.id}`}
-                      style={{ color: "var(--primary)", textDecoration: "underline" }}
-                    >
-                      Ver exemplares ({livro.totalExemplares} cadastrados)
-                    </Link>
-                  </div>
+                    Ver ({livro.totalExemplares} total)
+                  </Link>
                 </div>
               </div>
             ))}
@@ -195,3 +249,4 @@ export default function MonitoringSection({ data }: MonitoringSectionProps) {
     </div>
   );
 }
+

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { api } from "../../services/api";
-import "./Avaliacao.css";
 
 interface MinhaAvaliacaoItem {
   id: number;
@@ -55,80 +54,145 @@ export default function MinhasAvaliacoes() {
     }
   };
 
+  const mediaGeral =
+    avaliacoes.length > 0
+      ? (
+          avaliacoes.reduce((acc, curr) => acc + curr.nota, 0) /
+          avaliacoes.length
+        ).toFixed(1)
+      : "0.0";
+
   return (
-    <section className="profile-card" style={{ marginTop: "24px" }}>
-      <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#0f172a", marginBottom: "16px" }}>
-        ⭐ Minhas Avaliações e Resenhas
-      </h3>
+    <section className="bg-surface-container-lowest rounded-2xl border border-outline-variant p-6 md:p-8 shadow-soft space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant pb-4">
+        <div>
+          <h3 className="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary" data-weight="fill">
+              rate_review
+            </span>
+            Minhas Avaliações & Resenhas
+          </h3>
+          <p className="font-body-sm text-body-sm text-on-surface-variant">
+            Gerencie suas notas e comentários sobre os livros que você já leu.
+          </p>
+        </div>
 
-      {mensagem && <div className="alert-success">{mensagem}</div>}
-      {erro && <div className="alert-error">{erro}</div>}
+        {avaliacoes.length > 0 && (
+          <div className="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-xl border border-outline-variant">
+            <span className="material-symbols-outlined text-[#F59E0B] text-[20px] fill">
+              star
+            </span>
+            <span className="text-body-sm font-bold text-on-surface">
+              Média: {mediaGeral}
+            </span>
+          </div>
+        )}
+      </div>
 
-      {carregando && <p style={{ color: "#64748b" }}>Carregando suas avaliações...</p>}
+      {mensagem && (
+        <div className="p-3 bg-secondary-container/50 border border-secondary/30 text-on-secondary-container rounded-lg text-body-sm flex items-center gap-2">
+          <span className="material-symbols-outlined text-[18px]">check_circle</span>
+          <span>{mensagem}</span>
+        </div>
+      )}
+
+      {erro && (
+        <div className="p-3 bg-error-container/50 border border-error/30 text-error rounded-lg text-body-sm flex items-center gap-2">
+          <span className="material-symbols-outlined text-[18px]">error</span>
+          <span>{erro}</span>
+        </div>
+      )}
+
+      {carregando && (
+        <div className="py-8 text-center text-body-sm text-on-surface-variant animate-pulse">
+          Carregando suas avaliações...
+        </div>
+      )}
 
       {!carregando && avaliacoes.length === 0 && (
-        <p style={{ color: "#64748b", fontStyle: "italic" }}>
-          Você ainda não avaliou nenhum livro no acervo.
-        </p>
+        <div className="p-8 text-center bg-surface-container-low rounded-xl text-on-surface-variant">
+          <span className="material-symbols-outlined text-4xl text-outline mb-2">
+            reviews
+          </span>
+          <p className="font-body-sm text-body-sm italic">
+            Você ainda não avaliou nenhum livro no acervo. Quando concluir uma leitura, deixe sua opinião!
+          </p>
+        </div>
       )}
 
       {!carregando && avaliacoes.length > 0 && (
-        <div className="minhas-avaliacoes-grid">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {avaliacoes.map((av) => {
-            const dataFormatada = new Date(av.criadoEm).toLocaleDateString("pt-BR");
+            const dataFormatada = new Date(av.criadoEm).toLocaleDateString(
+              "pt-BR",
+            );
 
             return (
-              <div key={av.id} className="minha-avaliacao-card">
-                <img
-                  src={
-                    av.livro.capa ||
-                    `https://covers.openlibrary.org/b/isbn/${av.livro.isbn}-M.jpg`
-                  }
-                  alt={av.livro.titulo}
-                  className="minha-avaliacao-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "https://via.placeholder.com/60x90?text=Capa";
-                  }}
-                />
-                <div className="minha-avaliacao-details">
-                  <div className="minha-avaliacao-title">{av.livro.titulo}</div>
-                  <div style={{ fontSize: "12px", color: "#64748b" }}>{av.livro.autor}</div>
+              <div
+                key={av.id}
+                className="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex gap-4 hover:shadow-xs transition-all"
+              >
+                {/* Book Thumbnail */}
+                <div className="w-14 h-20 bg-surface-container-lowest rounded-lg border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+                  <img
+                    src={
+                      av.livro?.capa ||
+                      (av.livro?.isbn
+                        ? `https://covers.openlibrary.org/b/isbn/${av.livro.isbn}-M.jpg`
+                        : "https://via.placeholder.com/80x120?text=Capa")
+                    }
+                    alt={av.livro?.titulo || "Capa"}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        "https://via.placeholder.com/80x120?text=Capa";
+                    }}
+                  />
+                </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", margin: "4px 0" }}>
-                    <span className="star-rating-display" style={{ fontSize: "14px" }}>
-                      {"★".repeat(Math.min(5, Math.max(0, av.nota)))}
-                      {"☆".repeat(Math.max(0, 5 - av.nota))}
-                    </span>
-                    <span style={{ fontSize: "12px", fontWeight: 600, color: "#475569" }}>
-                      {av.nota}/5
-                    </span>
-                    <span style={{ fontSize: "11px", color: "#94a3b8", marginLeft: "auto" }}>
-                      {dataFormatada}
-                    </span>
+                {/* Content */}
+                <div className="flex-1 flex flex-col justify-between min-w-0">
+                  <div>
+                    <h4 className="font-body-md font-bold text-on-surface truncate">
+                      {av.livro?.titulo || "Livro"}
+                    </h4>
+                    <p className="font-body-sm text-xs text-on-surface-variant truncate">
+                      {av.livro?.autor || "Autor não informado"}
+                    </p>
+
+                    <div className="flex items-center gap-1 my-1.5 text-[#F59E0B]">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span
+                          key={star}
+                          className={`material-symbols-outlined text-[16px] ${
+                            star <= av.nota ? "fill" : "text-outline-variant"
+                          }`}
+                        >
+                          star
+                        </span>
+                      ))}
+                      <span className="text-xs text-outline ml-2">
+                        {dataFormatada}
+                      </span>
+                    </div>
+
+                    {av.comentario && (
+                      <p className="font-body-sm text-xs text-on-surface-variant italic line-clamp-2 leading-relaxed">
+                        "{av.comentario}"
+                      </p>
+                    )}
                   </div>
 
-                  {av.comentario && (
-                    <p style={{ fontSize: "12px", color: "#334155", fontStyle: "italic", margin: "4px 0" }}>
-                      "{av.comentario}"
-                    </p>
-                  )}
-
-                  <div style={{ marginTop: "auto", textAlign: "right" }}>
+                  <div className="flex justify-end pt-2">
                     <button
                       onClick={() => handleExcluir(av.id)}
-                      className="btn-danger"
-                      style={{
-                        padding: "4px 8px",
-                        fontSize: "11px",
-                        backgroundColor: "#fee2e2",
-                        color: "#991b1b",
-                        border: "1px solid #fecaca",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
+                      className="text-error hover:bg-error-container/40 p-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                      title="Excluir Avaliação"
                     >
-                      Excluir
+                      <span className="material-symbols-outlined text-[16px]">
+                        delete
+                      </span>
+                      <span>Excluir</span>
                     </button>
                   </div>
                 </div>
@@ -140,3 +204,4 @@ export default function MinhasAvaliacoes() {
     </section>
   );
 }
+

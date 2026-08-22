@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { api } from "../../services/api";
-import "./Avaliacao.css";
 
 export interface AvaliacaoItem {
   id: number;
@@ -46,48 +45,92 @@ export default function ListaAvaliacoes({
   }, [livroId, recarregarGatilho]);
 
   if (carregando) {
-    return <p style={{ fontSize: "13px", color: "#64748b" }}>Carregando avaliações...</p>;
+    return (
+      <div className="py-4 text-center text-body-sm text-on-surface-variant animate-pulse">
+        Carregando avaliações...
+      </div>
+    );
   }
 
   if (erro) {
-    return <p style={{ fontSize: "13px", color: "#dc2626" }}>{erro}</p>;
+    return (
+      <div className="p-3 bg-error-container/30 border border-error/20 text-error rounded-lg text-body-sm">
+        {erro}
+      </div>
+    );
   }
 
   if (avaliacoes.length === 0) {
     return (
-      <p style={{ fontSize: "13px", color: "#64748b", fontStyle: "italic", margin: "12px 0" }}>
+      <div className="p-4 bg-surface-container-low rounded-lg text-center text-body-sm text-on-surface-variant italic">
         Nenhuma avaliação deixada para este livro ainda. Seja o primeiro a avaliar!
-      </p>
+      </div>
     );
   }
 
   return (
-    <div className="avaliacoes-list">
-      {avaliacoes.map((av) => {
+    <div className="flex flex-col gap-3 mb-6">
+      {avaliacoes.map((av, idx) => {
         const dataFormatada = new Date(av.criadoEm).toLocaleDateString("pt-BR", {
           day: "2-digit",
-          month: "2-digit",
+          month: "short",
           year: "numeric",
         });
 
+        const nome = av.usuario?.nome || "Leitor";
+        const initials = nome
+          .split(" ")
+          .map((n) => n[0])
+          .slice(0, 2)
+          .join("")
+          .toUpperCase();
+
+        const avatarColors = [
+          "bg-primary-container text-on-primary-container",
+          "bg-secondary-container text-on-secondary-container",
+          "bg-amber-100 text-amber-800",
+          "bg-indigo-100 text-indigo-800",
+        ];
+        const colorClass = avatarColors[idx % avatarColors.length];
+
         return (
-          <div key={av.id} className="avaliacao-item">
-            <div className="avaliacao-item-header">
-              <span className="avaliacao-author">
-                {av.usuario?.nome || "Leitor Anônimo"}
-              </span>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span className="star-rating-display">
-                  {"★".repeat(Math.min(5, Math.max(0, av.nota)))}
-                  {"☆".repeat(Math.max(0, 5 - av.nota))}
-                </span>
-                <span className="avaliacao-date">{dataFormatada}</span>
+          <div
+            key={av.id}
+            className="p-4 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-xs"
+          >
+            <div className="flex justify-between items-start mb-2">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-9 h-9 rounded-full ${colorClass} flex items-center justify-center font-bold text-xs shrink-0`}
+                >
+                  {initials}
+                </div>
+                <div>
+                  <p className="font-body-md text-body-md font-semibold text-on-surface leading-tight">
+                    {nome}
+                  </p>
+                  <p className="font-body-sm text-body-sm text-outline">
+                    {dataFormatada}
+                  </p>
+                </div>
+              </div>
+              <div className="flex text-[#F59E0B]">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={`material-symbols-outlined text-[18px] ${
+                      star <= av.nota ? "fill" : "text-outline-variant"
+                    }`}
+                  >
+                    star
+                  </span>
+                ))}
               </div>
             </div>
             {av.comentario && (
-              <div className="avaliacao-comment">
-                "{av.comentario}"
-              </div>
+              <p className="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+                {av.comentario}
+              </p>
             )}
           </div>
         );
@@ -95,3 +138,4 @@ export default function ListaAvaliacoes({
     </div>
   );
 }
+

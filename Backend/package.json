@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "tsx watch src/index.ts",
-    "debug": "nest start --debug --watch",
+    "dev": "npx tsx watch src/main.ts",
+    "debug": "npx tsx watch --inspect src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "prisma": {

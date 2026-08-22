@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../services/api";
 import { AuthContext, type Usuario } from "../contexts/AuthContext";
-import "../assets/styles/Login.css";
 
 interface TokenPayload {
   id: string;
@@ -61,55 +60,101 @@ export default function Login() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <div className="auth-brand">📚 Bookary</div>
-          <h1>Acesse sua conta</h1>
-          <p>Informe suas credenciais para entrar na biblioteca</p>
+    <div className="min-h-screen w-full bg-slate-50 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background soft glow decoration */}
+      <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-teal-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" />
+
+      <div
+        className="w-full max-w-md bg-white rounded-3xl p-8 shadow-lg border border-slate-200 relative z-10 space-y-6"
+        style={{ width: "100%", maxWidth: "440px", minWidth: "300px" }}
+      >
+        {/* Brand Header */}
+        <div className="w-full text-center space-y-2" style={{ width: "100%" }}>
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-teal-800 text-white shadow-md mb-2">
+            <span className="material-symbols-outlined text-3xl">local_library</span>
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900">
+            Web-Lib
+          </h1>
+          <p className="text-sm text-slate-600">
+            Acesse sua conta para gerenciar empréstimos e explorar o acervo.
+          </p>
         </div>
 
-        {erro && <div className="alert-error">{erro}</div>}
+        {/* Error Alert */}
+        {erro && (
+          <div
+            className="w-full p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-2.5"
+            style={{ width: "100%" }}
+          >
+            <span className="material-symbols-outlined text-[20px] shrink-0">error</span>
+            <span>{erro}</span>
+          </div>
+        )}
 
-        <form onSubmit={handleLogin} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="email">E-mail</label>
-            <input
-              type="email"
-              id="email"
-              className="form-control"
-              placeholder="seu.email@exemplo.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+        {/* Form */}
+        <form onSubmit={handleLogin} className="w-full space-y-4" style={{ width: "100%" }}>
+          <div className="w-full space-y-1.5" style={{ width: "100%" }}>
+            <label htmlFor="email" className="block text-sm font-medium text-slate-900">
+              E-mail
+            </label>
+            <div className="relative w-full" style={{ width: "100%" }}>
+              <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
+                mail
+              </span>
+              <input
+                type="email"
+                id="email"
+                className="w-full h-12 pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:border-teal-700 focus:ring-2 focus:ring-teal-200 outline-none transition-all placeholder:text-slate-400"
+                placeholder="seu.email@exemplo.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ width: "100%" }}
+                required
+              />
+            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="senha">Senha</label>
-            <input
-              type="password"
-              id="senha"
-              className="form-control"
-              placeholder="••••••••"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-            />
+          <div className="w-full space-y-1.5" style={{ width: "100%" }}>
+            <label htmlFor="senha" className="block text-sm font-medium text-slate-900">
+              Senha
+            </label>
+            <div className="relative w-full" style={{ width: "100%" }}>
+              <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
+                lock
+              </span>
+              <input
+                type="password"
+                id="senha"
+                className="w-full h-12 pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:border-teal-700 focus:ring-2 focus:ring-teal-200 outline-none transition-all placeholder:text-slate-400"
+                placeholder="••••••••"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                style={{ width: "100%" }}
+                required
+              />
+            </div>
           </div>
 
           <button
             type="submit"
-            className="btn-primary btn-full"
             disabled={carregando}
+            className="w-full h-12 bg-teal-800 hover:bg-teal-900 text-white font-semibold text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm disabled:opacity-50 cursor-pointer pt-1"
+            style={{ width: "100%" }}
           >
-            {carregando ? "Entrando..." : "Entrar"}
+            <span className="material-symbols-outlined text-[20px]">login</span>
+            <span>{carregando ? "Entrando..." : "Entrar no Sistema"}</span>
           </button>
         </form>
 
-        <div className="auth-footer">
+        {/* Footer Link */}
+        <div className="w-full text-center pt-2 border-t border-slate-200 text-sm text-slate-600">
           <span>Ainda não tem conta? </span>
-          <Link to="/cadastro" className="auth-link">
+          <Link
+            to="/cadastro"
+            className="font-bold text-teal-800 hover:underline ml-1"
+          >
             Cadastre-se aqui
           </Link>
         </div>
@@ -117,3 +162,4 @@ export default function Login() {
     </div>
   );
 }
+

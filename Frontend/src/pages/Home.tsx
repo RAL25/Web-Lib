@@ -1,29 +1,20 @@
-import { Link } from "react-router-dom";
 import MenuLateral from "../components/common/MenuLateral";
+import TopNavBar from "../components/common/TopNavBar";
 import CatalogoLivros from "../components/home/CatalogoLivros";
-import "../assets/styles/Home.css";
 
 export default function Home() {
-  const token = localStorage.getItem("token");
-
   return (
-    <div className="app-container">
+    <div className="flex min-h-screen w-full bg-background">
       <MenuLateral />
 
-      <main className="main-content">
-        <header className="header-bar">
-          <h1>Bem-vindo à Biblioteca</h1>
+      <div className="flex-1 md:ml-64 flex flex-col min-w-0 min-h-screen w-full">
+        <TopNavBar showSearch={false} />
 
-          {!token && (
-            <nav className="auth-nav">
-              <Link to="/login">Fazer Login</Link>
-              <Link to="/cadastro">Cadastrar-se</Link>
-            </nav>
-          )}
-        </header>
-
-        <CatalogoLivros />
-      </main>
+        <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
+          <CatalogoLivros />
+        </main>
+      </div>
     </div>
   );
 }
+

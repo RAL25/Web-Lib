@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { api } from "../../services/api";
-import "./Avaliacao.css";
 
 interface FormularioAvaliacaoProps {
   livroId: number;
@@ -29,7 +28,7 @@ export default function FormularioAvaliacao({
 
     const token = localStorage.getItem("token");
     if (!token) {
-      setErro("Você precisa estar logado para avaliar este livro.");
+      setErro("Você precisa estar autenticado para avaliar este livro.");
       return;
     }
 
@@ -42,6 +41,7 @@ export default function FormularioAvaliacao({
       });
 
       setMensagem("Avaliação salva com sucesso!");
+      setComentario("");
       if (onAvaliacaoSalva) {
         onAvaliacaoSalva();
       }
@@ -57,64 +57,86 @@ export default function FormularioAvaliacao({
   };
 
   return (
-    <div className="avaliacao-form-card">
-      <h4>Deixe sua avaliação</h4>
+    <div className="p-md bg-surface-container rounded-xl border border-outline-variant mt-4">
+      <h5 className="font-body-lg text-body-lg font-bold text-on-surface mb-sm">
+        Deixe sua avaliação
+      </h5>
 
-      {mensagem && <div className="alert-success" style={{ marginBottom: "10px" }}>{mensagem}</div>}
-      {erro && <div className="alert-error" style={{ marginBottom: "10px" }}>{erro}</div>}
+      {mensagem && (
+        <div className="p-3 mb-3 bg-secondary-container/50 border border-secondary/30 text-on-secondary-container rounded-lg text-body-sm flex items-center gap-2">
+          <span className="material-symbols-outlined text-[18px]">check_circle</span>
+          <span>{mensagem}</span>
+        </div>
+      )}
+      {erro && (
+        <div className="p-3 mb-3 bg-error-container/50 border border-error/30 text-error rounded-lg text-body-sm flex items-center gap-2">
+          <span className="material-symbols-outlined text-[18px]">error</span>
+          <span>{erro}</span>
+        </div>
+      )}
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "10px" }}>
-          <label style={{ fontSize: "13px", fontWeight: 600, color: "#475569" }}>
-            Sua Nota (1 a 5 estrelas):
+      <form onSubmit={handleSubmit} className="flex flex-col gap-md">
+        <div>
+          <label className="font-label-md text-label-md text-on-surface-variant mb-1.5 block">
+            Sua Nota
           </label>
-          <div className="stars-selector">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                type="button"
-                className={`star-btn ${
-                  (hoverNota || nota) >= star ? "active" : ""
-                }`}
-                onClick={() => setNota(star)}
-                onMouseEnter={() => setHoverNota(star)}
-                onMouseLeave={() => setHoverNota(0)}
-                aria-label={`Avaliar com ${star} estrela(s)`}
-              >
-                ★
-              </button>
-            ))}
-            <span style={{ fontSize: "13px", fontWeight: 600, alignSelf: "center", marginLeft: "6px", color: "#f59e0b" }}>
-              {hoverNota || nota} / 5
+          <div className="flex items-center gap-1 cursor-pointer">
+            {[1, 2, 3, 4, 5].map((star) => {
+              const isActive = (hoverNota || nota) >= star;
+              return (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setNota(star)}
+                  onMouseEnter={() => setHoverNota(star)}
+                  onMouseLeave={() => setHoverNota(0)}
+                  className="text-outline-variant hover:text-[#F59E0B] transition-colors p-0.5 cursor-pointer bg-transparent border-0"
+                  aria-label={`Nota ${star}`}
+                >
+                  <span
+                    className={`material-symbols-outlined text-2xl ${
+                      isActive ? "text-[#F59E0B] fill" : "text-outline-variant"
+                    }`}
+                  >
+                    star
+                  </span>
+                </button>
+              );
+            })}
+            <span className="font-label-md text-label-md text-[#F59E0B] ml-2 font-bold">
+              {hoverNota || nota} de 5
             </span>
           </div>
         </div>
 
-        <div style={{ marginBottom: "12px" }}>
+        <div>
           <label
             htmlFor="comentario"
-            style={{ fontSize: "13px", fontWeight: 600, color: "#475569", display: "block", marginBottom: "4px" }}
+            className="font-label-md text-label-md text-on-surface-variant mb-1.5 block"
           >
-            Seu Comentário / Resenha (Opcional):
+            Comentário (opcional)
           </label>
           <textarea
             id="comentario"
-            className="avaliacao-form-textarea"
-            placeholder="O que você achou deste livro? Conte sua experiência..."
+            rows={3}
+            className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest p-sm font-body-sm text-body-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-none transition-all placeholder:text-outline"
+            placeholder="Escreva sua experiência de leitura com esta obra..."
             value={comentario}
             onChange={(e) => setComentario(e.target.value)}
           />
         </div>
 
-        <button
-          type="submit"
-          className="btn-primary"
-          disabled={salvando}
-          style={{ fontSize: "13px", padding: "8px 16px" }}
-        >
-          {salvando ? "Enviando..." : "Enviar Avaliação"}
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={salvando}
+            className="bg-primary text-on-primary font-label-md text-label-md py-2.5 px-5 rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+          >
+            {salvando ? "Enviando..." : "Enviar Avaliação"}
+          </button>
+        </div>
       </form>
     </div>
   );
 }
+

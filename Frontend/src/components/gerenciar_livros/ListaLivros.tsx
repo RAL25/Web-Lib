@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export interface LivroAdmin {
   id: number;
   isbn: string;
@@ -18,119 +20,136 @@ interface ListaLivrosProps {
 export default function ListaLivros({ livros, onExcluir }: ListaLivrosProps) {
   if (livros.length === 0) {
     return (
-      <p style={{ color: "#64748b", textAlign: "center", padding: "20px" }}>
-        Nenhum livro cadastrado ou encontrado com este filtro.
-      </p>
+      <div className="p-12 text-center text-on-surface-variant bg-surface-container-lowest rounded-2xl border border-outline-variant">
+        <span className="material-symbols-outlined text-4xl text-outline mb-2">
+          search_off
+        </span>
+        <p className="font-body-md">Nenhum livro cadastrado ou encontrado com este filtro.</p>
+      </div>
     );
   }
 
   return (
-    <div className="table-responsive">
-      <table className="custom-table" style={{ width: "100%", textAlign: "left" }}>
-        <thead>
-          <tr>
-            <th>Capa</th>
-            <th>Título / Autor</th>
-            <th>ISBN</th>
-            <th>Editora / Categoria</th>
-            <th>Avaliação</th>
-            <th>Exemplares</th>
-            <th style={{ textAlign: "right" }}>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {livros.map((livro) => {
-            const nota = livro.mediaAvaliacoes ?? 0;
-            return (
-              <tr key={livro.id}>
-                <td style={{ width: "60px" }}>
-                  <img
-                    src={
-                      livro.capa ||
-                      `https://covers.openlibrary.org/b/isbn/${livro.isbn}-M.jpg`
-                    }
-                    alt={livro.titulo}
-                    style={{
-                      width: "42px",
-                      height: "60px",
-                      objectFit: "cover",
-                      borderRadius: "4px",
-                      backgroundColor: "#f1f5f9",
-                    }}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        "https://via.placeholder.com/42x60?text=Capa";
-                    }}
-                  />
-                </td>
-                <td>
-                  <strong style={{ display: "block", color: "#0f172a" }}>
-                    {livro.titulo}
-                  </strong>
-                  <span style={{ fontSize: "13px", color: "#64748b" }}>
-                    {livro.autor}
-                  </span>
-                </td>
-                <td>
-                  <code style={{ fontSize: "12px", background: "#f1f5f9", padding: "2px 6px", borderRadius: "4px" }}>
-                    {livro.isbn}
-                  </code>
-                </td>
-                <td>
-                  <div style={{ fontSize: "13px", color: "#334155" }}>
-                    {livro.editora || "Não informada"}
-                  </div>
-                  <span
-                    style={{
-                      display: "inline-block",
-                      fontSize: "11px",
-                      color: "#024935",
-                      background: "#e6f4f0",
-                      padding: "1px 6px",
-                      borderRadius: "10px",
-                      marginTop: "2px",
-                    }}
-                  >
-                    {livro.categoria || "Geral"}
-                  </span>
-                </td>
-                <td>
-                  <span style={{ color: "#f59e0b", fontSize: "14px" }}>
-                    {"★".repeat(Math.min(5, Math.max(0, Math.round(nota))))}
-                    {"☆".repeat(Math.max(0, 5 - Math.round(nota)))}
-                  </span>
-                  <span style={{ fontSize: "12px", marginLeft: "4px", color: "#475569" }}>
-                    {nota > 0 ? nota.toFixed(1) : "-"}
-                  </span>
-                </td>
-                <td>
-                  <span className="badge" style={{ backgroundColor: "#f1f5f9", color: "#334155" }}>
-                    {livro.exemplares?.length ?? 0} exemplar(es)
-                  </span>
-                </td>
-                <td style={{ textAlign: "right" }}>
-                  <button
-                    onClick={() => onExcluir(livro.id)}
-                    className="btn-danger"
-                    style={{
-                      backgroundColor: "#fee2e2",
-                      color: "#991b1b",
-                      border: "1px solid #fecaca",
-                      padding: "6px 12px",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      fontWeight: "600",
-                      fontSize: "12px",
-                    }}
-                  >
-                    Excluir
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-soft overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead className="bg-[#F1F5F9] border-b border-outline-variant">
+            <tr>
+              <th className="py-3.5 px-4 font-label-md text-label-md text-on-surface uppercase tracking-wider">
+                Livro / Autor
+              </th>
+              <th className="py-3.5 px-4 font-label-md text-label-md text-on-surface uppercase tracking-wider">
+                ISBN
+              </th>
+              <th className="py-3.5 px-4 font-label-md text-label-md text-on-surface uppercase tracking-wider">
+                Categoria / Editora
+              </th>
+              <th className="py-3.5 px-4 font-label-md text-label-md text-on-surface uppercase tracking-wider text-center">
+                Avaliação
+              </th>
+              <th className="py-3.5 px-4 font-label-md text-label-md text-on-surface uppercase tracking-wider text-center">
+                Exemplares
+              </th>
+              <th className="py-3.5 px-4 font-label-md text-label-md text-on-surface uppercase tracking-wider text-right">
+                Ações
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-outline-variant bg-surface-container-lowest font-body-sm text-body-sm">
+            {livros.map((livro) => {
+              const nota = livro.mediaAvaliacoes ?? 0;
+              const totalExemplares = livro.exemplares?.length ?? 0;
+
+              return (
+                <tr key={livro.id} className="hover:bg-primary/5 transition-colors group">
+                  <td className="py-3 px-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-14 bg-surface-container rounded border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+                        <img
+                          src={
+                            livro.capa ||
+                            (livro.isbn
+                              ? `https://covers.openlibrary.org/b/isbn/${livro.isbn}-M.jpg`
+                              : "https://via.placeholder.com/60x90?text=Capa")
+                          }
+                          alt={livro.titulo}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src =
+                              "https://via.placeholder.com/60x90?text=Capa";
+                          }}
+                        />
+                      </div>
+                      <div className="min-w-0 max-w-xs">
+                        <Link
+                          to={`/exemplares-livro/${livro.id}`}
+                          className="font-body-md font-semibold text-on-surface hover:text-primary transition-colors truncate block"
+                          title="Ver detalhes do livro"
+                        >
+                          {livro.titulo}
+                        </Link>
+                        <p className="font-body-sm text-xs text-on-surface-variant truncate">
+                          {livro.autor || "Autor não informado"}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-3 px-4">
+                    <code className="text-xs bg-surface-container-low border border-outline-variant px-2 py-0.5 rounded text-on-surface">
+                      {livro.isbn}
+                    </code>
+                  </td>
+                  <td className="py-3 px-4">
+                    <span className="inline-block text-[11px] font-bold text-primary bg-primary-container/15 px-2.5 py-0.5 rounded-full mb-1">
+                      {livro.categoria || "Geral"}
+                    </span>
+                    <p className="text-xs text-on-surface-variant truncate">
+                      {livro.editora || "Editora não informada"}
+                    </p>
+                  </td>
+                  <td className="py-3 px-4 text-center">
+                    <div className="inline-flex items-center gap-1 text-[#F59E0B]">
+                      <span className="material-symbols-outlined text-[16px] fill">
+                        star
+                      </span>
+                      <span className="text-xs font-bold text-on-surface">
+                        {nota > 0 ? nota.toFixed(1) : "—"}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-3 px-4 text-center">
+                    <Link
+                      to={`/exemplares-livro/${livro.id}`}
+                      className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-surface-container hover:bg-surface-container-high border border-outline-variant text-on-surface transition-colors"
+                      title="Gerenciar exemplares físicos"
+                    >
+                      <span className="material-symbols-outlined text-[14px]">inventory_2</span>
+                      <span>{totalExemplares} ex.</span>
+                    </Link>
+                  </td>
+                  <td className="py-3 px-4 text-right">
+                    <button
+                      onClick={() => onExcluir(livro.id)}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-error-container/40 text-error hover:bg-error hover:text-on-error transition-colors cursor-pointer"
+                      title="Excluir livro e exemplares"
+                    >
+                      <span className="material-symbols-outlined text-[14px]">delete</span>
+                      <span>Excluir</span>
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="px-5 py-3 border-t border-outline-variant bg-surface-container-low/40 flex items-center justify-between text-xs text-on-surface-variant">
+        <span>
+          Total de títulos listados: <strong>{livros.length}</strong>
+        </span>
+      </div>
     </div>
   );
 }
+

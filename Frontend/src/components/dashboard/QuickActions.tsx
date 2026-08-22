@@ -12,10 +12,8 @@ export default function QuickActions() {
     if (!termo) return;
 
     if (tipoBusca === "cpf") {
-      // Redireciona para gerenciamento de usuários com o filtro
       navigate(`/gerenciar-usuarios?busca=${encodeURIComponent(termo)}`);
     } else {
-      // Se for numérico direto, pode direcionar para a página de exemplares ou gerenciamento
       if (/^\d+$/.test(termo)) {
         navigate(`/exemplares-livro/${termo}`);
       } else {
@@ -25,56 +23,76 @@ export default function QuickActions() {
   };
 
   return (
-    <div className="quick-actions-card">
-      <div className="quick-actions-top">
-        {/* Botões de Atalho */}
-        <div className="quick-actions-buttons">
-          <Link to="/cadastrar-livro" className="btn-action btn-action-primary">
-            <span>+</span> Novo Livro
+    <section className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 shadow-soft">
+      <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
+        {/* Shortcut Action Buttons */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Link
+            to="/cadastrar-livro"
+            className="h-11 px-5 rounded-full bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md flex items-center gap-2 transition-all shadow-xs cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            <span>Novo Livro</span>
           </Link>
           <Link
             to="/cadastrar-usuario"
-            className="btn-action btn-action-secondary"
+            className="h-11 px-5 rounded-full bg-surface-container-low hover:bg-surface-container border border-outline-variant text-on-surface font-label-md text-label-md flex items-center gap-2 transition-all cursor-pointer"
           >
-            <span>+</span> Novo Usuário
+            <span className="material-symbols-outlined text-[18px]">person_add</span>
+            <span>Novo Usuário</span>
           </Link>
-          <Link to="/configuracao" className="btn-action btn-action-secondary">
-            <span>⚙️</span> Configurações
+          <Link
+            to="/configuracao"
+            className="h-11 px-4 rounded-full bg-surface-container-low hover:bg-surface-container border border-outline-variant text-on-surface font-label-md text-label-md flex items-center gap-2 transition-all cursor-pointer"
+            title="Configurações do Sistema"
+          >
+            <span className="material-symbols-outlined text-[18px]">settings</span>
+            <span>Configurações</span>
           </Link>
         </div>
 
-        {/* Input de Busca Rápida Universal */}
-        <form onSubmit={handleBuscar} className="search-box-universal">
-          <select
-            value={tipoBusca}
-            onChange={(e) =>
-              setTipoBusca(e.target.value as "cpf" | "exemplar")
-            }
-            className="search-type-select"
-            aria-label="Tipo de busca rápida"
-          >
-            <option value="cpf">CPF do Cliente</option>
-            <option value="exemplar">Cód. Exemplar / Livro</option>
-          </select>
+        {/* Universal Fast Search Bar */}
+        <form onSubmit={handleBuscar} className="flex-1 max-w-xl flex flex-col sm:flex-row gap-2">
+          <div className="relative shrink-0">
+            <select
+              value={tipoBusca}
+              onChange={(e) =>
+                setTipoBusca(e.target.value as "cpf" | "exemplar")
+              }
+              className="h-11 pl-3 pr-8 rounded-xl sm:rounded-l-full sm:rounded-r-none bg-surface-container-low border border-outline-variant text-body-sm text-on-surface font-medium focus:border-primary outline-none transition-all cursor-pointer"
+              aria-label="Tipo de busca rápida"
+            >
+              <option value="cpf">CPF do Leitor</option>
+              <option value="exemplar">Cód. Exemplar / Livro</option>
+            </select>
+          </div>
 
-          <div className="search-input-wrapper">
+          <div className="relative flex-1">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
+              search
+            </span>
             <input
               type="text"
               placeholder={
                 tipoBusca === "cpf"
-                  ? "Digite o CPF (ex: 12345678901)..."
-                  : "Digite o ID do exemplar ou título..."
+                  ? "Digite o CPF do cliente..."
+                  : "Digite o ID ou título do livro..."
               }
               value={termoBusca}
               onChange={(e) => setTermoBusca(e.target.value)}
+              className="w-full h-11 pl-9 pr-3 rounded-xl sm:rounded-none bg-surface-container-low border border-outline-variant sm:border-x-0 text-body-sm text-on-surface focus:border-primary outline-none transition-all placeholder:text-outline"
             />
           </div>
 
-          <button type="submit" className="btn-search">
-            Buscar
+          <button
+            type="submit"
+            className="h-11 px-5 rounded-xl sm:rounded-r-full sm:rounded-l-none bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
+          >
+            <span>Buscar</span>
           </button>
         </form>
       </div>
-    </div>
+    </section>
   );
 }
+
