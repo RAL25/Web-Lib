@@ -3,7 +3,6 @@ import { prisma } from "../config/prisma-configDB";
 import { seedConfiguracoes } from "./seeds/Configuracaos";
 import { seedUsuarios } from "./seeds/Usuarios";
 import { seedLivros } from "./seeds/Livros";
-import { seedExemplarLivros } from "./seeds/ExemplarLivros";
 import { seedEmprestimos } from "./seeds/Emprestimos";
 import { seedItemEmprestimos } from "./seeds/ItemEmprestimos";
 
@@ -27,15 +26,19 @@ async function main() {
   const usuarios = await seedUsuarios(prisma);
 
   // 3. Catálogo e acervo
-  const livros = await seedLivros(prisma);
-  const exemplares = await seedExemplarLivros(prisma, {
-    livro1Id: livros.livro1.id,
-    livro2Id: livros.livro2.id,
-  });
+  const catalogo = await seedLivros(prisma);
 
   // 4. Circulação (Empréstimos e Itens)
-  const emprestimo = await seedEmprestimos(prisma, usuarios.cliente.id);
-  await seedItemEmprestimos(prisma, emprestimo.id, exemplares.exemplar1.id);
+  if (usuarios.cliente && catalogo.exemplares.length > 0) {
+    const exemplarEmprestado =
+      catalogo.exemplares.find((e) => e.status === "Emprestado") ||
+      catalogo.exemplares[0];
+
+    if (exemplarEmprestado) {
+      const emprestimo = await seedEmprestimos(prisma, usuarios.cliente.id);
+      await seedItemEmprestimos(prisma, emprestimo.id, exemplarEmprestado.id);
+    }
+  }
 
   console.log("✨ Povoamento concluído com sucesso!");
 }

@@ -6,7 +6,6 @@ import { prisma } from "../../config/prisma-configDB";
 import { Role } from "../generated/prisma";
 import { seedConfiguracoes } from "./Configuracaos";
 import { seedLivros } from "./Livros";
-import { seedExemplarLivros } from "./ExemplarLivros";
 import { seedEmprestimos } from "./Emprestimos";
 import { seedItemEmprestimos } from "./ItemEmprestimos";
 
@@ -99,17 +98,19 @@ async function main() {
   // 2. Usuários via JSON
   const usuarios = await seedUsuariosFromJson();
 
-  // 3. Livros e Exemplares
-  const livros = await seedLivros(prisma);
-  const exemplares = await seedExemplarLivros(prisma, {
-    livro1Id: livros.livro1.id,
-    livro2Id: livros.livro2.id,
-  });
+  // 3. Catálogo de Livros e Exemplares via JSON
+  const catalogo = await seedLivros(prisma);
 
-  // 4. Empréstimos
-  if (usuarios.cliente) {
-    const emprestimo = await seedEmprestimos(prisma, usuarios.cliente.id);
-    await seedItemEmprestimos(prisma, emprestimo.id, exemplares.exemplar1.id);
+  // 4. Empréstimos iniciais
+  if (usuarios.cliente && catalogo.exemplares.length > 0) {
+    const exemplarEmprestado =
+      catalogo.exemplares.find((e) => e.status === "Emprestado") ||
+      catalogo.exemplares[0];
+
+    if (exemplarEmprestado) {
+      const emprestimo = await seedEmprestimos(prisma, usuarios.cliente.id);
+      await seedItemEmprestimos(prisma, emprestimo.id, exemplarEmprestado.id);
+    }
   }
 
   console.log("✨ Povoamento concluído com sucesso!");

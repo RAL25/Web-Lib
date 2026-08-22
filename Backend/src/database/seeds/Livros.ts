@@ -1,24 +1,80 @@
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient, LivroStatus } from "../generated/prisma";
+import fs from "fs";
+import path from "path";
+import { buscarLivroPorIsbn } from "../../services/googleBooksService";
+
+export interface LivroSeedItem {
+  isbn: string;
+  mediaAvaliacoes?: number;
+  status?: string;
+}
 
 export async function seedLivros(prisma: PrismaClient) {
-  const livro1 = await prisma.livro.upsert({
-    where: { isbn: "9788572328753" },
-    update: {},
-    create: {
-      isbn: "9788572328753",
-      mediaAvaliacoes: 4.5,
-    },
-  });
+  const jsonPath = path.join(__dirname, "jsons", "livros.json");
+  let livrosData: LivroSeedItem[] = [];
 
-  const livro2 = await prisma.livro.upsert({
-    where: { isbn: "9788535914849" },
-    update: {},
-    create: {
-      isbn: "9788535914849",
-      mediaAvaliacoes: 4.8,
-    },
-  });
+  if (fs.existsSync(jsonPath)) {
+    const rawData = fs.readFileSync(jsonPath, "utf-8");
+    livrosData = JSON.parse(rawData);
+  }
 
-  console.log("🌱 Seed: Livros criados");
-  return { livro1, livro2 };
+  const livrosCriados = [];
+  const exemplaresCriados = [];
+
+  for (const item of livrosData) {
+    const cleanIsbn = item.isbn.replace(/[^0-9X]/gi, "").trim();
+
+    // Validação prévia na Google Books API
+    const meta = await buscarLivroPorIsbn(cleanIsbn);
+    if (!meta) {
+      console.warn(
+        `⚠️ Alerta: ISBN ${cleanIsbn} não retornou metadados válidos da Google Books API.`,
+      );
+    }
+
+    const livro = await prisma.livro.upsert({
+      where: { isbn: cleanIsbn },
+      update: {
+        mediaAvaliacoes: item.mediaAvaliacoes ?? 0.0,
+      },
+      create: {
+        isbn: cleanIsbn,
+        mediaAvaliacoes: item.mediaAvaliacoes ?? 0.0,
+      },
+    });
+
+    livrosCriados.push(livro);
+
+    // Geração de exemplares para cada livro (1 a 2 exemplares)
+    const statusExemplar1 =
+      item.status === "Emprestado"
+        ? LivroStatus.Emprestado
+        : LivroStatus.Disponivel;
+
+    const exemplar1 = await prisma.exemplarLivro.create({
+      data: {
+        livroId: livro.id,
+        status: statusExemplar1,
+      },
+    });
+    exemplaresCriados.push(exemplar1);
+
+    const exemplar2 = await prisma.exemplarLivro.create({
+      data: {
+        livroId: livro.id,
+        status: LivroStatus.Disponivel,
+      },
+    });
+    exemplaresCriados.push(exemplar2);
+  }
+
+  console.log(
+    `🌱 Seed: ${livrosCriados.length} livros e ${exemplaresCriados.length} exemplares criados a partir do JSON`,
+  );
+  return {
+    livros: livrosCriados,
+    exemplares: exemplaresCriados,
+    livro1: livrosCriados[0],
+    livro2: livrosCriados[1],
+  };
 }

@@ -1,70 +1,87 @@
 [
   {
     "isbn": "9786550973100",
+    "mediaAvaliacoes": 4.7,
     "status": "Disponivel"
   },
   {
     "isbn": "9788576757344",
+    "mediaAvaliacoes": 4.6,
     "status": "Emprestado"
   },
   {
     "isbn": "9788571751248",
+    "mediaAvaliacoes": 4.8,
     "status": "Disponivel"
   },
   {
     "isbn": "9788582850145",
+    "mediaAvaliacoes": 4.9,
     "status": "Disponivel"
   },
   {
     "isbn": "9788572328753",
+    "mediaAvaliacoes": 4.8,
     "status": "Emprestado"
   },
   {
     "isbn": "9786555520804",
+    "mediaAvaliacoes": 4.9,
     "status": "Disponivel"
   },
   {
     "isbn": "9788501012074",
+    "mediaAvaliacoes": 4.9,
     "status": "Emprestado"
   },
   {
     "isbn": "9788582850350",
+    "mediaAvaliacoes": 4.7,
     "status": "Emprestado"
   },
   {
     "isbn": "9788584390670",
+    "mediaAvaliacoes": 4.5,
     "status": "Disponivel"
   },
   {
     "isbn": "9788535914849",
+    "mediaAvaliacoes": 4.8,
     "status": "Disponivel"
   },
   {
     "isbn": "9788532651181",
+    "mediaAvaliacoes": 4.6,
     "status": "Disponivel"
   },
   {
     "isbn": "9788525432186",
+    "mediaAvaliacoes": 4.8,
     "status": "Disponivel"
   },
   {
     "isbn": "9788580410792",
+    "mediaAvaliacoes": 4.3,
     "status": "Disponivel"
   },
   {
     "isbn": "9788580574517",
+    "mediaAvaliacoes": 4.7,
     "status": "Emprestado"
   },
   {
     "isbn": "9788595084742",
+    "mediaAvaliacoes": 4.9,
     "status": "Disponivel"
   },
   {
     "isbn": "9788535914061",
+    "mediaAvaliacoes": 4.6,
     "status": "Disponivel"
   },
   {
     "isbn": "9788535930313",
+    "mediaAvaliacoes": 4.8,
     "status": "Disponivel"
   }
 ]
