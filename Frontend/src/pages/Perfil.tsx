@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
 import MenuLateral from "../components/common/MenuLateral";
+import MinhasAvaliacoes from "../components/avaliacao/MinhasAvaliacoes";
 import "../assets/styles/Perfil.css";
 
 export default function Perfil() {
@@ -162,6 +163,8 @@ export default function Perfil() {
             </form>
           )}
         </section>
+
+        <MinhasAvaliacoes />
       </main>
     </div>
   );

@@ -30,6 +30,7 @@ model Usuario {
   role      Role    @default(CLIENTE)
 
   emprestimos Emprestimo[]
+  avaliacoes  Avaliacao[]
 }
 
 //-----------Início parte livros
@@ -45,6 +46,22 @@ model Livro {
   mediaAvaliacoes Float  @default(0.0) @map("media_avaliacoes")
 
   exemplares ExemplarLivro[]
+  avaliacoes Avaliacao[]
+}
+
+model Avaliacao {
+  id           Int      @id @default(autoincrement())
+  nota         Int
+  comentario   String?  @db.Text
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+  usuarioId    String   @map("usuario_id") @db.VarChar(36)
+  livroId      Int      @map("livro_id")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  livro   Livro   @relation(fields: [livroId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, livroId])
 }
 
 model ExemplarLivro {

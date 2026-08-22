@@ -24,6 +24,11 @@ export type Usuario = $Result.DefaultSelection<Prisma.$UsuarioPayload>
  */
 export type Livro = $Result.DefaultSelection<Prisma.$LivroPayload>
 /**
+ * Model Avaliacao
+ * 
+ */
+export type Avaliacao = $Result.DefaultSelection<Prisma.$AvaliacaoPayload>
+/**
  * Model ExemplarLivro
  * 
  */
@@ -213,6 +218,16 @@ export class PrismaClient<
     * ```
     */
   get livro(): Prisma.LivroDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.avaliacao`: Exposes CRUD operations for the **Avaliacao** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Avaliacaos
+    * const avaliacaos = await prisma.avaliacao.findMany()
+    * ```
+    */
+  get avaliacao(): Prisma.AvaliacaoDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.exemplarLivro`: Exposes CRUD operations for the **ExemplarLivro** model.
@@ -689,6 +704,7 @@ export namespace Prisma {
   export const ModelName: {
     Usuario: 'Usuario',
     Livro: 'Livro',
+    Avaliacao: 'Avaliacao',
     ExemplarLivro: 'ExemplarLivro',
     Emprestimo: 'Emprestimo',
     ItemEmprestimo: 'ItemEmprestimo',
@@ -708,7 +724,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "usuario" | "livro" | "exemplarLivro" | "emprestimo" | "itemEmprestimo" | "configuracao"
+      modelProps: "usuario" | "livro" | "avaliacao" | "exemplarLivro" | "emprestimo" | "itemEmprestimo" | "configuracao"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -841,6 +857,72 @@ export namespace Prisma {
           count: {
             args: Prisma.LivroCountArgs<ExtArgs>
             result: $Utils.Optional<LivroCountAggregateOutputType> | number
+          }
+        }
+      }
+      Avaliacao: {
+        payload: Prisma.$AvaliacaoPayload<ExtArgs>
+        fields: Prisma.AvaliacaoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AvaliacaoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AvaliacaoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AvaliacaoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AvaliacaoPayload>
+          }
+          findFirst: {
+            args: Prisma.AvaliacaoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AvaliacaoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AvaliacaoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AvaliacaoPayload>
+          }
+          findMany: {
+            args: Prisma.AvaliacaoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AvaliacaoPayload>[]
+          }
+          create: {
+            args: Prisma.AvaliacaoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AvaliacaoPayload>
+          }
+          createMany: {
+            args: Prisma.AvaliacaoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.AvaliacaoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AvaliacaoPayload>
+          }
+          update: {
+            args: Prisma.AvaliacaoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AvaliacaoPayload>
+          }
+          deleteMany: {
+            args: Prisma.AvaliacaoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AvaliacaoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AvaliacaoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AvaliacaoPayload>
+          }
+          aggregate: {
+            args: Prisma.AvaliacaoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAvaliacao>
+          }
+          groupBy: {
+            args: Prisma.AvaliacaoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AvaliacaoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AvaliacaoCountArgs<ExtArgs>
+            result: $Utils.Optional<AvaliacaoCountAggregateOutputType> | number
           }
         }
       }
@@ -1218,6 +1300,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     usuario?: UsuarioOmit
     livro?: LivroOmit
+    avaliacao?: AvaliacaoOmit
     exemplarLivro?: ExemplarLivroOmit
     emprestimo?: EmprestimoOmit
     itemEmprestimo?: ItemEmprestimoOmit
@@ -1303,10 +1386,12 @@ export namespace Prisma {
 
   export type UsuarioCountOutputType = {
     emprestimos: number
+    avaliacoes: number
   }
 
   export type UsuarioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprestimos?: boolean | UsuarioCountOutputTypeCountEmprestimosArgs
+    avaliacoes?: boolean | UsuarioCountOutputTypeCountAvaliacoesArgs
   }
 
   // Custom InputTypes
@@ -1327,6 +1412,13 @@ export namespace Prisma {
     where?: EmprestimoWhereInput
   }
 
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountAvaliacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AvaliacaoWhereInput
+  }
+
 
   /**
    * Count Type LivroCountOutputType
@@ -1334,10 +1426,12 @@ export namespace Prisma {
 
   export type LivroCountOutputType = {
     exemplares: number
+    avaliacoes: number
   }
 
   export type LivroCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     exemplares?: boolean | LivroCountOutputTypeCountExemplaresArgs
+    avaliacoes?: boolean | LivroCountOutputTypeCountAvaliacoesArgs
   }
 
   // Custom InputTypes
@@ -1356,6 +1450,13 @@ export namespace Prisma {
    */
   export type LivroCountOutputTypeCountExemplaresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ExemplarLivroWhereInput
+  }
+
+  /**
+   * LivroCountOutputType without action
+   */
+  export type LivroCountOutputTypeCountAvaliacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AvaliacaoWhereInput
   }
 
 
@@ -1614,6 +1715,7 @@ export namespace Prisma {
     bloqueado?: boolean
     role?: boolean
     emprestimos?: boolean | Usuario$emprestimosArgs<ExtArgs>
+    avaliacoes?: boolean | Usuario$avaliacoesArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["usuario"]>
 
@@ -1633,6 +1735,7 @@ export namespace Prisma {
   export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "email" | "senhaHash" | "cpf" | "telefone" | "bloqueado" | "role", ExtArgs["result"]["usuario"]>
   export type UsuarioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprestimos?: boolean | Usuario$emprestimosArgs<ExtArgs>
+    avaliacoes?: boolean | Usuario$avaliacoesArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -1640,6 +1743,7 @@ export namespace Prisma {
     name: "Usuario"
     objects: {
       emprestimos: Prisma.$EmprestimoPayload<ExtArgs>[]
+      avaliacoes: Prisma.$AvaliacaoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1991,6 +2095,7 @@ export namespace Prisma {
   export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     emprestimos<T extends Usuario$emprestimosArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$emprestimosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmprestimoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    avaliacoes<T extends Usuario$avaliacoesArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$avaliacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2400,6 +2505,30 @@ export namespace Prisma {
   }
 
   /**
+   * Usuario.avaliacoes
+   */
+  export type Usuario$avaliacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    where?: AvaliacaoWhereInput
+    orderBy?: AvaliacaoOrderByWithRelationInput | AvaliacaoOrderByWithRelationInput[]
+    cursor?: AvaliacaoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AvaliacaoScalarFieldEnum | AvaliacaoScalarFieldEnum[]
+  }
+
+  /**
    * Usuario without action
    */
   export type UsuarioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2605,6 +2734,7 @@ export namespace Prisma {
     isbn?: boolean
     mediaAvaliacoes?: boolean
     exemplares?: boolean | Livro$exemplaresArgs<ExtArgs>
+    avaliacoes?: boolean | Livro$avaliacoesArgs<ExtArgs>
     _count?: boolean | LivroCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["livro"]>
 
@@ -2619,6 +2749,7 @@ export namespace Prisma {
   export type LivroOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "isbn" | "mediaAvaliacoes", ExtArgs["result"]["livro"]>
   export type LivroInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     exemplares?: boolean | Livro$exemplaresArgs<ExtArgs>
+    avaliacoes?: boolean | Livro$avaliacoesArgs<ExtArgs>
     _count?: boolean | LivroCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2626,6 +2757,7 @@ export namespace Prisma {
     name: "Livro"
     objects: {
       exemplares: Prisma.$ExemplarLivroPayload<ExtArgs>[]
+      avaliacoes: Prisma.$AvaliacaoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2972,6 +3104,7 @@ export namespace Prisma {
   export interface Prisma__LivroClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     exemplares<T extends Livro$exemplaresArgs<ExtArgs> = {}>(args?: Subset<T, Livro$exemplaresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExemplarLivroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    avaliacoes<T extends Livro$avaliacoesArgs<ExtArgs> = {}>(args?: Subset<T, Livro$avaliacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3376,6 +3509,30 @@ export namespace Prisma {
   }
 
   /**
+   * Livro.avaliacoes
+   */
+  export type Livro$avaliacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    where?: AvaliacaoWhereInput
+    orderBy?: AvaliacaoOrderByWithRelationInput | AvaliacaoOrderByWithRelationInput[]
+    cursor?: AvaliacaoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AvaliacaoScalarFieldEnum | AvaliacaoScalarFieldEnum[]
+  }
+
+  /**
    * Livro without action
    */
   export type LivroDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3391,6 +3548,1008 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LivroInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Avaliacao
+   */
+
+  export type AggregateAvaliacao = {
+    _count: AvaliacaoCountAggregateOutputType | null
+    _avg: AvaliacaoAvgAggregateOutputType | null
+    _sum: AvaliacaoSumAggregateOutputType | null
+    _min: AvaliacaoMinAggregateOutputType | null
+    _max: AvaliacaoMaxAggregateOutputType | null
+  }
+
+  export type AvaliacaoAvgAggregateOutputType = {
+    id: number | null
+    nota: number | null
+    livroId: number | null
+  }
+
+  export type AvaliacaoSumAggregateOutputType = {
+    id: number | null
+    nota: number | null
+    livroId: number | null
+  }
+
+  export type AvaliacaoMinAggregateOutputType = {
+    id: number | null
+    nota: number | null
+    comentario: string | null
+    criadoEm: Date | null
+    atualizadoEm: Date | null
+    usuarioId: string | null
+    livroId: number | null
+  }
+
+  export type AvaliacaoMaxAggregateOutputType = {
+    id: number | null
+    nota: number | null
+    comentario: string | null
+    criadoEm: Date | null
+    atualizadoEm: Date | null
+    usuarioId: string | null
+    livroId: number | null
+  }
+
+  export type AvaliacaoCountAggregateOutputType = {
+    id: number
+    nota: number
+    comentario: number
+    criadoEm: number
+    atualizadoEm: number
+    usuarioId: number
+    livroId: number
+    _all: number
+  }
+
+
+  export type AvaliacaoAvgAggregateInputType = {
+    id?: true
+    nota?: true
+    livroId?: true
+  }
+
+  export type AvaliacaoSumAggregateInputType = {
+    id?: true
+    nota?: true
+    livroId?: true
+  }
+
+  export type AvaliacaoMinAggregateInputType = {
+    id?: true
+    nota?: true
+    comentario?: true
+    criadoEm?: true
+    atualizadoEm?: true
+    usuarioId?: true
+    livroId?: true
+  }
+
+  export type AvaliacaoMaxAggregateInputType = {
+    id?: true
+    nota?: true
+    comentario?: true
+    criadoEm?: true
+    atualizadoEm?: true
+    usuarioId?: true
+    livroId?: true
+  }
+
+  export type AvaliacaoCountAggregateInputType = {
+    id?: true
+    nota?: true
+    comentario?: true
+    criadoEm?: true
+    atualizadoEm?: true
+    usuarioId?: true
+    livroId?: true
+    _all?: true
+  }
+
+  export type AvaliacaoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Avaliacao to aggregate.
+     */
+    where?: AvaliacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Avaliacaos to fetch.
+     */
+    orderBy?: AvaliacaoOrderByWithRelationInput | AvaliacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AvaliacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Avaliacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Avaliacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Avaliacaos
+    **/
+    _count?: true | AvaliacaoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AvaliacaoAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AvaliacaoSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AvaliacaoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AvaliacaoMaxAggregateInputType
+  }
+
+  export type GetAvaliacaoAggregateType<T extends AvaliacaoAggregateArgs> = {
+        [P in keyof T & keyof AggregateAvaliacao]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAvaliacao[P]>
+      : GetScalarType<T[P], AggregateAvaliacao[P]>
+  }
+
+
+
+
+  export type AvaliacaoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AvaliacaoWhereInput
+    orderBy?: AvaliacaoOrderByWithAggregationInput | AvaliacaoOrderByWithAggregationInput[]
+    by: AvaliacaoScalarFieldEnum[] | AvaliacaoScalarFieldEnum
+    having?: AvaliacaoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AvaliacaoCountAggregateInputType | true
+    _avg?: AvaliacaoAvgAggregateInputType
+    _sum?: AvaliacaoSumAggregateInputType
+    _min?: AvaliacaoMinAggregateInputType
+    _max?: AvaliacaoMaxAggregateInputType
+  }
+
+  export type AvaliacaoGroupByOutputType = {
+    id: number
+    nota: number
+    comentario: string | null
+    criadoEm: Date
+    atualizadoEm: Date
+    usuarioId: string
+    livroId: number
+    _count: AvaliacaoCountAggregateOutputType | null
+    _avg: AvaliacaoAvgAggregateOutputType | null
+    _sum: AvaliacaoSumAggregateOutputType | null
+    _min: AvaliacaoMinAggregateOutputType | null
+    _max: AvaliacaoMaxAggregateOutputType | null
+  }
+
+  type GetAvaliacaoGroupByPayload<T extends AvaliacaoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AvaliacaoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AvaliacaoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AvaliacaoGroupByOutputType[P]>
+            : GetScalarType<T[P], AvaliacaoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AvaliacaoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nota?: boolean
+    comentario?: boolean
+    criadoEm?: boolean
+    atualizadoEm?: boolean
+    usuarioId?: boolean
+    livroId?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+    livro?: boolean | LivroDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["avaliacao"]>
+
+
+
+  export type AvaliacaoSelectScalar = {
+    id?: boolean
+    nota?: boolean
+    comentario?: boolean
+    criadoEm?: boolean
+    atualizadoEm?: boolean
+    usuarioId?: boolean
+    livroId?: boolean
+  }
+
+  export type AvaliacaoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nota" | "comentario" | "criadoEm" | "atualizadoEm" | "usuarioId" | "livroId", ExtArgs["result"]["avaliacao"]>
+  export type AvaliacaoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+    livro?: boolean | LivroDefaultArgs<ExtArgs>
+  }
+
+  export type $AvaliacaoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Avaliacao"
+    objects: {
+      usuario: Prisma.$UsuarioPayload<ExtArgs>
+      livro: Prisma.$LivroPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      nota: number
+      comentario: string | null
+      criadoEm: Date
+      atualizadoEm: Date
+      usuarioId: string
+      livroId: number
+    }, ExtArgs["result"]["avaliacao"]>
+    composites: {}
+  }
+
+  type AvaliacaoGetPayload<S extends boolean | null | undefined | AvaliacaoDefaultArgs> = $Result.GetResult<Prisma.$AvaliacaoPayload, S>
+
+  type AvaliacaoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AvaliacaoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AvaliacaoCountAggregateInputType | true
+    }
+
+  export interface AvaliacaoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Avaliacao'], meta: { name: 'Avaliacao' } }
+    /**
+     * Find zero or one Avaliacao that matches the filter.
+     * @param {AvaliacaoFindUniqueArgs} args - Arguments to find a Avaliacao
+     * @example
+     * // Get one Avaliacao
+     * const avaliacao = await prisma.avaliacao.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AvaliacaoFindUniqueArgs>(args: SelectSubset<T, AvaliacaoFindUniqueArgs<ExtArgs>>): Prisma__AvaliacaoClient<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Avaliacao that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AvaliacaoFindUniqueOrThrowArgs} args - Arguments to find a Avaliacao
+     * @example
+     * // Get one Avaliacao
+     * const avaliacao = await prisma.avaliacao.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AvaliacaoFindUniqueOrThrowArgs>(args: SelectSubset<T, AvaliacaoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AvaliacaoClient<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Avaliacao that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AvaliacaoFindFirstArgs} args - Arguments to find a Avaliacao
+     * @example
+     * // Get one Avaliacao
+     * const avaliacao = await prisma.avaliacao.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AvaliacaoFindFirstArgs>(args?: SelectSubset<T, AvaliacaoFindFirstArgs<ExtArgs>>): Prisma__AvaliacaoClient<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Avaliacao that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AvaliacaoFindFirstOrThrowArgs} args - Arguments to find a Avaliacao
+     * @example
+     * // Get one Avaliacao
+     * const avaliacao = await prisma.avaliacao.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AvaliacaoFindFirstOrThrowArgs>(args?: SelectSubset<T, AvaliacaoFindFirstOrThrowArgs<ExtArgs>>): Prisma__AvaliacaoClient<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Avaliacaos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AvaliacaoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Avaliacaos
+     * const avaliacaos = await prisma.avaliacao.findMany()
+     * 
+     * // Get first 10 Avaliacaos
+     * const avaliacaos = await prisma.avaliacao.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const avaliacaoWithIdOnly = await prisma.avaliacao.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AvaliacaoFindManyArgs>(args?: SelectSubset<T, AvaliacaoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Avaliacao.
+     * @param {AvaliacaoCreateArgs} args - Arguments to create a Avaliacao.
+     * @example
+     * // Create one Avaliacao
+     * const Avaliacao = await prisma.avaliacao.create({
+     *   data: {
+     *     // ... data to create a Avaliacao
+     *   }
+     * })
+     * 
+     */
+    create<T extends AvaliacaoCreateArgs>(args: SelectSubset<T, AvaliacaoCreateArgs<ExtArgs>>): Prisma__AvaliacaoClient<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Avaliacaos.
+     * @param {AvaliacaoCreateManyArgs} args - Arguments to create many Avaliacaos.
+     * @example
+     * // Create many Avaliacaos
+     * const avaliacao = await prisma.avaliacao.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AvaliacaoCreateManyArgs>(args?: SelectSubset<T, AvaliacaoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Avaliacao.
+     * @param {AvaliacaoDeleteArgs} args - Arguments to delete one Avaliacao.
+     * @example
+     * // Delete one Avaliacao
+     * const Avaliacao = await prisma.avaliacao.delete({
+     *   where: {
+     *     // ... filter to delete one Avaliacao
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AvaliacaoDeleteArgs>(args: SelectSubset<T, AvaliacaoDeleteArgs<ExtArgs>>): Prisma__AvaliacaoClient<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Avaliacao.
+     * @param {AvaliacaoUpdateArgs} args - Arguments to update one Avaliacao.
+     * @example
+     * // Update one Avaliacao
+     * const avaliacao = await prisma.avaliacao.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AvaliacaoUpdateArgs>(args: SelectSubset<T, AvaliacaoUpdateArgs<ExtArgs>>): Prisma__AvaliacaoClient<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Avaliacaos.
+     * @param {AvaliacaoDeleteManyArgs} args - Arguments to filter Avaliacaos to delete.
+     * @example
+     * // Delete a few Avaliacaos
+     * const { count } = await prisma.avaliacao.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AvaliacaoDeleteManyArgs>(args?: SelectSubset<T, AvaliacaoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Avaliacaos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AvaliacaoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Avaliacaos
+     * const avaliacao = await prisma.avaliacao.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AvaliacaoUpdateManyArgs>(args: SelectSubset<T, AvaliacaoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Avaliacao.
+     * @param {AvaliacaoUpsertArgs} args - Arguments to update or create a Avaliacao.
+     * @example
+     * // Update or create a Avaliacao
+     * const avaliacao = await prisma.avaliacao.upsert({
+     *   create: {
+     *     // ... data to create a Avaliacao
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Avaliacao we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AvaliacaoUpsertArgs>(args: SelectSubset<T, AvaliacaoUpsertArgs<ExtArgs>>): Prisma__AvaliacaoClient<$Result.GetResult<Prisma.$AvaliacaoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Avaliacaos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AvaliacaoCountArgs} args - Arguments to filter Avaliacaos to count.
+     * @example
+     * // Count the number of Avaliacaos
+     * const count = await prisma.avaliacao.count({
+     *   where: {
+     *     // ... the filter for the Avaliacaos we want to count
+     *   }
+     * })
+    **/
+    count<T extends AvaliacaoCountArgs>(
+      args?: Subset<T, AvaliacaoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AvaliacaoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Avaliacao.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AvaliacaoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AvaliacaoAggregateArgs>(args: Subset<T, AvaliacaoAggregateArgs>): Prisma.PrismaPromise<GetAvaliacaoAggregateType<T>>
+
+    /**
+     * Group by Avaliacao.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AvaliacaoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AvaliacaoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AvaliacaoGroupByArgs['orderBy'] }
+        : { orderBy?: AvaliacaoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AvaliacaoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAvaliacaoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Avaliacao model
+   */
+  readonly fields: AvaliacaoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Avaliacao.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AvaliacaoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    livro<T extends LivroDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LivroDefaultArgs<ExtArgs>>): Prisma__LivroClient<$Result.GetResult<Prisma.$LivroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Avaliacao model
+   */
+  interface AvaliacaoFieldRefs {
+    readonly id: FieldRef<"Avaliacao", 'Int'>
+    readonly nota: FieldRef<"Avaliacao", 'Int'>
+    readonly comentario: FieldRef<"Avaliacao", 'String'>
+    readonly criadoEm: FieldRef<"Avaliacao", 'DateTime'>
+    readonly atualizadoEm: FieldRef<"Avaliacao", 'DateTime'>
+    readonly usuarioId: FieldRef<"Avaliacao", 'String'>
+    readonly livroId: FieldRef<"Avaliacao", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Avaliacao findUnique
+   */
+  export type AvaliacaoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Avaliacao to fetch.
+     */
+    where: AvaliacaoWhereUniqueInput
+  }
+
+  /**
+   * Avaliacao findUniqueOrThrow
+   */
+  export type AvaliacaoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Avaliacao to fetch.
+     */
+    where: AvaliacaoWhereUniqueInput
+  }
+
+  /**
+   * Avaliacao findFirst
+   */
+  export type AvaliacaoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Avaliacao to fetch.
+     */
+    where?: AvaliacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Avaliacaos to fetch.
+     */
+    orderBy?: AvaliacaoOrderByWithRelationInput | AvaliacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Avaliacaos.
+     */
+    cursor?: AvaliacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Avaliacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Avaliacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Avaliacaos.
+     */
+    distinct?: AvaliacaoScalarFieldEnum | AvaliacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Avaliacao findFirstOrThrow
+   */
+  export type AvaliacaoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Avaliacao to fetch.
+     */
+    where?: AvaliacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Avaliacaos to fetch.
+     */
+    orderBy?: AvaliacaoOrderByWithRelationInput | AvaliacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Avaliacaos.
+     */
+    cursor?: AvaliacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Avaliacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Avaliacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Avaliacaos.
+     */
+    distinct?: AvaliacaoScalarFieldEnum | AvaliacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Avaliacao findMany
+   */
+  export type AvaliacaoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Avaliacaos to fetch.
+     */
+    where?: AvaliacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Avaliacaos to fetch.
+     */
+    orderBy?: AvaliacaoOrderByWithRelationInput | AvaliacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Avaliacaos.
+     */
+    cursor?: AvaliacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Avaliacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Avaliacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Avaliacaos.
+     */
+    distinct?: AvaliacaoScalarFieldEnum | AvaliacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Avaliacao create
+   */
+  export type AvaliacaoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Avaliacao.
+     */
+    data: XOR<AvaliacaoCreateInput, AvaliacaoUncheckedCreateInput>
+  }
+
+  /**
+   * Avaliacao createMany
+   */
+  export type AvaliacaoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Avaliacaos.
+     */
+    data: AvaliacaoCreateManyInput | AvaliacaoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Avaliacao update
+   */
+  export type AvaliacaoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Avaliacao.
+     */
+    data: XOR<AvaliacaoUpdateInput, AvaliacaoUncheckedUpdateInput>
+    /**
+     * Choose, which Avaliacao to update.
+     */
+    where: AvaliacaoWhereUniqueInput
+  }
+
+  /**
+   * Avaliacao updateMany
+   */
+  export type AvaliacaoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Avaliacaos.
+     */
+    data: XOR<AvaliacaoUpdateManyMutationInput, AvaliacaoUncheckedUpdateManyInput>
+    /**
+     * Filter which Avaliacaos to update
+     */
+    where?: AvaliacaoWhereInput
+    /**
+     * Limit how many Avaliacaos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Avaliacao upsert
+   */
+  export type AvaliacaoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Avaliacao to update in case it exists.
+     */
+    where: AvaliacaoWhereUniqueInput
+    /**
+     * In case the Avaliacao found by the `where` argument doesn't exist, create a new Avaliacao with this data.
+     */
+    create: XOR<AvaliacaoCreateInput, AvaliacaoUncheckedCreateInput>
+    /**
+     * In case the Avaliacao was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AvaliacaoUpdateInput, AvaliacaoUncheckedUpdateInput>
+  }
+
+  /**
+   * Avaliacao delete
+   */
+  export type AvaliacaoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
+    /**
+     * Filter which Avaliacao to delete.
+     */
+    where: AvaliacaoWhereUniqueInput
+  }
+
+  /**
+   * Avaliacao deleteMany
+   */
+  export type AvaliacaoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Avaliacaos to delete
+     */
+    where?: AvaliacaoWhereInput
+    /**
+     * Limit how many Avaliacaos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Avaliacao without action
+   */
+  export type AvaliacaoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Avaliacao
+     */
+    select?: AvaliacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Avaliacao
+     */
+    omit?: AvaliacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AvaliacaoInclude<ExtArgs> | null
   }
 
 
@@ -7319,6 +8478,19 @@ export namespace Prisma {
   export type LivroScalarFieldEnum = (typeof LivroScalarFieldEnum)[keyof typeof LivroScalarFieldEnum]
 
 
+  export const AvaliacaoScalarFieldEnum: {
+    id: 'id',
+    nota: 'nota',
+    comentario: 'comentario',
+    criadoEm: 'criadoEm',
+    atualizadoEm: 'atualizadoEm',
+    usuarioId: 'usuarioId',
+    livroId: 'livroId'
+  };
+
+  export type AvaliacaoScalarFieldEnum = (typeof AvaliacaoScalarFieldEnum)[keyof typeof AvaliacaoScalarFieldEnum]
+
+
   export const ExemplarLivroScalarFieldEnum: {
     id: 'id',
     livroId: 'livroId',
@@ -7387,19 +8559,27 @@ export namespace Prisma {
   export type LivroOrderByRelevanceFieldEnum = (typeof LivroOrderByRelevanceFieldEnum)[keyof typeof LivroOrderByRelevanceFieldEnum]
 
 
-  export const EmprestimoOrderByRelevanceFieldEnum: {
-    usuarioId: 'usuarioId'
-  };
-
-  export type EmprestimoOrderByRelevanceFieldEnum = (typeof EmprestimoOrderByRelevanceFieldEnum)[keyof typeof EmprestimoOrderByRelevanceFieldEnum]
-
-
   export const NullsOrder: {
     first: 'first',
     last: 'last'
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const AvaliacaoOrderByRelevanceFieldEnum: {
+    comentario: 'comentario',
+    usuarioId: 'usuarioId'
+  };
+
+  export type AvaliacaoOrderByRelevanceFieldEnum = (typeof AvaliacaoOrderByRelevanceFieldEnum)[keyof typeof AvaliacaoOrderByRelevanceFieldEnum]
+
+
+  export const EmprestimoOrderByRelevanceFieldEnum: {
+    usuarioId: 'usuarioId'
+  };
+
+  export type EmprestimoOrderByRelevanceFieldEnum = (typeof EmprestimoOrderByRelevanceFieldEnum)[keyof typeof EmprestimoOrderByRelevanceFieldEnum]
 
 
   /**
@@ -7443,16 +8623,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'LivroStatus'
+   * Reference to a field of type 'DateTime'
    */
-  export type EnumLivroStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LivroStatus'>
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
     
 
 
   /**
-   * Reference to a field of type 'DateTime'
+   * Reference to a field of type 'LivroStatus'
    */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+  export type EnumLivroStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LivroStatus'>
     
   /**
    * Deep Input Types
@@ -7472,6 +8652,7 @@ export namespace Prisma {
     bloqueado?: BoolFilter<"Usuario"> | boolean
     role?: EnumRoleFilter<"Usuario"> | $Enums.Role
     emprestimos?: EmprestimoListRelationFilter
+    avaliacoes?: AvaliacaoListRelationFilter
   }
 
   export type UsuarioOrderByWithRelationInput = {
@@ -7484,6 +8665,7 @@ export namespace Prisma {
     bloqueado?: SortOrder
     role?: SortOrder
     emprestimos?: EmprestimoOrderByRelationAggregateInput
+    avaliacoes?: AvaliacaoOrderByRelationAggregateInput
     _relevance?: UsuarioOrderByRelevanceInput
   }
 
@@ -7500,6 +8682,7 @@ export namespace Prisma {
     bloqueado?: BoolFilter<"Usuario"> | boolean
     role?: EnumRoleFilter<"Usuario"> | $Enums.Role
     emprestimos?: EmprestimoListRelationFilter
+    avaliacoes?: AvaliacaoListRelationFilter
   }, "id" | "email" | "cpf">
 
   export type UsuarioOrderByWithAggregationInput = {
@@ -7538,6 +8721,7 @@ export namespace Prisma {
     isbn?: StringFilter<"Livro"> | string
     mediaAvaliacoes?: FloatFilter<"Livro"> | number
     exemplares?: ExemplarLivroListRelationFilter
+    avaliacoes?: AvaliacaoListRelationFilter
   }
 
   export type LivroOrderByWithRelationInput = {
@@ -7545,6 +8729,7 @@ export namespace Prisma {
     isbn?: SortOrder
     mediaAvaliacoes?: SortOrder
     exemplares?: ExemplarLivroOrderByRelationAggregateInput
+    avaliacoes?: AvaliacaoOrderByRelationAggregateInput
     _relevance?: LivroOrderByRelevanceInput
   }
 
@@ -7556,6 +8741,7 @@ export namespace Prisma {
     NOT?: LivroWhereInput | LivroWhereInput[]
     mediaAvaliacoes?: FloatFilter<"Livro"> | number
     exemplares?: ExemplarLivroListRelationFilter
+    avaliacoes?: AvaliacaoListRelationFilter
   }, "id" | "isbn">
 
   export type LivroOrderByWithAggregationInput = {
@@ -7576,6 +8762,78 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Livro"> | number
     isbn?: StringWithAggregatesFilter<"Livro"> | string
     mediaAvaliacoes?: FloatWithAggregatesFilter<"Livro"> | number
+  }
+
+  export type AvaliacaoWhereInput = {
+    AND?: AvaliacaoWhereInput | AvaliacaoWhereInput[]
+    OR?: AvaliacaoWhereInput[]
+    NOT?: AvaliacaoWhereInput | AvaliacaoWhereInput[]
+    id?: IntFilter<"Avaliacao"> | number
+    nota?: IntFilter<"Avaliacao"> | number
+    comentario?: StringNullableFilter<"Avaliacao"> | string | null
+    criadoEm?: DateTimeFilter<"Avaliacao"> | Date | string
+    atualizadoEm?: DateTimeFilter<"Avaliacao"> | Date | string
+    usuarioId?: StringFilter<"Avaliacao"> | string
+    livroId?: IntFilter<"Avaliacao"> | number
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+    livro?: XOR<LivroScalarRelationFilter, LivroWhereInput>
+  }
+
+  export type AvaliacaoOrderByWithRelationInput = {
+    id?: SortOrder
+    nota?: SortOrder
+    comentario?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    atualizadoEm?: SortOrder
+    usuarioId?: SortOrder
+    livroId?: SortOrder
+    usuario?: UsuarioOrderByWithRelationInput
+    livro?: LivroOrderByWithRelationInput
+    _relevance?: AvaliacaoOrderByRelevanceInput
+  }
+
+  export type AvaliacaoWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    usuarioId_livroId?: AvaliacaoUsuarioIdLivroIdCompoundUniqueInput
+    AND?: AvaliacaoWhereInput | AvaliacaoWhereInput[]
+    OR?: AvaliacaoWhereInput[]
+    NOT?: AvaliacaoWhereInput | AvaliacaoWhereInput[]
+    nota?: IntFilter<"Avaliacao"> | number
+    comentario?: StringNullableFilter<"Avaliacao"> | string | null
+    criadoEm?: DateTimeFilter<"Avaliacao"> | Date | string
+    atualizadoEm?: DateTimeFilter<"Avaliacao"> | Date | string
+    usuarioId?: StringFilter<"Avaliacao"> | string
+    livroId?: IntFilter<"Avaliacao"> | number
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+    livro?: XOR<LivroScalarRelationFilter, LivroWhereInput>
+  }, "id" | "usuarioId_livroId">
+
+  export type AvaliacaoOrderByWithAggregationInput = {
+    id?: SortOrder
+    nota?: SortOrder
+    comentario?: SortOrderInput | SortOrder
+    criadoEm?: SortOrder
+    atualizadoEm?: SortOrder
+    usuarioId?: SortOrder
+    livroId?: SortOrder
+    _count?: AvaliacaoCountOrderByAggregateInput
+    _avg?: AvaliacaoAvgOrderByAggregateInput
+    _max?: AvaliacaoMaxOrderByAggregateInput
+    _min?: AvaliacaoMinOrderByAggregateInput
+    _sum?: AvaliacaoSumOrderByAggregateInput
+  }
+
+  export type AvaliacaoScalarWhereWithAggregatesInput = {
+    AND?: AvaliacaoScalarWhereWithAggregatesInput | AvaliacaoScalarWhereWithAggregatesInput[]
+    OR?: AvaliacaoScalarWhereWithAggregatesInput[]
+    NOT?: AvaliacaoScalarWhereWithAggregatesInput | AvaliacaoScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Avaliacao"> | number
+    nota?: IntWithAggregatesFilter<"Avaliacao"> | number
+    comentario?: StringNullableWithAggregatesFilter<"Avaliacao"> | string | null
+    criadoEm?: DateTimeWithAggregatesFilter<"Avaliacao"> | Date | string
+    atualizadoEm?: DateTimeWithAggregatesFilter<"Avaliacao"> | Date | string
+    usuarioId?: StringWithAggregatesFilter<"Avaliacao"> | string
+    livroId?: IntWithAggregatesFilter<"Avaliacao"> | number
   }
 
   export type ExemplarLivroWhereInput = {
@@ -7808,6 +9066,7 @@ export namespace Prisma {
     bloqueado?: boolean
     role?: $Enums.Role
     emprestimos?: EmprestimoCreateNestedManyWithoutUsuarioInput
+    avaliacoes?: AvaliacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateInput = {
@@ -7820,6 +9079,7 @@ export namespace Prisma {
     bloqueado?: boolean
     role?: $Enums.Role
     emprestimos?: EmprestimoUncheckedCreateNestedManyWithoutUsuarioInput
+    avaliacoes?: AvaliacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUpdateInput = {
@@ -7832,6 +9092,7 @@ export namespace Prisma {
     bloqueado?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     emprestimos?: EmprestimoUpdateManyWithoutUsuarioNestedInput
+    avaliacoes?: AvaliacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateInput = {
@@ -7844,6 +9105,7 @@ export namespace Prisma {
     bloqueado?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     emprestimos?: EmprestimoUncheckedUpdateManyWithoutUsuarioNestedInput
+    avaliacoes?: AvaliacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioCreateManyInput = {
@@ -7883,6 +9145,7 @@ export namespace Prisma {
     isbn: string
     mediaAvaliacoes?: number
     exemplares?: ExemplarLivroCreateNestedManyWithoutLivroInput
+    avaliacoes?: AvaliacaoCreateNestedManyWithoutLivroInput
   }
 
   export type LivroUncheckedCreateInput = {
@@ -7890,12 +9153,14 @@ export namespace Prisma {
     isbn: string
     mediaAvaliacoes?: number
     exemplares?: ExemplarLivroUncheckedCreateNestedManyWithoutLivroInput
+    avaliacoes?: AvaliacaoUncheckedCreateNestedManyWithoutLivroInput
   }
 
   export type LivroUpdateInput = {
     isbn?: StringFieldUpdateOperationsInput | string
     mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
     exemplares?: ExemplarLivroUpdateManyWithoutLivroNestedInput
+    avaliacoes?: AvaliacaoUpdateManyWithoutLivroNestedInput
   }
 
   export type LivroUncheckedUpdateInput = {
@@ -7903,6 +9168,7 @@ export namespace Prisma {
     isbn?: StringFieldUpdateOperationsInput | string
     mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
     exemplares?: ExemplarLivroUncheckedUpdateManyWithoutLivroNestedInput
+    avaliacoes?: AvaliacaoUncheckedUpdateManyWithoutLivroNestedInput
   }
 
   export type LivroCreateManyInput = {
@@ -7920,6 +9186,71 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     isbn?: StringFieldUpdateOperationsInput | string
     mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type AvaliacaoCreateInput = {
+    nota: number
+    comentario?: string | null
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    usuario: UsuarioCreateNestedOneWithoutAvaliacoesInput
+    livro: LivroCreateNestedOneWithoutAvaliacoesInput
+  }
+
+  export type AvaliacaoUncheckedCreateInput = {
+    id?: number
+    nota: number
+    comentario?: string | null
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    usuarioId: string
+    livroId: number
+  }
+
+  export type AvaliacaoUpdateInput = {
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuario?: UsuarioUpdateOneRequiredWithoutAvaliacoesNestedInput
+    livro?: LivroUpdateOneRequiredWithoutAvaliacoesNestedInput
+  }
+
+  export type AvaliacaoUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuarioId?: StringFieldUpdateOperationsInput | string
+    livroId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type AvaliacaoCreateManyInput = {
+    id?: number
+    nota: number
+    comentario?: string | null
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    usuarioId: string
+    livroId: number
+  }
+
+  export type AvaliacaoUpdateManyMutationInput = {
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AvaliacaoUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuarioId?: StringFieldUpdateOperationsInput | string
+    livroId?: IntFieldUpdateOperationsInput | number
   }
 
   export type ExemplarLivroCreateInput = {
@@ -8153,7 +9484,17 @@ export namespace Prisma {
     none?: EmprestimoWhereInput
   }
 
+  export type AvaliacaoListRelationFilter = {
+    every?: AvaliacaoWhereInput
+    some?: AvaliacaoWhereInput
+    none?: AvaliacaoWhereInput
+  }
+
   export type EmprestimoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AvaliacaoOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -8330,16 +9671,137 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type EnumLivroStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.LivroStatus | EnumLivroStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LivroStatus[]
-    notIn?: $Enums.LivroStatus[]
-    not?: NestedEnumLivroStatusFilter<$PrismaModel> | $Enums.LivroStatus
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type UsuarioScalarRelationFilter = {
+    is?: UsuarioWhereInput
+    isNot?: UsuarioWhereInput
   }
 
   export type LivroScalarRelationFilter = {
     is?: LivroWhereInput
     isNot?: LivroWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type AvaliacaoOrderByRelevanceInput = {
+    fields: AvaliacaoOrderByRelevanceFieldEnum | AvaliacaoOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type AvaliacaoUsuarioIdLivroIdCompoundUniqueInput = {
+    usuarioId: string
+    livroId: number
+  }
+
+  export type AvaliacaoCountOrderByAggregateInput = {
+    id?: SortOrder
+    nota?: SortOrder
+    comentario?: SortOrder
+    criadoEm?: SortOrder
+    atualizadoEm?: SortOrder
+    usuarioId?: SortOrder
+    livroId?: SortOrder
+  }
+
+  export type AvaliacaoAvgOrderByAggregateInput = {
+    id?: SortOrder
+    nota?: SortOrder
+    livroId?: SortOrder
+  }
+
+  export type AvaliacaoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nota?: SortOrder
+    comentario?: SortOrder
+    criadoEm?: SortOrder
+    atualizadoEm?: SortOrder
+    usuarioId?: SortOrder
+    livroId?: SortOrder
+  }
+
+  export type AvaliacaoMinOrderByAggregateInput = {
+    id?: SortOrder
+    nota?: SortOrder
+    comentario?: SortOrder
+    criadoEm?: SortOrder
+    atualizadoEm?: SortOrder
+    usuarioId?: SortOrder
+    livroId?: SortOrder
+  }
+
+  export type AvaliacaoSumOrderByAggregateInput = {
+    id?: SortOrder
+    nota?: SortOrder
+    livroId?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type EnumLivroStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LivroStatus | EnumLivroStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LivroStatus[]
+    notIn?: $Enums.LivroStatus[]
+    not?: NestedEnumLivroStatusFilter<$PrismaModel> | $Enums.LivroStatus
   }
 
   export type ItemEmprestimoListRelationFilter = {
@@ -8390,22 +9852,6 @@ export namespace Prisma {
     _max?: NestedEnumLivroStatusFilter<$PrismaModel>
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type UsuarioScalarRelationFilter = {
-    is?: UsuarioWhereInput
-    isNot?: UsuarioWhereInput
-  }
-
   export type EmprestimoOrderByRelevanceInput = {
     fields: EmprestimoOrderByRelevanceFieldEnum | EmprestimoOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -8438,20 +9884,6 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -8471,11 +9903,6 @@ export namespace Prisma {
   export type ExemplarLivroScalarRelationFilter = {
     is?: ExemplarLivroWhereInput
     isNot?: ExemplarLivroWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type ItemEmprestimoCountOrderByAggregateInput = {
@@ -8580,11 +10007,25 @@ export namespace Prisma {
     connect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
   }
 
+  export type AvaliacaoCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<AvaliacaoCreateWithoutUsuarioInput, AvaliacaoUncheckedCreateWithoutUsuarioInput> | AvaliacaoCreateWithoutUsuarioInput[] | AvaliacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AvaliacaoCreateOrConnectWithoutUsuarioInput | AvaliacaoCreateOrConnectWithoutUsuarioInput[]
+    createMany?: AvaliacaoCreateManyUsuarioInputEnvelope
+    connect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+  }
+
   export type EmprestimoUncheckedCreateNestedManyWithoutUsuarioInput = {
     create?: XOR<EmprestimoCreateWithoutUsuarioInput, EmprestimoUncheckedCreateWithoutUsuarioInput> | EmprestimoCreateWithoutUsuarioInput[] | EmprestimoUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: EmprestimoCreateOrConnectWithoutUsuarioInput | EmprestimoCreateOrConnectWithoutUsuarioInput[]
     createMany?: EmprestimoCreateManyUsuarioInputEnvelope
     connect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
+  }
+
+  export type AvaliacaoUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<AvaliacaoCreateWithoutUsuarioInput, AvaliacaoUncheckedCreateWithoutUsuarioInput> | AvaliacaoCreateWithoutUsuarioInput[] | AvaliacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AvaliacaoCreateOrConnectWithoutUsuarioInput | AvaliacaoCreateOrConnectWithoutUsuarioInput[]
+    createMany?: AvaliacaoCreateManyUsuarioInputEnvelope
+    connect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -8613,6 +10054,20 @@ export namespace Prisma {
     deleteMany?: EmprestimoScalarWhereInput | EmprestimoScalarWhereInput[]
   }
 
+  export type AvaliacaoUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<AvaliacaoCreateWithoutUsuarioInput, AvaliacaoUncheckedCreateWithoutUsuarioInput> | AvaliacaoCreateWithoutUsuarioInput[] | AvaliacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AvaliacaoCreateOrConnectWithoutUsuarioInput | AvaliacaoCreateOrConnectWithoutUsuarioInput[]
+    upsert?: AvaliacaoUpsertWithWhereUniqueWithoutUsuarioInput | AvaliacaoUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: AvaliacaoCreateManyUsuarioInputEnvelope
+    set?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    disconnect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    delete?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    connect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    update?: AvaliacaoUpdateWithWhereUniqueWithoutUsuarioInput | AvaliacaoUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: AvaliacaoUpdateManyWithWhereWithoutUsuarioInput | AvaliacaoUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: AvaliacaoScalarWhereInput | AvaliacaoScalarWhereInput[]
+  }
+
   export type EmprestimoUncheckedUpdateManyWithoutUsuarioNestedInput = {
     create?: XOR<EmprestimoCreateWithoutUsuarioInput, EmprestimoUncheckedCreateWithoutUsuarioInput> | EmprestimoCreateWithoutUsuarioInput[] | EmprestimoUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: EmprestimoCreateOrConnectWithoutUsuarioInput | EmprestimoCreateOrConnectWithoutUsuarioInput[]
@@ -8627,6 +10082,20 @@ export namespace Prisma {
     deleteMany?: EmprestimoScalarWhereInput | EmprestimoScalarWhereInput[]
   }
 
+  export type AvaliacaoUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<AvaliacaoCreateWithoutUsuarioInput, AvaliacaoUncheckedCreateWithoutUsuarioInput> | AvaliacaoCreateWithoutUsuarioInput[] | AvaliacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: AvaliacaoCreateOrConnectWithoutUsuarioInput | AvaliacaoCreateOrConnectWithoutUsuarioInput[]
+    upsert?: AvaliacaoUpsertWithWhereUniqueWithoutUsuarioInput | AvaliacaoUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: AvaliacaoCreateManyUsuarioInputEnvelope
+    set?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    disconnect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    delete?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    connect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    update?: AvaliacaoUpdateWithWhereUniqueWithoutUsuarioInput | AvaliacaoUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: AvaliacaoUpdateManyWithWhereWithoutUsuarioInput | AvaliacaoUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: AvaliacaoScalarWhereInput | AvaliacaoScalarWhereInput[]
+  }
+
   export type ExemplarLivroCreateNestedManyWithoutLivroInput = {
     create?: XOR<ExemplarLivroCreateWithoutLivroInput, ExemplarLivroUncheckedCreateWithoutLivroInput> | ExemplarLivroCreateWithoutLivroInput[] | ExemplarLivroUncheckedCreateWithoutLivroInput[]
     connectOrCreate?: ExemplarLivroCreateOrConnectWithoutLivroInput | ExemplarLivroCreateOrConnectWithoutLivroInput[]
@@ -8634,11 +10103,25 @@ export namespace Prisma {
     connect?: ExemplarLivroWhereUniqueInput | ExemplarLivroWhereUniqueInput[]
   }
 
+  export type AvaliacaoCreateNestedManyWithoutLivroInput = {
+    create?: XOR<AvaliacaoCreateWithoutLivroInput, AvaliacaoUncheckedCreateWithoutLivroInput> | AvaliacaoCreateWithoutLivroInput[] | AvaliacaoUncheckedCreateWithoutLivroInput[]
+    connectOrCreate?: AvaliacaoCreateOrConnectWithoutLivroInput | AvaliacaoCreateOrConnectWithoutLivroInput[]
+    createMany?: AvaliacaoCreateManyLivroInputEnvelope
+    connect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+  }
+
   export type ExemplarLivroUncheckedCreateNestedManyWithoutLivroInput = {
     create?: XOR<ExemplarLivroCreateWithoutLivroInput, ExemplarLivroUncheckedCreateWithoutLivroInput> | ExemplarLivroCreateWithoutLivroInput[] | ExemplarLivroUncheckedCreateWithoutLivroInput[]
     connectOrCreate?: ExemplarLivroCreateOrConnectWithoutLivroInput | ExemplarLivroCreateOrConnectWithoutLivroInput[]
     createMany?: ExemplarLivroCreateManyLivroInputEnvelope
     connect?: ExemplarLivroWhereUniqueInput | ExemplarLivroWhereUniqueInput[]
+  }
+
+  export type AvaliacaoUncheckedCreateNestedManyWithoutLivroInput = {
+    create?: XOR<AvaliacaoCreateWithoutLivroInput, AvaliacaoUncheckedCreateWithoutLivroInput> | AvaliacaoCreateWithoutLivroInput[] | AvaliacaoUncheckedCreateWithoutLivroInput[]
+    connectOrCreate?: AvaliacaoCreateOrConnectWithoutLivroInput | AvaliacaoCreateOrConnectWithoutLivroInput[]
+    createMany?: AvaliacaoCreateManyLivroInputEnvelope
+    connect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -8663,6 +10146,20 @@ export namespace Prisma {
     deleteMany?: ExemplarLivroScalarWhereInput | ExemplarLivroScalarWhereInput[]
   }
 
+  export type AvaliacaoUpdateManyWithoutLivroNestedInput = {
+    create?: XOR<AvaliacaoCreateWithoutLivroInput, AvaliacaoUncheckedCreateWithoutLivroInput> | AvaliacaoCreateWithoutLivroInput[] | AvaliacaoUncheckedCreateWithoutLivroInput[]
+    connectOrCreate?: AvaliacaoCreateOrConnectWithoutLivroInput | AvaliacaoCreateOrConnectWithoutLivroInput[]
+    upsert?: AvaliacaoUpsertWithWhereUniqueWithoutLivroInput | AvaliacaoUpsertWithWhereUniqueWithoutLivroInput[]
+    createMany?: AvaliacaoCreateManyLivroInputEnvelope
+    set?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    disconnect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    delete?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    connect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    update?: AvaliacaoUpdateWithWhereUniqueWithoutLivroInput | AvaliacaoUpdateWithWhereUniqueWithoutLivroInput[]
+    updateMany?: AvaliacaoUpdateManyWithWhereWithoutLivroInput | AvaliacaoUpdateManyWithWhereWithoutLivroInput[]
+    deleteMany?: AvaliacaoScalarWhereInput | AvaliacaoScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -8683,6 +10180,56 @@ export namespace Prisma {
     update?: ExemplarLivroUpdateWithWhereUniqueWithoutLivroInput | ExemplarLivroUpdateWithWhereUniqueWithoutLivroInput[]
     updateMany?: ExemplarLivroUpdateManyWithWhereWithoutLivroInput | ExemplarLivroUpdateManyWithWhereWithoutLivroInput[]
     deleteMany?: ExemplarLivroScalarWhereInput | ExemplarLivroScalarWhereInput[]
+  }
+
+  export type AvaliacaoUncheckedUpdateManyWithoutLivroNestedInput = {
+    create?: XOR<AvaliacaoCreateWithoutLivroInput, AvaliacaoUncheckedCreateWithoutLivroInput> | AvaliacaoCreateWithoutLivroInput[] | AvaliacaoUncheckedCreateWithoutLivroInput[]
+    connectOrCreate?: AvaliacaoCreateOrConnectWithoutLivroInput | AvaliacaoCreateOrConnectWithoutLivroInput[]
+    upsert?: AvaliacaoUpsertWithWhereUniqueWithoutLivroInput | AvaliacaoUpsertWithWhereUniqueWithoutLivroInput[]
+    createMany?: AvaliacaoCreateManyLivroInputEnvelope
+    set?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    disconnect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    delete?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    connect?: AvaliacaoWhereUniqueInput | AvaliacaoWhereUniqueInput[]
+    update?: AvaliacaoUpdateWithWhereUniqueWithoutLivroInput | AvaliacaoUpdateWithWhereUniqueWithoutLivroInput[]
+    updateMany?: AvaliacaoUpdateManyWithWhereWithoutLivroInput | AvaliacaoUpdateManyWithWhereWithoutLivroInput[]
+    deleteMany?: AvaliacaoScalarWhereInput | AvaliacaoScalarWhereInput[]
+  }
+
+  export type UsuarioCreateNestedOneWithoutAvaliacoesInput = {
+    create?: XOR<UsuarioCreateWithoutAvaliacoesInput, UsuarioUncheckedCreateWithoutAvaliacoesInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutAvaliacoesInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type LivroCreateNestedOneWithoutAvaliacoesInput = {
+    create?: XOR<LivroCreateWithoutAvaliacoesInput, LivroUncheckedCreateWithoutAvaliacoesInput>
+    connectOrCreate?: LivroCreateOrConnectWithoutAvaliacoesInput
+    connect?: LivroWhereUniqueInput
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutAvaliacoesNestedInput = {
+    create?: XOR<UsuarioCreateWithoutAvaliacoesInput, UsuarioUncheckedCreateWithoutAvaliacoesInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutAvaliacoesInput
+    upsert?: UsuarioUpsertWithoutAvaliacoesInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutAvaliacoesInput, UsuarioUpdateWithoutAvaliacoesInput>, UsuarioUncheckedUpdateWithoutAvaliacoesInput>
+  }
+
+  export type LivroUpdateOneRequiredWithoutAvaliacoesNestedInput = {
+    create?: XOR<LivroCreateWithoutAvaliacoesInput, LivroUncheckedCreateWithoutAvaliacoesInput>
+    connectOrCreate?: LivroCreateOrConnectWithoutAvaliacoesInput
+    upsert?: LivroUpsertWithoutAvaliacoesInput
+    connect?: LivroWhereUniqueInput
+    update?: XOR<XOR<LivroUpdateToOneWithWhereWithoutAvaliacoesInput, LivroUpdateWithoutAvaliacoesInput>, LivroUncheckedUpdateWithoutAvaliacoesInput>
   }
 
   export type LivroCreateNestedOneWithoutExemplaresInput = {
@@ -8763,10 +10310,6 @@ export namespace Prisma {
     connectOrCreate?: ItemEmprestimoCreateOrConnectWithoutEmprestimoInput | ItemEmprestimoCreateOrConnectWithoutEmprestimoInput[]
     createMany?: ItemEmprestimoCreateManyEmprestimoInputEnvelope
     connect?: ItemEmprestimoWhereUniqueInput | ItemEmprestimoWhereUniqueInput[]
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
   }
 
   export type ItemEmprestimoUpdateManyWithoutEmprestimoNestedInput = {
@@ -8954,6 +10497,75 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type NestedEnumLivroStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LivroStatus | EnumLivroStatusFieldRefInput<$PrismaModel>
     in?: $Enums.LivroStatus[]
@@ -8969,31 +10581,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLivroStatusFilter<$PrismaModel>
     _max?: NestedEnumLivroStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -9021,17 +10608,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type EmprestimoCreateWithoutUsuarioInput = {
     data_saida?: Date | string
     itens?: ItemEmprestimoCreateNestedManyWithoutEmprestimoInput
@@ -9050,6 +10626,33 @@ export namespace Prisma {
 
   export type EmprestimoCreateManyUsuarioInputEnvelope = {
     data: EmprestimoCreateManyUsuarioInput | EmprestimoCreateManyUsuarioInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AvaliacaoCreateWithoutUsuarioInput = {
+    nota: number
+    comentario?: string | null
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    livro: LivroCreateNestedOneWithoutAvaliacoesInput
+  }
+
+  export type AvaliacaoUncheckedCreateWithoutUsuarioInput = {
+    id?: number
+    nota: number
+    comentario?: string | null
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    livroId: number
+  }
+
+  export type AvaliacaoCreateOrConnectWithoutUsuarioInput = {
+    where: AvaliacaoWhereUniqueInput
+    create: XOR<AvaliacaoCreateWithoutUsuarioInput, AvaliacaoUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type AvaliacaoCreateManyUsuarioInputEnvelope = {
+    data: AvaliacaoCreateManyUsuarioInput | AvaliacaoCreateManyUsuarioInput[]
     skipDuplicates?: boolean
   }
 
@@ -9078,6 +10681,35 @@ export namespace Prisma {
     data_saida?: DateTimeFilter<"Emprestimo"> | Date | string
   }
 
+  export type AvaliacaoUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: AvaliacaoWhereUniqueInput
+    update: XOR<AvaliacaoUpdateWithoutUsuarioInput, AvaliacaoUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<AvaliacaoCreateWithoutUsuarioInput, AvaliacaoUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type AvaliacaoUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: AvaliacaoWhereUniqueInput
+    data: XOR<AvaliacaoUpdateWithoutUsuarioInput, AvaliacaoUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type AvaliacaoUpdateManyWithWhereWithoutUsuarioInput = {
+    where: AvaliacaoScalarWhereInput
+    data: XOR<AvaliacaoUpdateManyMutationInput, AvaliacaoUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type AvaliacaoScalarWhereInput = {
+    AND?: AvaliacaoScalarWhereInput | AvaliacaoScalarWhereInput[]
+    OR?: AvaliacaoScalarWhereInput[]
+    NOT?: AvaliacaoScalarWhereInput | AvaliacaoScalarWhereInput[]
+    id?: IntFilter<"Avaliacao"> | number
+    nota?: IntFilter<"Avaliacao"> | number
+    comentario?: StringNullableFilter<"Avaliacao"> | string | null
+    criadoEm?: DateTimeFilter<"Avaliacao"> | Date | string
+    atualizadoEm?: DateTimeFilter<"Avaliacao"> | Date | string
+    usuarioId?: StringFilter<"Avaliacao"> | string
+    livroId?: IntFilter<"Avaliacao"> | number
+  }
+
   export type ExemplarLivroCreateWithoutLivroInput = {
     status?: $Enums.LivroStatus
     itens?: ItemEmprestimoCreateNestedManyWithoutExemplarLivroInput
@@ -9096,6 +10728,33 @@ export namespace Prisma {
 
   export type ExemplarLivroCreateManyLivroInputEnvelope = {
     data: ExemplarLivroCreateManyLivroInput | ExemplarLivroCreateManyLivroInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AvaliacaoCreateWithoutLivroInput = {
+    nota: number
+    comentario?: string | null
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    usuario: UsuarioCreateNestedOneWithoutAvaliacoesInput
+  }
+
+  export type AvaliacaoUncheckedCreateWithoutLivroInput = {
+    id?: number
+    nota: number
+    comentario?: string | null
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    usuarioId: string
+  }
+
+  export type AvaliacaoCreateOrConnectWithoutLivroInput = {
+    where: AvaliacaoWhereUniqueInput
+    create: XOR<AvaliacaoCreateWithoutLivroInput, AvaliacaoUncheckedCreateWithoutLivroInput>
+  }
+
+  export type AvaliacaoCreateManyLivroInputEnvelope = {
+    data: AvaliacaoCreateManyLivroInput | AvaliacaoCreateManyLivroInput[]
     skipDuplicates?: boolean
   }
 
@@ -9124,15 +10783,139 @@ export namespace Prisma {
     status?: EnumLivroStatusFilter<"ExemplarLivro"> | $Enums.LivroStatus
   }
 
+  export type AvaliacaoUpsertWithWhereUniqueWithoutLivroInput = {
+    where: AvaliacaoWhereUniqueInput
+    update: XOR<AvaliacaoUpdateWithoutLivroInput, AvaliacaoUncheckedUpdateWithoutLivroInput>
+    create: XOR<AvaliacaoCreateWithoutLivroInput, AvaliacaoUncheckedCreateWithoutLivroInput>
+  }
+
+  export type AvaliacaoUpdateWithWhereUniqueWithoutLivroInput = {
+    where: AvaliacaoWhereUniqueInput
+    data: XOR<AvaliacaoUpdateWithoutLivroInput, AvaliacaoUncheckedUpdateWithoutLivroInput>
+  }
+
+  export type AvaliacaoUpdateManyWithWhereWithoutLivroInput = {
+    where: AvaliacaoScalarWhereInput
+    data: XOR<AvaliacaoUpdateManyMutationInput, AvaliacaoUncheckedUpdateManyWithoutLivroInput>
+  }
+
+  export type UsuarioCreateWithoutAvaliacoesInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    cpf: string
+    telefone: string
+    bloqueado?: boolean
+    role?: $Enums.Role
+    emprestimos?: EmprestimoCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutAvaliacoesInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    cpf: string
+    telefone: string
+    bloqueado?: boolean
+    role?: $Enums.Role
+    emprestimos?: EmprestimoUncheckedCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutAvaliacoesInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutAvaliacoesInput, UsuarioUncheckedCreateWithoutAvaliacoesInput>
+  }
+
+  export type LivroCreateWithoutAvaliacoesInput = {
+    isbn: string
+    mediaAvaliacoes?: number
+    exemplares?: ExemplarLivroCreateNestedManyWithoutLivroInput
+  }
+
+  export type LivroUncheckedCreateWithoutAvaliacoesInput = {
+    id?: number
+    isbn: string
+    mediaAvaliacoes?: number
+    exemplares?: ExemplarLivroUncheckedCreateNestedManyWithoutLivroInput
+  }
+
+  export type LivroCreateOrConnectWithoutAvaliacoesInput = {
+    where: LivroWhereUniqueInput
+    create: XOR<LivroCreateWithoutAvaliacoesInput, LivroUncheckedCreateWithoutAvaliacoesInput>
+  }
+
+  export type UsuarioUpsertWithoutAvaliacoesInput = {
+    update: XOR<UsuarioUpdateWithoutAvaliacoesInput, UsuarioUncheckedUpdateWithoutAvaliacoesInput>
+    create: XOR<UsuarioCreateWithoutAvaliacoesInput, UsuarioUncheckedCreateWithoutAvaliacoesInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutAvaliacoesInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutAvaliacoesInput, UsuarioUncheckedUpdateWithoutAvaliacoesInput>
+  }
+
+  export type UsuarioUpdateWithoutAvaliacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    cpf?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    bloqueado?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    emprestimos?: EmprestimoUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutAvaliacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    cpf?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    bloqueado?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    emprestimos?: EmprestimoUncheckedUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type LivroUpsertWithoutAvaliacoesInput = {
+    update: XOR<LivroUpdateWithoutAvaliacoesInput, LivroUncheckedUpdateWithoutAvaliacoesInput>
+    create: XOR<LivroCreateWithoutAvaliacoesInput, LivroUncheckedCreateWithoutAvaliacoesInput>
+    where?: LivroWhereInput
+  }
+
+  export type LivroUpdateToOneWithWhereWithoutAvaliacoesInput = {
+    where?: LivroWhereInput
+    data: XOR<LivroUpdateWithoutAvaliacoesInput, LivroUncheckedUpdateWithoutAvaliacoesInput>
+  }
+
+  export type LivroUpdateWithoutAvaliacoesInput = {
+    isbn?: StringFieldUpdateOperationsInput | string
+    mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
+    exemplares?: ExemplarLivroUpdateManyWithoutLivroNestedInput
+  }
+
+  export type LivroUncheckedUpdateWithoutAvaliacoesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    isbn?: StringFieldUpdateOperationsInput | string
+    mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
+    exemplares?: ExemplarLivroUncheckedUpdateManyWithoutLivroNestedInput
+  }
+
   export type LivroCreateWithoutExemplaresInput = {
     isbn: string
     mediaAvaliacoes?: number
+    avaliacoes?: AvaliacaoCreateNestedManyWithoutLivroInput
   }
 
   export type LivroUncheckedCreateWithoutExemplaresInput = {
     id?: number
     isbn: string
     mediaAvaliacoes?: number
+    avaliacoes?: AvaliacaoUncheckedCreateNestedManyWithoutLivroInput
   }
 
   export type LivroCreateOrConnectWithoutExemplaresInput = {
@@ -9179,12 +10962,14 @@ export namespace Prisma {
   export type LivroUpdateWithoutExemplaresInput = {
     isbn?: StringFieldUpdateOperationsInput | string
     mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
+    avaliacoes?: AvaliacaoUpdateManyWithoutLivroNestedInput
   }
 
   export type LivroUncheckedUpdateWithoutExemplaresInput = {
     id?: IntFieldUpdateOperationsInput | number
     isbn?: StringFieldUpdateOperationsInput | string
     mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
+    avaliacoes?: AvaliacaoUncheckedUpdateManyWithoutLivroNestedInput
   }
 
   export type ItemEmprestimoUpsertWithWhereUniqueWithoutExemplarLivroInput = {
@@ -9249,6 +11034,7 @@ export namespace Prisma {
     telefone: string
     bloqueado?: boolean
     role?: $Enums.Role
+    avaliacoes?: AvaliacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutEmprestimosInput = {
@@ -9260,6 +11046,7 @@ export namespace Prisma {
     telefone: string
     bloqueado?: boolean
     role?: $Enums.Role
+    avaliacoes?: AvaliacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutEmprestimosInput = {
@@ -9303,6 +11090,7 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     bloqueado?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avaliacoes?: AvaliacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutEmprestimosInput = {
@@ -9314,6 +11102,7 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     bloqueado?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avaliacoes?: AvaliacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type EmprestimoCreateWithoutItensInput = {
@@ -9397,6 +11186,15 @@ export namespace Prisma {
     data_saida?: Date | string
   }
 
+  export type AvaliacaoCreateManyUsuarioInput = {
+    id?: number
+    nota: number
+    comentario?: string | null
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    livroId: number
+  }
+
   export type EmprestimoUpdateWithoutUsuarioInput = {
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
     itens?: ItemEmprestimoUpdateManyWithoutEmprestimoNestedInput
@@ -9413,9 +11211,44 @@ export namespace Prisma {
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AvaliacaoUpdateWithoutUsuarioInput = {
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    livro?: LivroUpdateOneRequiredWithoutAvaliacoesNestedInput
+  }
+
+  export type AvaliacaoUncheckedUpdateWithoutUsuarioInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    livroId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type AvaliacaoUncheckedUpdateManyWithoutUsuarioInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    livroId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type ExemplarLivroCreateManyLivroInput = {
     id?: number
     status?: $Enums.LivroStatus
+  }
+
+  export type AvaliacaoCreateManyLivroInput = {
+    id?: number
+    nota: number
+    comentario?: string | null
+    criadoEm?: Date | string
+    atualizadoEm?: Date | string
+    usuarioId: string
   }
 
   export type ExemplarLivroUpdateWithoutLivroInput = {
@@ -9432,6 +11265,32 @@ export namespace Prisma {
   export type ExemplarLivroUncheckedUpdateManyWithoutLivroInput = {
     id?: IntFieldUpdateOperationsInput | number
     status?: EnumLivroStatusFieldUpdateOperationsInput | $Enums.LivroStatus
+  }
+
+  export type AvaliacaoUpdateWithoutLivroInput = {
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuario?: UsuarioUpdateOneRequiredWithoutAvaliacoesNestedInput
+  }
+
+  export type AvaliacaoUncheckedUpdateWithoutLivroInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuarioId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AvaliacaoUncheckedUpdateManyWithoutLivroInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nota?: IntFieldUpdateOperationsInput | number
+    comentario?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuarioId?: StringFieldUpdateOperationsInput | string
   }
 
   export type ItemEmprestimoCreateManyExemplarLivroInput = {

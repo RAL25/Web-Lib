@@ -4,6 +4,7 @@ import Livro from "./livro";
 import Emprestimo from "./emprestimo";
 import Dashboard from "./dashboard";
 import Configuracao from "./config";
+import Avaliacao from "./avaliacao";
 import { login } from "../controllers/authController";
 import { autorizar, admin } from "../middleware/authMiddleware";
 
@@ -17,6 +18,7 @@ router.get("/", (_request: Request, response: Response) => {
 router.post("/login", login);
 router.use("/livro", Livro);
 router.use("/usuario", Usuario);
+router.use("/avaliacao", Avaliacao);
 
 // Rotas para usuários logados
 router.use("/emprestimo", autorizar, Emprestimo);

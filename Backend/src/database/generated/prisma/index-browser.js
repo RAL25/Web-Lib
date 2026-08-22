@@ -137,6 +137,16 @@ exports.Prisma.LivroScalarFieldEnum = {
   mediaAvaliacoes: 'mediaAvaliacoes'
 };
 
+exports.Prisma.AvaliacaoScalarFieldEnum = {
+  id: 'id',
+  nota: 'nota',
+  comentario: 'comentario',
+  criadoEm: 'criadoEm',
+  atualizadoEm: 'atualizadoEm',
+  usuarioId: 'usuarioId',
+  livroId: 'livroId'
+};
+
 exports.Prisma.ExemplarLivroScalarFieldEnum = {
   id: 'id',
   livroId: 'livroId',
@@ -184,13 +194,18 @@ exports.Prisma.LivroOrderByRelevanceFieldEnum = {
   isbn: 'isbn'
 };
 
-exports.Prisma.EmprestimoOrderByRelevanceFieldEnum = {
-  usuarioId: 'usuarioId'
-};
-
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.AvaliacaoOrderByRelevanceFieldEnum = {
+  comentario: 'comentario',
+  usuarioId: 'usuarioId'
+};
+
+exports.Prisma.EmprestimoOrderByRelevanceFieldEnum = {
+  usuarioId: 'usuarioId'
 };
 exports.Role = exports.$Enums.Role = {
   ADMINISTRADOR: 'ADMINISTRADOR',
@@ -205,6 +220,7 @@ exports.LivroStatus = exports.$Enums.LivroStatus = {
 exports.Prisma.ModelName = {
   Usuario: 'Usuario',
   Livro: 'Livro',
+  Avaliacao: 'Avaliacao',
   ExemplarLivro: 'ExemplarLivro',
   Emprestimo: 'Emprestimo',
   ItemEmprestimo: 'ItemEmprestimo',

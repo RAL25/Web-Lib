@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as usuarioController from "../controllers/usuarioController";
+import * as avaliacaoController from "../controllers/avaliacaoController";
 import {
   autorizar,
   admin,
@@ -15,6 +16,13 @@ router.post("/", usuarioController.createUsuarioPublico);
 // 2. Rotas do Usuário Autenticado (Própria Conta)
 // Visualizar o próprio perfil
 router.get("/perfil", autorizar, usuarioController.findUsuario);
+
+// Visualizar avaliações do próprio usuário
+router.get(
+  "/minhas-avaliacoes",
+  autorizar,
+  avaliacaoController.listarPorUsuario,
+);
 
 // Alterar os próprios dados
 router.put("/alterar", autorizar, usuarioController.updateUsuario);

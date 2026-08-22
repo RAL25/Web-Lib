@@ -1,16 +1,19 @@
 import { Router, type Request, type Response } from "express";
 import * as livroController from "../controllers/livroController";
+import * as avaliacaoController from "../controllers/avaliacaoController";
 import { autorizar, admin } from "../middleware/authMiddleware";
 const router = Router();
 
 // Rotas públicas
 router.get("/", livroController.index);
 router.get("/exemplar/", livroController.indexExemplar);
+router.get("/:id/avaliacoes", avaliacaoController.listarPorLivro);
 
 // Apenas usuários logados
 router.use(autorizar);
 
 router.get("/:id", livroController.findLivro);
+router.post("/:id/avaliacoes", avaliacaoController.criarOuAtualizarAvaliacao);
 
 // Rota para buscar exemplares disponíveis diretamente por busca
 router.get(
