@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { api } from "../services/api"; // Importando a configuração do Axios
+import { api } from "../services/api";
+import "../assets/styles/Cadastro.css";
 
 export default function Cadastro() {
-  // Estados para cada campo do formulário
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [cpf, setCpf] = useState("");
   const [telefone, setTelefone] = useState("");
 
-  // Estados para feedback visual
   const [erro, setErro] = useState("");
   const [mensagemSucesso, setMensagemSucesso] = useState("");
 
@@ -20,7 +19,6 @@ export default function Cadastro() {
     setMensagemSucesso("");
 
     try {
-      // O Axios envia os dados já como JSON e abstrai os headers
       const response = await api.post("/usuario", {
         nome,
         email,
@@ -29,23 +27,19 @@ export default function Cadastro() {
         telefone,
       });
 
-      // Os dados retornados pelo backend ficam em response.data
       const data = response.data;
 
-      // Limpa o formulário após o sucesso
       setNome("");
       setEmail("");
       setSenha("");
       setCpf("");
       setTelefone("");
 
-      // Exibe a mensagem de sucesso
       setMensagemSucesso(
         data.mensagem ||
           "Cadastro realizado com sucesso! Verifique seu e-mail.",
       );
     } catch (error: any) {
-      // O Axios joga erros de status HTTP direto para o catch
       const mensagemErro =
         error.response?.data?.erro ||
         error.response?.data?.error ||
@@ -56,85 +50,100 @@ export default function Cadastro() {
   };
 
   return (
-    <div>
-      <h1>Cadastro de Cliente</h1>
-
-      {/* Exibição de mensagens de erro ou sucesso */}
-      {erro && <p style={{ color: "red" }}>{erro}</p>}
-      {mensagemSucesso && <p style={{ color: "green" }}>{mensagemSucesso}</p>}
-
-      <form onSubmit={handleCadastro}>
-        <div>
-          <label htmlFor="nome">Nome Completo: </label>
-          <input
-            type="text"
-            id="nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            required
-          />
+    <div className="auth-container">
+      <div className="auth-card register-card">
+        <div className="auth-header">
+          <div className="auth-brand">📚 Bookary</div>
+          <h1>Cadastro de Cliente</h1>
+          <p>Preencha os dados abaixo para criar sua conta</p>
         </div>
 
-        <br />
+        {erro && <div className="alert-error">{erro}</div>}
+        {mensagemSucesso && (
+          <div className="alert-success">{mensagemSucesso}</div>
+        )}
 
-        <div>
-          <label htmlFor="email">E-mail: </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+        <form onSubmit={handleCadastro} className="auth-form">
+          <div className="form-group">
+            <label htmlFor="nome">Nome Completo</label>
+            <input
+              type="text"
+              id="nome"
+              className="form-control"
+              placeholder="Digite seu nome completo"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email">E-mail</label>
+            <input
+              type="email"
+              id="email"
+              className="form-control"
+              placeholder="seu.email@exemplo.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="senha">Senha</label>
+            <input
+              type="password"
+              id="senha"
+              className="form-control"
+              placeholder="••••••••"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="cpf">CPF</label>
+              <input
+                type="text"
+                id="cpf"
+                className="form-control"
+                placeholder="000.000.000-00"
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+                required
+                maxLength={14}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="telefone">Telefone</label>
+              <input
+                type="tel"
+                id="telefone"
+                className="form-control"
+                placeholder="(00) 00000-0000"
+                value={telefone}
+                onChange={(e) => setTelefone(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="btn-primary btn-full">
+            Cadastrar
+          </button>
+        </form>
+
+        <div className="auth-footer">
+          <span>Já tem uma conta? </span>
+          <Link to="/login" className="auth-link">
+            Faça login aqui
+          </Link>
         </div>
-
-        <br />
-
-        <div>
-          <label htmlFor="senha">Senha: </label>
-          <input
-            type="password"
-            id="senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <label htmlFor="cpf">CPF: </label>
-          <input
-            type="text"
-            id="cpf"
-            value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
-            required
-            maxLength={14}
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <label htmlFor="telefone">Telefone: </label>
-          <input
-            type="tel"
-            id="telefone"
-            value={telefone}
-            onChange={(e) => setTelefone(e.target.value)}
-            required
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">Cadastrar</button>
-      </form>
-
-      <br />
-      <Link to={"/login"}>Já tem uma conta? Faça login aqui.</Link>
+      </div>
     </div>
   );
 }

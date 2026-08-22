@@ -2,19 +2,18 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api } from "../services/api";
 import MenuLateral from "../components/common/MenuLateral";
+import "../assets/styles/CadastrarUsuario.css";
 
 export default function CadastrarUsuario() {
   const navigate = useNavigate();
-  const [role, setRole] = useState<"Cliente" | "Funcionario" | "Admin">(
-    "Cliente",
-  );
+  const [role, setRole] = useState<"ADMINISTRADOR" | "CLIENTE">("CLIENTE");
+  const [bloqueado, setBloqueado] = useState(false);
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
     senha: "",
     cpf: "",
     telefone: "",
-    salario: "",
   });
 
   const [mensagem, setMensagem] = useState("");
@@ -34,143 +33,158 @@ export default function CadastrarUsuario() {
     setEnviando(true);
 
     try {
-      const payload: any = {
+      const payload = {
         nome: formData.nome,
         email: formData.email,
         senha: formData.senha,
+        cpf: formData.cpf,
+        telefone: formData.telefone,
         role: role,
+        bloqueado: bloqueado,
       };
 
-      if (role === "Cliente") {
-        payload.cpf = formData.cpf;
-        payload.telefone = formData.telefone;
-      } else if (role === "Funcionario") {
-        payload.salario = Number(formData.salario);
-      }
-
       const response = await api.post("/usuario/adicionar_usuario", payload);
-      setMensagem(response.data || "Usuário cadastrado com sucesso!");
+      setMensagem(
+        response.data?.mensagem || "Usuário cadastrado com sucesso!",
+      );
 
-      setTimeout(() => navigate("/gerenciar-usuarios"), 2000);
+      setTimeout(() => navigate("/gerenciar-usuarios"), 1500);
     } catch (err: any) {
-      setErro(err.response?.data?.erro || "Erro ao cadastrar usuário.");
+      setErro(
+        err.response?.data?.erro ||
+          err.response?.data?.error ||
+          "Erro ao cadastrar usuário.",
+      );
     } finally {
       setEnviando(false);
     }
   };
 
   return (
-    <div>
-      <Link to="/gerenciar-usuarios">← Voltar para Gerenciar Usuários</Link>
-      <h1>Cadastrar Novo Usuário</h1>
+    <div className="app-container">
       <MenuLateral />
 
-      {mensagem && (
-        <p style={{ color: "green", fontWeight: "bold" }}>{mensagem}</p>
-      )}
-      {erro && <p style={{ color: "red", fontWeight: "bold" }}>{erro}</p>}
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Tipo de Perfil (Role): </label>
-          <select value={role} onChange={(e: any) => setRole(e.target.value)}>
-            <option value="Cliente">Cliente</option>
-            <option value="Funcionario">Funcionário</option>
-            <option value="Admin">Administrador</option>
-          </select>
+      <main className="main-content">
+        <div className="header-actions">
+          <Link to="/gerenciar-usuarios" className="btn-outline btn-back">
+            ← Voltar para Gerenciar Usuários
+          </Link>
         </div>
 
-        <br />
+        <header className="page-header">
+          <h1>Cadastrar Novo Usuário</h1>
+        </header>
 
-        <div>
-          <label>Nome: </label>
-          <input
-            type="text"
-            name="nome"
-            value={formData.nome}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        {mensagem && <div className="alert-success">{mensagem}</div>}
+        {erro && <div className="alert-error">{erro}</div>}
 
-        <br />
+        <section className="form-card">
+          <form onSubmit={handleSubmit} className="custom-form">
+            <div className="form-group">
+              <label htmlFor="role">Perfil de Acesso</label>
+              <select
+                id="role"
+                value={role}
+                onChange={(e) =>
+                  setRole(e.target.value as "ADMINISTRADOR" | "CLIENTE")
+                }
+                className="form-control"
+              >
+                <option value="CLIENTE">Cliente / Leitor</option>
+                <option value="ADMINISTRADOR">Administrador</option>
+              </select>
+            </div>
 
-        <div>
-          <label>E-mail: </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <label>Senha: </label>
-          <input
-            type="password"
-            name="senha"
-            value={formData.senha}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <br />
-
-        {/* Campos Dinâmicos para Cliente */}
-        {role === "Cliente" && (
-          <>
-            <div>
-              <label>CPF: </label>
+            <div className="form-group">
+              <label htmlFor="nome">Nome Completo</label>
               <input
                 type="text"
-                name="cpf"
-                value={formData.cpf}
+                id="nome"
+                name="nome"
+                placeholder="Ex: João da Silva"
+                className="form-control"
+                value={formData.nome}
                 onChange={handleChange}
-                maxLength={11}
                 required
               />
             </div>
-            <br />
-            <div>
-              <label>Telefone: </label>
+
+            <div className="form-group">
+              <label htmlFor="email">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="exemplo@email.com"
+                className="form-control"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="senha">Senha</label>
+              <input
+                type="password"
+                id="senha"
+                name="senha"
+                placeholder="Digite a senha de acesso"
+                className="form-control"
+                value={formData.senha}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="cpf">CPF</label>
               <input
                 type="text"
+                id="cpf"
+                name="cpf"
+                placeholder="000.000.000-00"
+                className="form-control"
+                value={formData.cpf}
+                onChange={handleChange}
+                maxLength={14}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="telefone">Telefone</label>
+              <input
+                type="tel"
+                id="telefone"
                 name="telefone"
+                placeholder="(00) 00000-0000"
+                className="form-control"
                 value={formData.telefone}
                 onChange={handleChange}
               />
             </div>
-            <br />
-          </>
-        )}
 
-        {/* Campos Dinâmicos para Funcionário */}
-        {role === "Funcionario" && (
-          <>
-            <div>
-              <label>Salário (R$): </label>
-              <input
-                type="number"
-                step="0.01"
-                name="salario"
-                value={formData.salario}
-                onChange={handleChange}
-                required
-              />
+            <div className="form-group checkbox-group">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  name="bloqueado"
+                  checked={bloqueado}
+                  onChange={(e) => setBloqueado(e.target.checked)}
+                />
+                <span>Conta bloqueada (impede empréstimos e logins)</span>
+              </label>
             </div>
-            <br />
-          </>
-        )}
 
-        <button type="submit" disabled={enviando}>
-          {enviando ? "Cadastrando..." : "Cadastrar Usuário"}
-        </button>
-      </form>
+            <div className="form-actions">
+              <button type="submit" className="btn-primary" disabled={enviando}>
+                {enviando ? "Cadastrando..." : "Cadastrar Usuário"}
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
     </div>
   );
 }

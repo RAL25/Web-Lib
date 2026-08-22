@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { CarrinhoContext } from "../contexts/CarrinhoContext";
 import { api } from "../services/api";
 import MenuLateral from "../components/common/MenuLateral";
+import "../assets/styles/Carrinho.css";
 
 export default function Carrinho() {
   const { itens, removerDoCarrinho, limparCarrinho } =
@@ -18,10 +19,9 @@ export default function Carrinho() {
     setEnviando(true);
 
     try {
-      // Extrai apenas os números dos IDs dos exemplares [10, 22, 45]
       const id_exemplares = itens.map((item) => item.exemplarId);
 
-      /*const response =*/ await api.post("/emprestimo/realizar", {
+      await api.post("/emprestimo/realizar", {
         id_exemplares,
       });
 
@@ -37,53 +37,69 @@ export default function Carrinho() {
   };
 
   return (
-    <div>
-      <h1>Carrinho</h1>
+    <div className="app-container">
       <MenuLateral />
 
-      {mensagem && (
-        <p style={{ color: "green", fontWeight: "bold" }}>{mensagem}</p>
-      )}
-      {erro && <p style={{ color: "red", fontWeight: "bold" }}>{erro}</p>}
+      <main className="main-content">
+        <header className="page-header">
+          <h1>Carrinho de Empréstimo</h1>
+        </header>
 
-      {itens.length === 0 ? (
-        <p>O carrinho está vazio.</p>
-      ) : (
-        <>
-          <table
-            border={1}
-            cellPadding={8}
-            style={{ borderCollapse: "collapse", width: "60%" }}
-          >
-            <thead>
-              <tr>
-                <th>Código do Exemplar</th>
-                <th>Livro / Informação</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              {itens.map((item) => (
-                <tr key={item.exemplarId}>
-                  <td>Exemplar #{item.exemplarId}</td>
-                  <td>{item.titulo || "Título não informado"}</td>
-                  <td>
-                    <button onClick={() => removerDoCarrinho(item.exemplarId)}>
-                      Remover
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {mensagem && <div className="alert-success">{mensagem}</div>}
+        {erro && <div className="alert-error">{erro}</div>}
 
-          <br />
+        <section className="cart-card">
+          {itens.length === 0 ? (
+            <div className="empty-cart">
+              <p>O carrinho está vazio.</p>
+            </div>
+          ) : (
+            <>
+              <div className="table-responsive">
+                <table className="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Código do Exemplar</th>
+                      <th>Livro / Informação</th>
+                      <th style={{ textAlign: "right" }}>Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {itens.map((item) => (
+                      <tr key={item.exemplarId}>
+                        <td className="code-cell">
+                          Exemplar #{item.exemplarId}
+                        </td>
+                        <td className="title-cell">
+                          {item.titulo || "Título não informado"}
+                        </td>
+                        <td style={{ textAlign: "right" }}>
+                          <button
+                            className="btn-danger-outline"
+                            onClick={() => removerDoCarrinho(item.exemplarId)}
+                          >
+                            Remover
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
-          <button onClick={finalizarEmprestimo} disabled={enviando}>
-            {enviando ? "Processando..." : "Confirmar Empréstimo"}
-          </button>
-        </>
-      )}
+              <div className="cart-footer">
+                <button
+                  className="btn-primary"
+                  onClick={finalizarEmprestimo}
+                  disabled={enviando}
+                >
+                  {enviando ? "Processando..." : "Confirmar Empréstimo"}
+                </button>
+              </div>
+            </>
+          )}
+        </section>
+      </main>
     </div>
   );
 }

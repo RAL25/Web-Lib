@@ -2,15 +2,14 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Cadastro from "../pages/Cadastro";
-// import CadastroLivro from "../pages/CadastroLivro";
 import Perfil from "../pages/Perfil";
 import { RotaPrivada } from "./RotaPrivada";
 import RealizarEmprestimo from "../pages/RealizarEmprestimo";
 import MeuEmprestimo from "../pages/MeuEmprestimo";
 import Historico from "../pages/Historico";
 import GerenciarLivros from "../pages/GerenciarLivros";
-import Dashboard from "../pages/Dashboard";
 import GerenciarUsuarios from "../pages/GerenciarUsuarios";
+import DashboardAdmin from "../pages/DashboardAdmin";
 import Configuracao from "../pages/Configuracao";
 import CadastroLivro from "../pages/CadastroLivro";
 import Carrinho from "../pages/Carrinho";
@@ -26,7 +25,7 @@ export function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/cadastro" element={<Cadastro />} />
 
-      {/* Rota Privada: Qualquer usuário logado */}
+      {/* Rota Privada: Qualquer usuário autenticado */}
       <Route
         path="/perfil"
         element={
@@ -36,10 +35,11 @@ export function AppRoutes() {
         }
       />
 
+      {/* Rotas Protegidas: Perfil CLIENTE */}
       <Route
         path="/realizar-emprestimo"
         element={
-          <RotaPrivada>
+          <RotaPrivada rolesPermitidas={["CLIENTE"]}>
             <RealizarEmprestimo />
           </RotaPrivada>
         }
@@ -48,7 +48,7 @@ export function AppRoutes() {
       <Route
         path="/carrinho"
         element={
-          <RotaPrivada>
+          <RotaPrivada rolesPermitidas={["CLIENTE"]}>
             <Carrinho />
           </RotaPrivada>
         }
@@ -57,7 +57,7 @@ export function AppRoutes() {
       <Route
         path="/exemplares-livro/:id"
         element={
-          <RotaPrivada>
+          <RotaPrivada rolesPermitidas={["CLIENTE"]}>
             <ExemplaresLivro />
           </RotaPrivada>
         }
@@ -66,7 +66,7 @@ export function AppRoutes() {
       <Route
         path="/meu-emprestimo"
         element={
-          <RotaPrivada>
+          <RotaPrivada rolesPermitidas={["CLIENTE"]}>
             <MeuEmprestimo />
           </RotaPrivada>
         }
@@ -75,18 +75,18 @@ export function AppRoutes() {
       <Route
         path="/historico"
         element={
-          <RotaPrivada>
+          <RotaPrivada rolesPermitidas={["CLIENTE"]}>
             <Historico />
           </RotaPrivada>
         }
       />
 
-      {/* Rota Protegida: Somente Admin e Funcionário */}
+      {/* Rotas Protegidas: Perfil ADMINISTRADOR */}
       <Route
         path="/dashboard"
         element={
-          <RotaPrivada rolesPermitidas={["Admin", "Funcionario"]}>
-            <Dashboard />
+          <RotaPrivada rolesPermitidas={["ADMINISTRADOR"]}>
+            <DashboardAdmin />
           </RotaPrivada>
         }
       />
@@ -94,7 +94,7 @@ export function AppRoutes() {
       <Route
         path="/gerenciar-livros"
         element={
-          <RotaPrivada rolesPermitidas={["Admin", "Funcionario"]}>
+          <RotaPrivada rolesPermitidas={["ADMINISTRADOR"]}>
             <GerenciarLivros />
           </RotaPrivada>
         }
@@ -103,7 +103,7 @@ export function AppRoutes() {
       <Route
         path="/cadastrar-livro"
         element={
-          <RotaPrivada rolesPermitidas={["Admin", "Funcionario"]}>
+          <RotaPrivada rolesPermitidas={["ADMINISTRADOR"]}>
             <CadastroLivro />
           </RotaPrivada>
         }
@@ -112,17 +112,16 @@ export function AppRoutes() {
       <Route
         path="/configuracao"
         element={
-          <RotaPrivada rolesPermitidas={["Admin", "Funcionario"]}>
+          <RotaPrivada rolesPermitidas={["ADMINISTRADOR"]}>
             <Configuracao />
           </RotaPrivada>
         }
       />
 
-      {/* Só Admin */}
       <Route
         path="/gerenciar-usuarios"
         element={
-          <RotaPrivada rolesPermitidas={["Admin"]}>
+          <RotaPrivada rolesPermitidas={["ADMINISTRADOR"]}>
             <GerenciarUsuarios />
           </RotaPrivada>
         }
@@ -131,7 +130,7 @@ export function AppRoutes() {
       <Route
         path="/cadastrar-usuario"
         element={
-          <RotaPrivada rolesPermitidas={["Admin"]}>
+          <RotaPrivada rolesPermitidas={["ADMINISTRADOR"]}>
             <CadastrarUsuario />
           </RotaPrivada>
         }
@@ -140,7 +139,7 @@ export function AppRoutes() {
       <Route
         path="/editar-usuario/:id"
         element={
-          <RotaPrivada rolesPermitidas={["Admin"]}>
+          <RotaPrivada rolesPermitidas={["ADMINISTRADOR"]}>
             <EditarUsuario />
           </RotaPrivada>
         }

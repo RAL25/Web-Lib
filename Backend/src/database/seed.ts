@@ -1,11 +1,8 @@
 import "dotenv/config";
-import mariadb from "mariadb";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-import { PrismaClient } from "./generated/prisma/client";
+import { PrismaClient } from "./generated/prisma";
 import { seedConfiguracoes } from "./seeds/Configuracaos";
 import { seedUsuarios } from "./seeds/Usuarios";
-import { seedFuncionarios } from "./seeds/Funcionarios";
-import { seedClientes } from "./seeds/Clientes";
 import { seedLivros } from "./seeds/Livros";
 import { seedExemplarLivros } from "./seeds/ExemplarLivros";
 import { seedEmprestimos } from "./seeds/Emprestimos";
@@ -22,8 +19,6 @@ async function main() {
   await prisma.emprestimo.deleteMany();
   await prisma.exemplarLivro.deleteMany();
   await prisma.livro.deleteMany();
-  await prisma.cliente.deleteMany();
-  await prisma.funcionario.deleteMany();
   await prisma.usuario.deleteMany();
   await prisma.configuracao.deleteMany();
 
@@ -32,21 +27,17 @@ async function main() {
   // 1. Configurações
   await seedConfiguracoes(prisma);
 
-  // 2. Usuários (Admin, Funcionário, Cliente)
+  // 2. Usuários (Admin e Cliente)
   const usuarios = await seedUsuarios(prisma);
 
-  // 3. Perfis estendidos (usam o id do usuário correspondente)
-  await seedFuncionarios(prisma, usuarios.funcionario.id);
-  await seedClientes(prisma, usuarios.cliente.id);
-
-  // 4. Catalógo e acervo
+  // 3. Catálogo e acervo
   const livros = await seedLivros(prisma);
   const exemplares = await seedExemplarLivros(prisma, {
     livro1Id: livros.livro1.id,
     livro2Id: livros.livro2.id,
   });
 
-  // 5. Circulação (Empréstimos e Itens)
+  // 4. Circulação (Empréstimos e Itens)
   const emprestimo = await seedEmprestimos(prisma, usuarios.cliente.id);
   await seedItemEmprestimos(prisma, emprestimo.id, exemplares.exemplar1.id);
 

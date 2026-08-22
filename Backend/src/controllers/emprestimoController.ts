@@ -4,14 +4,19 @@ import { LivroStatus } from "../database/generated/prisma/client";
 
 /**
  * GET /listar_itens
- * Retorna apenas os itens em posse do cliente (que ainda não foram devolvidos).
+ * Retorna apenas os itens em posse do usuário (que ainda não foram devolvidos).
  * Calcula as regras de bloqueio de botão de renovar para o frontend.
  */
 export async function index(
   request: Request,
   response: Response,
 ): Promise<void> {
-  const id_cliente = (request as any).usuarioLogado.id;
+  const usuarioId = request.usuarioId || request.usuarioLogado?.id;
+  if (!usuarioId) {
+    response.status(401).json({ erro: "Usuário não autenticado." });
+    return;
+  }
+
   const dataAtual = new Date();
 
   try {
@@ -20,7 +25,7 @@ export async function index(
 
     const itensEmprestados = await prisma.itemEmprestimo.findMany({
       where: {
-        emprestimo: { id_cliente: id_cliente },
+        emprestimo: { usuarioId: usuarioId },
         data_devolucao: null,
       },
       include: {
@@ -85,7 +90,7 @@ export async function index(
 
     response.status(200).json(resultado);
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao listar empréstimos ativos:", error);
     response
       .status(500)
       .json({ error: "Erro ao listar os itens dos empréstimos ativos." });
@@ -99,12 +104,16 @@ export async function HistoricoEmprestimo(
   request: Request,
   response: Response,
 ): Promise<void> {
-  const id_cliente = (request as any).usuarioLogado.id;
+  const usuarioId = request.usuarioId || request.usuarioLogado?.id;
+  if (!usuarioId) {
+    response.status(401).json({ erro: "Usuário não autenticado." });
+    return;
+  }
 
   try {
     const historicoItens = await prisma.itemEmprestimo.findMany({
       where: {
-        emprestimo: { id_cliente: id_cliente },
+        emprestimo: { usuarioId: usuarioId },
         data_devolucao: { not: null },
       },
       include: {
@@ -133,7 +142,7 @@ export async function HistoricoEmprestimo(
 
     response.status(200).json(resultado);
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao listar histórico de empréstimos:", error);
     response
       .status(500)
       .json({ error: "Erro ao listar o histórico de empréstimos." });
@@ -145,7 +154,12 @@ export async function HistoricoEmprestimo(
  */
 export async function realizarEmprestimo(req: Request, res: Response) {
   const { id_exemplares } = req.body;
-  const id_cliente = (req as any).usuarioLogado.id;
+  const usuarioId = req.usuarioId || req.usuarioLogado?.id;
+
+  if (!usuarioId) {
+    res.status(401).json({ erro: "Usuário não autenticado." });
+    return;
+  }
 
   try {
     const resultado = await prisma.$transaction(async (tx) => {
@@ -155,28 +169,18 @@ export async function realizarEmprestimo(req: Request, res: Response) {
       const limitePorTitulo = config?.limite_por_titulo ?? 2;
       const prazoDias = config?.prazo_padrao_dias ?? 7;
 
-      const cliente = await tx.cliente.findUnique({
-        where: { id: id_cliente },
+      const usuario = await tx.usuario.findUnique({
+        where: { id: usuarioId },
       });
-      if (!cliente) {
-        throw new Error("Cliente não encontrado.");
+      if (!usuario) {
+        throw new Error("Usuário não encontrado.");
       }
 
-      // Verifica se o cliente possui penalidade por atraso ativa
-      if (cliente.data_penalidade) {
-        const data_atual = new Date();
-        if (cliente.data_penalidade > data_atual) {
-          const dataFormatada =
-            cliente.data_penalidade.toLocaleDateString("pt-BR");
-          throw new Error(
-            `Não é possível realizar empréstimo. Conta bloqueada por atraso até ${dataFormatada}`,
-          );
-        } else {
-          await tx.cliente.update({
-            where: { id: id_cliente },
-            data: { data_penalidade: null },
-          });
-        }
+      // Verifica se o usuário está bloqueado
+      if (usuario.bloqueado) {
+        throw new Error(
+          "Não é possível realizar empréstimo. Sua conta está bloqueada.",
+        );
       }
 
       let exemplaresSolicitados = await tx.exemplarLivro.findMany({
@@ -190,7 +194,7 @@ export async function realizarEmprestimo(req: Request, res: Response) {
       if (indisponiveis.length > 0) {
         const titulos = indisponiveis.map((e) => e.id).join(", ");
         throw new Error(
-          `Os seguintes exemplares já estão empréstados: ${titulos}`,
+          `Os seguintes exemplares já estão emprestados: ${titulos}`,
         );
       }
 
@@ -202,7 +206,7 @@ export async function realizarEmprestimo(req: Request, res: Response) {
 
       const itens = await tx.itemEmprestimo.count({
         where: {
-          emprestimo: { id_cliente: id_cliente },
+          emprestimo: { usuarioId: usuarioId },
           data_devolucao: null,
         },
       });
@@ -231,7 +235,7 @@ export async function realizarEmprestimo(req: Request, res: Response) {
 
         const exemplaresJaEmprestados = await tx.itemEmprestimo.count({
           where: {
-            emprestimo: { id_cliente: id_cliente },
+            emprestimo: { usuarioId: usuarioId },
             exemplarLivro: { livroId: livroId },
             data_devolucao: null,
           },
@@ -252,7 +256,7 @@ export async function realizarEmprestimo(req: Request, res: Response) {
 
       const novoEmprestimo = await tx.emprestimo.create({
         data: {
-          id_cliente,
+          usuarioId: usuarioId,
           itens: {
             create: id_exemplares.map((id: number) => ({
               exemplarId: id,
@@ -272,7 +276,7 @@ export async function realizarEmprestimo(req: Request, res: Response) {
 
     res.status(201).json(resultado);
   } catch (error: any) {
-    console.error(error);
+    console.error("Erro ao realizar empréstimo:", error);
     res.status(400).json({ erro: error.message });
   }
 }
@@ -355,7 +359,7 @@ export async function devolverLivro(request: Request, response: Response) {
     const resultado = await prisma.$transaction(async (tx) => {
       const itemEmprestimo = await tx.itemEmprestimo.findUnique({
         where: { id: id_itemEmprestimo },
-        include: { emprestimo: true }, // Inclui a relação para pegar o id_cliente
+        include: { emprestimo: true }, // Inclui a relação para pegar o usuarioId
       });
 
       if (!itemEmprestimo) {
@@ -377,20 +381,6 @@ export async function devolverLivro(request: Request, response: Response) {
         where: { id: itemEmprestimo.exemplarId },
         data: { status: LivroStatus.Disponivel },
       });
-
-      // REGRA 3: Devolução com atraso gera penalidade de 7 dias
-      if (dataAtual > itemEmprestimo.data_prazo) {
-        const config = await tx.configuracao.findFirst();
-        const diasPenalidade = config?.dias_penalidade ?? 7;
-
-        const dataPenalidade = new Date();
-        dataPenalidade.setDate(dataPenalidade.getDate() + diasPenalidade);
-
-        await tx.cliente.update({
-          where: { id: itemEmprestimo.emprestimo.id_cliente },
-          data: { data_penalidade: dataPenalidade },
-        });
-      }
 
       return atualizaEmprestimo;
     });

@@ -1,44 +1,91 @@
-// import { PrismaClient } from "../generated/prisma";
-import { PrismaClient, Role } from "../generated/prisma/client";
+import { PrismaClient, Role } from "../generated/prisma";
 import bcrypt from "bcryptjs";
+import fs from "fs";
+import path from "path";
 
 export async function seedUsuarios(prisma: PrismaClient) {
-  const senhaHash = await bcrypt.hash("123456", 10);
+  const jsonPath = path.join(__dirname, "jsons", "usuarios.json");
+  let usersData = [];
 
-  // TODO: Resolver problema do administrador estar com ROle de usuário ao invés de Admin
-  const admin = await prisma.usuario.upsert({
-    where: { email: "admin@biblioteca.com" },
-    update: {},
-    create: {
-      nome: "Administrador do Sistema",
-      email: "admin@biblioteca.com",
-      senha: senhaHash,
-      role: Role.Admin,
-    },
-  });
+  if (fs.existsSync(jsonPath)) {
+    const rawData = fs.readFileSync(jsonPath, "utf-8");
+    usersData = JSON.parse(rawData);
+  }
 
-  const funcionario = await prisma.usuario.upsert({
-    where: { email: "funcionario@biblioteca.com" },
-    update: {},
-    create: {
-      nome: "Carlos Funcionário",
-      email: "funcionario@biblioteca.com",
-      senha: senhaHash,
-      role: Role.Funcionario,
-    },
-  });
+  let adminUser: any = null;
+  let clienteUser: any = null;
 
-  const cliente = await prisma.usuario.upsert({
-    where: { email: "cliente@email.com" },
-    update: {},
-    create: {
-      nome: "Maria Silva (Leitora)",
-      email: "cliente@email.com",
-      senha: senhaHash,
-      role: Role.Cliente,
-    },
-  });
+  for (const user of usersData) {
+    const senhaHash = await bcrypt.hash(user.senha || "123456", 10);
+    const userRole =
+      user.role === "ADMINISTRADOR" ? Role.ADMINISTRADOR : Role.CLIENTE;
+    const isBloqueado =
+      user.bloqueado === true || user.bloqueado === "true";
 
-  console.log("🌱 Seed: Usuários criados");
-  return { admin, funcionario, cliente };
+    const created = await prisma.usuario.upsert({
+      where: { email: user.email },
+      update: {
+        nome: user.nome,
+        senhaHash: senhaHash,
+        cpf: user.cpf,
+        telefone: user.telefone,
+        bloqueado: isBloqueado,
+        role: userRole,
+      },
+      create: {
+        nome: user.nome,
+        email: user.email,
+        senhaHash: senhaHash,
+        cpf: user.cpf,
+        telefone: user.telefone,
+        bloqueado: isBloqueado,
+        role: userRole,
+      },
+    });
+
+    if (userRole === Role.ADMINISTRADOR && !adminUser) {
+      adminUser = created;
+    }
+    if (userRole === Role.CLIENTE && !clienteUser) {
+      clienteUser = created;
+    }
+  }
+
+  // Se não encontrou no JSON, garante criação de admin e cliente básicos
+  if (!adminUser) {
+    const senhaHash = await bcrypt.hash("123456", 10);
+    adminUser = await prisma.usuario.upsert({
+      where: { email: "admin@biblioteca.com" },
+      update: {},
+      create: {
+        nome: "Administrador do Sistema",
+        email: "admin@biblioteca.com",
+        senhaHash,
+        cpf: "00000000001",
+        telefone: "11999999999",
+        bloqueado: false,
+        role: Role.ADMINISTRADOR,
+      },
+    });
+  }
+
+  if (!clienteUser) {
+    const senhaHash = await bcrypt.hash("123456", 10);
+    clienteUser = await prisma.usuario.upsert({
+      where: { email: "cliente@email.com" },
+      update: {},
+      create: {
+        nome: "Maria Silva (Leitora)",
+        email: "cliente@email.com",
+        senhaHash,
+        cpf: "00000000002",
+        telefone: "11988888888",
+        bloqueado: false,
+        role: Role.CLIENTE,
+      },
+    });
+  }
+
+  console.log("🌱 Seed: Usuários criados com sucesso");
+  return { admin: adminUser, cliente: clienteUser };
 }

@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from "express";
 import * as livroController from "../controllers/livroController";
-import { autorizar, funcionario } from "../middleware/authMiddleware";
+import { autorizar, admin } from "../middleware/authMiddleware";
 const router = Router();
 
 // Rotas públicas
@@ -17,10 +17,9 @@ router.get(
   "/exemplares/disponiveis",
   livroController.buscarExemplaresDisponiveis,
 );
-// router.get("/exemplar/:id", livroController.findExemplarLivro);
 
-// Apenas usuários logados com autorização (funcionários)
-router.use(funcionario);
+// Apenas administradores podem cadastrar, alterar ou deletar livros
+router.use(admin);
 
 router.post("/", livroController.cadastrarLivro);
 router.put("/:id", livroController.updateLivro);

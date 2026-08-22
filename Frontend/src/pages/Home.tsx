@@ -1,29 +1,29 @@
-// import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-// import { api } from "../services/api";
 import MenuLateral from "../components/common/MenuLateral";
 import CatalogoLivros from "../components/home/CatalogoLivros";
+import "../assets/styles/Home.css";
 
 export default function Home() {
-  // const [livros, setLivros] = useState<any[]>([]);
   const token = localStorage.getItem("token");
 
   return (
-    <div>
-      <h1>Bem-vindo à Biblioteca</h1>
-
-      {!token ? (
-        <nav>
-          <Link to="/login">Fazer Login</Link> |{" "}
-          <Link to="/cadastro">Cadastrar-se</Link>
-        </nav>
-      ) : (
-        <nav></nav>
-      )}
-
+    <div className="app-container">
       <MenuLateral />
 
-      <CatalogoLivros />
+      <main className="main-content">
+        <header className="header-bar">
+          <h1>Bem-vindo à Biblioteca</h1>
+
+          {!token && (
+            <nav className="auth-nav">
+              <Link to="/login">Fazer Login</Link>
+              <Link to="/cadastro">Cadastrar-se</Link>
+            </nav>
+          )}
+        </header>
+
+        <CatalogoLivros />
+      </main>
     </div>
   );
 }

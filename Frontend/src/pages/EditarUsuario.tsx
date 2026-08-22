@@ -2,26 +2,27 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { api } from "../services/api";
 import MenuLateral from "../components/common/MenuLateral";
+import "../assets/styles/EditarUsuario.css";
 
 export default function EditarUsuario() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [role, setRole] = useState<string>("");
+  const [role, setRole] = useState<"ADMINISTRADOR" | "CLIENTE">("CLIENTE");
+  const [bloqueado, setBloqueado] = useState(false);
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
     senha: "",
     cpf: "",
     telefone: "",
-    salario: "",
   });
 
   const [carregando, setCarregando] = useState(true);
   const [mensagem, setMensagem] = useState("");
   const [erro, setErro] = useState("");
+  const [salvando, setSalvando] = useState(false);
 
-  // Busca os dados atuais do usuário ao carregar a tela
   useEffect(() => {
     const buscarUsuario = async () => {
       try {
@@ -29,29 +30,18 @@ export default function EditarUsuario() {
         const response = await api.get(`/usuario/${id}`);
         const user = response.data;
 
-        // Identifica o perfil (role) do usuário
-        const userRole =
-          user.role ||
-          (user.cliente
-            ? "Cliente"
-            : user.funcionario
-              ? "Funcionario"
-              : "Admin");
+        setRole(user.role || "CLIENTE");
+        setBloqueado(Boolean(user.bloqueado));
 
-        setRole(userRole);
-
-        // Preenche o formulário com todas as informações vindas do backend
         setFormData({
           nome: user.nome || "",
           email: user.email || "",
-          senha: "", // Não mostra a senha por segurança
-          cpf: user.cliente?.cpf || "",
-          telefone: user.cliente?.telefone || "",
-          salario: user.funcionario?.salario
-            ? String(user.funcionario.salario)
-            : "",
+          senha: "",
+          cpf: user.cpf || "",
+          telefone: user.telefone || "",
         });
       } catch (err: any) {
+        console.error("Erro ao buscar usuário:", err);
         setErro("Erro ao carregar dados do usuário.");
       } finally {
         setCarregando(false);
@@ -61,7 +51,6 @@ export default function EditarUsuario() {
     if (id) buscarUsuario();
   }, [id]);
 
-  // Atualiza os campos do estado de forma dinâmica usando e.target.name
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -72,156 +61,172 @@ export default function EditarUsuario() {
     e.preventDefault();
     setMensagem("");
     setErro("");
+    setSalvando(true);
 
     try {
       const payload: any = {
         nome: formData.nome,
         email: formData.email,
-        senha: formData.senha,
+        cpf: formData.cpf,
+        telefone: formData.telefone,
         role: role,
+        bloqueado: bloqueado,
       };
 
-      if (role === "Cliente") {
-        payload.cpf = formData.cpf;
-        payload.telefone = formData.telefone;
-      } else if (role === "Funcionario") {
-        payload.salario = Number(formData.salario);
+      if (formData.senha.trim() !== "") {
+        payload.senha = formData.senha;
       }
 
       await api.put(`/usuario/alterar/${id}`, payload);
       setMensagem("Usuário atualizado com sucesso!");
 
-      setTimeout(() => navigate("/gerenciar-usuarios"), 2000);
+      setTimeout(() => navigate("/gerenciar-usuarios"), 1500);
     } catch (err: any) {
-      setErro(err.response?.data?.erro || "Erro ao atualizar usuário.");
+      setErro(
+        err.response?.data?.erro ||
+          err.response?.data?.error ||
+          "Erro ao atualizar usuário.",
+      );
+    } finally {
+      setSalvando(false);
     }
   };
 
-  if (carregando) return <p>Carregando dados do usuário...</p>;
-
   return (
-    <div>
-      <Link to="/gerenciar-usuarios">← Voltar</Link>
-      <h1>Editar Usuário #{id}</h1>
+    <div className="app-container">
       <MenuLateral />
 
-      {mensagem && (
-        <p style={{ color: "green", fontWeight: "bold" }}>{mensagem}</p>
-      )}
-      {erro && <p style={{ color: "red", fontWeight: "bold" }}>{erro}</p>}
-
-      <form onSubmit={handleSubmit}>
-        <p>
-          <strong>Perfil Atual:</strong> {role}
-        </p>
-
-        <div>
-          <label>Nome: </label>
-          <input
-            type="text"
-            name="nome"
-            value={formData.nome}
-            onChange={handleChange}
-            required
-          />
+      <main className="main-content">
+        <div className="header-actions">
+          <Link to="/gerenciar-usuarios" className="btn-outline btn-back">
+            ← Voltar para Gerenciar Usuários
+          </Link>
         </div>
 
-        <br />
+        <header className="page-header">
+          <h1>Editar Usuário</h1>
+          <p className="page-subtitle">ID: {id}</p>
+        </header>
 
-        <div>
-          <label>E-mail: </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        {mensagem && <div className="alert-success">{mensagem}</div>}
+        {erro && <div className="alert-error">{erro}</div>}
 
-        <br />
+        <section className="form-card">
+          {carregando ? (
+            <p className="status-message">Carregando dados do usuário...</p>
+          ) : (
+            <form onSubmit={handleSubmit} className="custom-form">
+              <div className="form-group">
+                <label htmlFor="role">Perfil de Acesso</label>
+                <select
+                  id="role"
+                  name="role"
+                  value={role}
+                  onChange={(e) =>
+                    setRole(e.target.value as "ADMINISTRADOR" | "CLIENTE")
+                  }
+                  className="form-control"
+                >
+                  <option value="CLIENTE">Cliente / Leitor</option>
+                  <option value="ADMINISTRADOR">Administrador</option>
+                </select>
+              </div>
 
-        <div>
-          <label>Senha: </label>
-          <input
-            type="text"
-            name="senha"
-            value={formData.senha}
-            onChange={handleChange}
-            placeholder="Digite a nova senha"
-            required
-          />
-        </div>
+              <div className="form-group">
+                <label htmlFor="nome">Nome Completo</label>
+                <input
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  className="form-control"
+                  value={formData.nome}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        <br />
+              <div className="form-group">
+                <label htmlFor="email">E-mail</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="form-control"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        {/* Campos Específicos para Cliente */}
-        {role === "Cliente" && (
-          <>
-            <div>
-              <label>CPF: </label>
-              <input
-                type="text"
-                name="cpf"
-                value={formData.cpf}
-                onChange={handleChange}
-                maxLength={11}
-                required
-              />
-            </div>
-            <br />
-            <div>
-              <label>Telefone: </label>
-              <input
-                type="text"
-                name="telefone"
-                value={formData.telefone}
-                onChange={handleChange}
-              />
-            </div>
-            <br />
-          </>
-        )}
+              <div className="form-group">
+                <label htmlFor="cpf">CPF</label>
+                <input
+                  type="text"
+                  id="cpf"
+                  name="cpf"
+                  className="form-control"
+                  value={formData.cpf}
+                  onChange={handleChange}
+                  maxLength={14}
+                  required
+                />
+              </div>
 
-        {/* Campos Específicos para Funcionário */}
-        {role === "Funcionario" && (
-          <>
-            <div>
-              <label>Salário (R$): </label>
-              <input
-                type="number"
-                step="0.01"
-                name="salario"
-                value={formData.salario}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <br />
-          </>
-        )}
+              <div className="form-group">
+                <label htmlFor="telefone">Telefone</label>
+                <input
+                  type="tel"
+                  id="telefone"
+                  name="telefone"
+                  className="form-control"
+                  value={formData.telefone}
+                  onChange={handleChange}
+                />
+              </div>
 
-        {/* Seleção de Role caso seja um usuário Administrador */}
-        {role === "Admin" && (
-          <>
-            <div>
-              <label>Alterar Role: </label>
-              <select
-                name="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value="Admin">Admin</option>
-                <option value="Funcionario">Funcionario</option>
-                <option value="Cliente">Cliente</option>
-              </select>
-            </div>
-            <br />
-          </>
-        )}
+              <div className="form-group">
+                <label htmlFor="senha">
+                  Nova Senha{" "}
+                  <span className="label-hint">
+                    (Deixe em branco se não desejar alterar)
+                  </span>
+                </label>
+                <input
+                  type="password"
+                  id="senha"
+                  name="senha"
+                  className="form-control"
+                  value={formData.senha}
+                  onChange={handleChange}
+                  placeholder="Digite a nova senha"
+                />
+              </div>
 
-        <button type="submit">Salvar Alterações</button>
-      </form>
+              <div className="form-group checkbox-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="bloqueado"
+                    checked={bloqueado}
+                    onChange={(e) => setBloqueado(e.target.checked)}
+                  />
+                  <span>Conta bloqueada (impede novos empréstimos e login)</span>
+                </label>
+              </div>
+
+              <div className="form-actions">
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  disabled={salvando}
+                >
+                  {salvando ? "Salvando..." : "Salvar Alterações"}
+                </button>
+              </div>
+            </form>
+          )}
+        </section>
+      </main>
     </div>
   );
 }

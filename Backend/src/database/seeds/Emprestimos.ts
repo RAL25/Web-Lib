@@ -1,9 +1,9 @@
-import { PrismaClient } from "../generated/prisma/client";
+import { PrismaClient } from "../generated/prisma";
 
-export async function seedEmprestimos(prisma: PrismaClient, clienteId: number) {
+export async function seedEmprestimos(prisma: PrismaClient, usuarioId: string) {
   const emprestimo = await prisma.emprestimo.create({
     data: {
-      id_cliente: clienteId,
+      usuarioId: usuarioId,
       data_saida: new Date(),
     },
   });

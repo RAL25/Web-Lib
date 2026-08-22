@@ -7,76 +7,69 @@ export async function login(req: Request, res: Response) {
   const { email, senha } = req.body;
 
   try {
-    // 1. Verificar se o e-mail foi enviado
+    // 1. Verificar se o e-mail e senha foram enviados
     if (!email || !senha) {
-      throw new Error("E-mail e senha são obrigatórios.");
+      return res.status(400).json({ erro: "E-mail e senha são obrigatórios." });
     }
 
     // 2. Buscar o usuário no banco de dados pelo e-mail
     const usuario = await prisma.usuario.findUnique({
-      where: { email: email },
-      // Trazendo as relações para saber se ele é funcionário, cliente ou administrador
-      include: {
-        cliente: true,
-        funcionario: true,
-      },
+      where: { email },
     });
 
-    // 3. Se o usuário não existir, retornamos erro genérico (por segurança)
+    // 3. Se o usuário não existir, retornamos erro genérico por segurança
     if (!usuario) {
-      throw new Error("Credenciais inválidas.");
+      return res.status(401).json({ erro: "Credenciais inválidas." });
     }
 
-    // 4. Comparar a senha digitada com a senha embaralhada (hash) do banco
-    // OBS: Quando você for criar novos usuários, lembre-se de usar bcrypt.hash() para salvar a senha!
-    const senhaValida = await bcrypt.compare(senha, usuario.senha!);
+    // 4. Verificar se a conta está bloqueada
+    if (usuario.bloqueado) {
+      return res.status(403).json({
+        erro: "Sua conta está temporariamente bloqueada. Entre em contato com o suporte/administração.",
+      });
+    }
+
+    // 5. Comparar a senha digitada com o hash do banco
+    const senhaValida = await bcrypt.compare(senha, usuario.senhaHash);
 
     if (!senhaValida) {
-      throw new Error("Credenciais inválidas.");
+      return res.status(401).json({ erro: "Credenciais inválidas." });
     }
 
-    // 5. Descobrir qual é o "perfil" da pessoa logada
-    // OBS: Pega o valor da role direto do campo do usuário ("Cliente" | "Funcionario" | "Admin")
-    let role = usuario.role;
-
-    // Verificar se o cliente já confirmou o seu email
-    if (role === "Cliente" && usuario.cliente) {
-      if (!usuario.cliente!.emailVerificado) {
-        return res.status(403).json({
-          erro: "Você precisa confirmar seu e-mail antes de fazer login.",
-        });
-      }
-    }
-
-    // 6. Gerar o Token JWT (O "crachá" de acesso)
+    // 6. Gerar o Token JWT
     const secret = process.env.JWT_SECRET;
     if (!secret) {
-      throw new Error("Erro interno: JWT_SECRET não configurado.");
+      return res
+        .status(500)
+        .json({ erro: "Erro interno: JWT_SECRET não configurado." });
     }
 
     const token = jwt.sign(
       {
         id: usuario.id,
         nome: usuario.nome,
-        role: role,
+        role: usuario.role,
       },
       secret,
-      { expiresIn: "1d" }, // O token expira em 1 dia
+      { expiresIn: "1d" },
     );
 
-    // 7. Retornar os dados (sem a senha, obviamente) e o token
-    res.status(200).json({
+    // 7. Retornar os dados do usuário e token
+    return res.status(200).json({
       mensagem: "Login realizado com sucesso!",
       usuario: {
         id: usuario.id,
         nome: usuario.nome,
         email: usuario.email,
-        tipo: role,
+        cpf: usuario.cpf,
+        telefone: usuario.telefone,
+        bloqueado: usuario.bloqueado,
+        role: usuario.role,
       },
       token: token,
     });
   } catch (error: any) {
-    // Usamos 401 (Unauthorized) para falhas de autenticação
-    res.status(401).json({ erro: error.message });
+    console.error("Erro no login:", error);
+    return res.status(500).json({ erro: "Erro interno ao processar login." });
   }
 }

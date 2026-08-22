@@ -1,12 +1,27 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-// Interface para dizer ao TypeScript o que tem dentro do Token
-interface TokenPayload {
-  id: number;
-  role: string;
-  iat: number;
-  exp: number;
+// Interface para o payload do Token JWT
+export interface TokenPayload {
+  id: string; // UUID
+  role: "ADMINISTRADOR" | "CLIENTE";
+  nome?: string;
+  iat?: number;
+  exp?: number;
+}
+
+// Extensão da tipagem do Express Request para conter usuarioId e usuarioLogado
+declare global {
+  namespace Express {
+    interface Request {
+      usuarioId?: string;
+      usuarioLogado?: {
+        id: string;
+        role: "ADMINISTRADOR" | "CLIENTE";
+        nome?: string;
+      };
+    }
+  }
 }
 
 export function autorizar(req: Request, res: Response, next: NextFunction) {
@@ -24,44 +39,32 @@ export function autorizar(req: Request, res: Response, next: NextFunction) {
     const secret = process.env.JWT_SECRET || "";
 
     // 2. Validar o token
-    const dados = jwt.verify(token, secret);
+    const dados = jwt.verify(token, secret) as TokenPayload;
 
-    // 3. Colocar os dados do usuário dentro da 'req' para que os
-    // próximos controllers saibam quem está logado
-    const { id, role } = dados as TokenPayload;
+    // 3. Colocar os dados do usuário dentro da 'req'
+    req.usuarioId = dados.id;
+    req.usuarioLogado = {
+      id: dados.id,
+      role: dados.role,
+      nome: dados.nome,
+    };
 
-    // Para isso funcionar sem erro de tipo, você pode usar: (req as any).usuarioId = id;
-    (req as any).usuarioLogado = { id, role };
-
-    // 4. "Pode passar!" - Chama a próxima função (o seu Controller)
+    // 4. Prosseguir
     return next();
   } catch {
     return res.status(401).json({ erro: "Token inválido ou expirado." });
   }
 }
 
-// Verifica se é funcionário
-export function funcionario(
-  request: Request,
-  response: Response,
-  next: NextFunction,
-) {
-  const usuario = (request as any).usuarioLogado;
-  if (usuario?.role === "Cliente") {
-    return response.status(403).json({ erro: "Acesso negado." });
-  }
-  next();
-}
-
 // Verifica se é Administrador
 export function admin(
-  request: Request,
-  response: Response,
+  req: Request,
+  res: Response,
   next: NextFunction,
 ) {
-  const usuario = (request as any).usuarioLogado;
-  if (usuario?.role !== "Admin") {
-    return response
+  const usuario = req.usuarioLogado;
+  if (usuario?.role !== "ADMINISTRADOR") {
+    return res
       .status(403)
       .json({ erro: "Acesso negado. Apenas administradores podem acessar." });
   }
@@ -69,22 +72,30 @@ export function admin(
 }
 
 // Verificar se é o próprio usuário ou o Administrador
-export function usuarioOuAdmin(req: any, res: any, next: any) {
-  const usuarioLogado = req.usuarioLogado; // Dados do Token
-  const idToken = Number((req as any).usuarioLogado.id); // ID que ele quer alterar/deletar
+export function usuarioOuAdmin(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const usuarioLogado = req.usuarioLogado;
+  if (!usuarioLogado) {
+    return res.status(401).json({ erro: "Usuário não autenticado." });
+  }
 
-  // 1. Se for Admin ou Funcionário, ele pode alterar qualquer um
-  if (usuarioLogado.role === "ADMIN" || usuarioLogado.role === "FUNCIONARIO") {
+  const idAlvo = req.params.id || usuarioLogado.id;
+
+  // 1. Se for Administrador, pode acessar/alterar qualquer usuário
+  if (usuarioLogado.role === "ADMINISTRADOR") {
     return next();
   }
 
-  // 2. Se for Cliente, ele SÓ pode passar se o ID for dele mesmo
-  if (usuarioLogado.id === idToken) {
+  // 2. Se for Cliente, só pode acessar/alterar se o ID for o dele mesmo
+  if (usuarioLogado.id === idAlvo) {
     return next();
   }
 
-  // 3. Se não for nenhum dos dois, barramos
+  // 3. Caso contrário, barramos
   return res.status(403).json({
-    erro: "Acesso negado. Você não tem permissão para alterar os dados de outra pessoa.",
+    erro: "Acesso negado. Você não tem permissão para acessar ou alterar dados de outro usuário.",
   });
 }

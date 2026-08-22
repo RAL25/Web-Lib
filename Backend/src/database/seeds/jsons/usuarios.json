@@ -1,0 +1,92 @@
+[
+  {
+    "nome": "Rian Leal",
+    "email": "rian@email.com",
+    "senha": "senha123",
+    "cpf": "11122233344",
+    "telefone": "11999998888" ,
+    "bloqueado": "false",
+    "role": "ADMINISTRADOR"
+  },
+  {
+    "nome": "Ana Oliveira",
+    "email": "ana@email.com",
+    "senha": "senha123",
+    "cpf": "22233344455",
+    "telefone": "21988887777" ,
+    "bloqueado": "false",
+    "role": "CLIENTE"
+  },
+  {
+    "nome": "Marcos Souza",
+    "email": "marcos@email.com",
+    "senha": "senha123",
+    "cpf": "33344455566",
+    "telefone": "31977776666" ,
+    "bloqueado": "false",
+    "role": "CLIENTE"
+  },
+  {
+    "nome": "Julia Costa",
+    "email": "julia@email.com",
+    "senha": "senha123",
+    "cpf": "44455566677",
+    "telefone": "41966665555" ,
+    "bloqueado": "true",
+    "role": "CLIENTE"
+  },
+  {
+    "nome": "Lucas Pereira",
+    "email": "lucas@email.com",
+    "senha": "senha123",
+    "cpf": "55566677788",
+    "telefone": "51955554444" ,
+    "bloqueado": "false",
+    "role": "CLIENTE"
+  },
+  {
+    "nome": "Carla Dias",
+    "email": "carla@email.com",
+    "senha": "senha123",
+    "cpf": "66677788899",
+    "telefone": "61944443333" ,
+    "bloqueado": "false",
+    "role": "CLIENTE"
+  },
+  {
+    "nome": "Bruno Rocha",
+    "email": "bruno@email.com",
+    "senha": "senha123",
+    "cpf": "77788899900",
+    "telefone": "71933332222" ,
+    "bloqueado": "false",
+    "role": "CLIENTE"
+  },
+  {
+    "nome": "Beatriz Lima",
+    "email": "beatriz@email.com",
+    "senha": "senha123",
+    "cpf": "88899900011",
+    "telefone": "81922221111" ,
+    "bloqueado": "false",
+    "role": "CLIENTE"
+  },
+  {
+    "nome": "Tiago Santos",
+    "email": "tiago@email.com",
+    "senha": "senha123",
+    "cpf": "99900011122",
+    "telefone": "91911110000" ,
+    "bloqueado": "false",
+    "role": "CLIENTE"
+  },
+  {
+    "nome": "Fernanda Melo",
+    "email": "nanda@email.com",
+    "senha": "senha123",
+    "cpf": "00011122233",
+    "telefone": "11900001111" ,
+    "bloqueado": "false",
+    "role": "CLIENTE"
+  }
+]

@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { api } from "../services/api";
 import { CarrinhoContext } from "../contexts/CarrinhoContext";
 import MenuLateral from "../components/common/MenuLateral";
+import "../assets/styles/RealizarEmprestimo.css";
 
 interface ExemplarComLivro {
   id: number;
@@ -32,7 +33,6 @@ export default function RealizarEmprestimo() {
     setBuscou(true);
 
     try {
-      // Alterado para buscar todos os exemplares (não apenas os disponíveis)
       const response = await api.get(
         `/livro/exemplares/disponiveis?busca=${busca}`,
       );
@@ -44,134 +44,138 @@ export default function RealizarEmprestimo() {
     }
   };
 
-  // Verifica se o exemplar já está no carrinho
   const estaNoCarrinho = (exemplarId: number) => {
     return itens.some((item: any) => item.exemplarId === exemplarId);
   };
 
-  // Normaliza e checa se o exemplar está com status disponível
   const isDisponivel = (status: string) => {
     const s = status ? status.toLowerCase() : "";
     return s === "disponivel" || s === "disponível";
   };
 
-  // Retorna estilos customizados de badge conforme o status do exemplar
   const getBadgeStyle = (status: string) => {
     const s = status ? status.toLowerCase() : "";
 
     if (s === "disponivel" || s === "disponível") {
-      return { backgroundColor: "#dcfce7", color: "#15803d" }; // Verde
+      return {
+        backgroundColor: "var(--primary-light, #e6f4f0)",
+        color: "var(--primary, #024935)",
+      };
     }
     if (s === "emprestado") {
-      return { backgroundColor: "#ffedd5", color: "#c2410c" }; // Laranja
+      return {
+        backgroundColor: "var(--warning, #ffedd5)",
+        color: "var(--warning-text, #7c2d12)",
+      };
     }
-    // Estilo padrão para futuros status (Manutenção, Perdido, Reservado, etc.)
-    return { backgroundColor: "#f3f4f6", color: "#374151" }; // Cinza
+    return { backgroundColor: "#f1f5f9", color: "#475569" };
   };
 
   return (
-    <div>
-      <h1>Consultar e Emprestar Exemplares</h1>
+    <div className="app-container">
       <MenuLateral />
-      <p>
-        Itens no Carrinho: <strong>{totalItens}</strong>
-      </p>
 
-      <form onSubmit={handleBuscar}>
-        <input
-          type="text"
-          placeholder="Digite o título do livro ou autor..."
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-        />
-        <button type="submit" disabled={carregando}>
-          {carregando ? "Buscando..." : "Buscar"}
-        </button>
-      </form>
+      <main className="main-content">
+        <header className="page-header header-with-badge">
+          <div>
+            <h1>Consultar e Emprestar Exemplares</h1>
+          </div>
+          <div className="cart-counter-badge">
+            🛒 Itens no Carrinho: <strong>{totalItens}</strong>
+          </div>
+        </header>
 
-      <br />
+        <section className="search-section">
+          <form onSubmit={handleBuscar} className="search-form">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Digite o título do livro ou autor..."
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+            />
+            <button type="submit" className="btn-primary" disabled={carregando}>
+              {carregando ? "Buscando..." : "Buscar"}
+            </button>
+          </form>
+        </section>
 
-      {buscou && exemplares.length === 0 && !carregando && (
-        <p>Nenhum exemplar foi encontrado para esta busca.</p>
-      )}
+        {buscou && exemplares.length === 0 && !carregando && (
+          <div className="results-card">
+            <p className="empty-message">
+              Nenhum exemplar foi encontrado para esta busca.
+            </p>
+          </div>
+        )}
 
-      {exemplares.length > 0 && (
-        <table
-          border={1}
-          cellPadding={8}
-          style={{ borderCollapse: "collapse", width: "75%" }}
-        >
-          <thead>
-            <tr>
-              <th>Código do Exemplar</th>
-              <th>Título do Livro</th>
-              <th>Autor</th>
-              <th>Status</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
-          <tbody>
-            {exemplares.map((exemplar) => {
-              const selecionado = estaNoCarrinho(exemplar.id);
-              const disponivel = isDisponivel(exemplar.status);
+        {exemplares.length > 0 && (
+          <section className="results-card">
+            <div className="table-responsive">
+              <table className="custom-table">
+                <thead>
+                  <tr>
+                    <th>Código do Exemplar</th>
+                    <th>Título do Livro</th>
+                    <th>Autor</th>
+                    <th>Status</th>
+                    <th style={{ textAlign: "right" }}>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {exemplares.map((exemplar) => {
+                    const selecionado = estaNoCarrinho(exemplar.id);
+                    const disponivel = isDisponivel(exemplar.status);
 
-              // Lógica de estado do botão de Ação
-              let textoBotao = "Adicionar ao carrinho";
-              let desabilitado = false;
-              let estiloBotao: React.CSSProperties = { cursor: "pointer" };
+                    let textoBotao = "Adicionar ao carrinho";
+                    let desabilitado = false;
+                    let classeBotao = "btn-primary";
 
-              if (!disponivel) {
-                textoBotao = "Indisponível";
-                desabilitado = true;
-                estiloBotao = { cursor: "not-allowed", opacity: 0.6 };
-              } else if (selecionado) {
-                textoBotao = "✓ Selecionado";
-                desabilitado = true;
-                estiloBotao = {
-                  backgroundColor: "#22c55e",
-                  color: "#ffffff",
-                  cursor: "not-allowed",
-                };
-              }
+                    if (!disponivel) {
+                      textoBotao = "Indisponível";
+                      desabilitado = true;
+                      classeBotao = "btn-disabled";
+                    } else if (selecionado) {
+                      textoBotao = "✓ Selecionado";
+                      desabilitado = true;
+                      classeBotao = "btn-selected";
+                    }
 
-              return (
-                <tr key={exemplar.id}>
-                  <td>Exemplar #{exemplar.id}</td>
-                  <td>{exemplar.livro.titulo}</td>
-                  <td>{exemplar.livro.autor || "Não informado"}</td>
-                  <td>
-                    <span
-                      style={{
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontWeight: "bold",
-                        fontSize: "0.9rem",
-                        ...getBadgeStyle(exemplar.status),
-                      }}
-                    >
-                      {exemplar.status}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      onClick={() =>
-                        adicionarAoCarrinho({
-                          exemplarId: exemplar.id,
-                          titulo: `${exemplar.livro.titulo} (Exemplar #${exemplar.id})`,
-                        })
-                      }
-                      disabled={desabilitado}
-                      style={estiloBotao}
-                    >
-                      {textoBotao}
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      )}
+                    return (
+                      <tr key={exemplar.id}>
+                        <td className="code-cell">Exemplar #{exemplar.id}</td>
+                        <td className="title-cell">{exemplar.livro.titulo}</td>
+                        <td>{exemplar.livro.autor || "Não informado"}</td>
+                        <td>
+                          <span
+                            className="badge"
+                            style={getBadgeStyle(exemplar.status)}
+                          >
+                            {exemplar.status}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: "right" }}>
+                          <button
+                            className={`btn-action ${classeBotao}`}
+                            onClick={() =>
+                              adicionarAoCarrinho({
+                                exemplarId: exemplar.id,
+                                titulo: `${exemplar.livro.titulo} (Exemplar #${exemplar.id})`,
+                              })
+                            }
+                            disabled={desabilitado}
+                          >
+                            {textoBotao}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+      </main>
     </div>
   );
 }

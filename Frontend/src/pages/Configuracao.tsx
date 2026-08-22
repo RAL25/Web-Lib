@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
 import MenuLateral from "../components/common/MenuLateral";
+import "../assets/styles/Configuracao.css";
 
 interface ConfiguracaoState {
   limite_global: number;
@@ -21,14 +22,12 @@ export default function Configuracao() {
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(true);
 
-  // Busca as configurações atuais salvas no banco
   useEffect(() => {
     const carregarConfigs = async () => {
       try {
         setCarregando(true);
         const response = await api.get("/configuracao");
 
-        // Como o controller utiliza 'findMany()', ele retorna um array com a lista
         const dados = Array.isArray(response.data)
           ? response.data[0]
           : response.data;
@@ -74,79 +73,96 @@ export default function Configuracao() {
     }
   };
 
-  if (carregando) return <p>Carregando configurações...</p>;
-
   return (
-    <div>
-      <h1>Configurações do Sistema</h1>
+    <div className="app-container">
       <MenuLateral />
 
-      {mensagem && (
-        <p style={{ color: "green", fontWeight: "bold" }}>{mensagem}</p>
-      )}
-      {erro && <p style={{ color: "red", fontWeight: "bold" }}>{erro}</p>}
+      <main className="main-content">
+        <header className="page-header">
+          <h1>Configurações do Sistema</h1>
+        </header>
 
-      <form onSubmit={salvarConfigs}>
-        <div>
-          <label>Limite Global (máximo de livros por cliente): </label>
-          <input
-            type="number"
-            name="limite_global"
-            value={configs.limite_global}
-            onChange={handleChange}
-            min={1}
-            required
-          />
-        </div>
+        {mensagem && <div className="alert-success">{mensagem}</div>}
+        {erro && <div className="alert-error">{erro}</div>}
 
-        <br />
+        <section className="form-card">
+          {carregando ? (
+            <p className="status-message">Carregando configurações...</p>
+          ) : (
+            <form onSubmit={salvarConfigs} className="custom-form">
+              <div className="form-group">
+                <label htmlFor="limite_global">
+                  Limite Global (máximo de livros por cliente)
+                </label>
+                <input
+                  type="number"
+                  id="limite_global"
+                  name="limite_global"
+                  className="form-control"
+                  value={configs.limite_global}
+                  onChange={handleChange}
+                  min={1}
+                  required
+                />
+              </div>
 
-        <div>
-          <label>
-            Limite por Título (máximo de exemplares da mesma obra):{" "}
-          </label>
-          <input
-            type="number"
-            name="limite_por_titulo"
-            value={configs.limite_por_titulo}
-            onChange={handleChange}
-            min={1}
-            required
-          />
-        </div>
+              <div className="form-group">
+                <label htmlFor="limite_por_titulo">
+                  Limite por Título (máximo de exemplares da mesma obra)
+                </label>
+                <input
+                  type="number"
+                  id="limite_por_titulo"
+                  name="limite_por_titulo"
+                  className="form-control"
+                  value={configs.limite_por_titulo}
+                  onChange={handleChange}
+                  min={1}
+                  required
+                />
+              </div>
 
-        <br />
+              <div className="form-group">
+                <label htmlFor="prazo_padrao_dias">
+                  Prazo Padrão do Empréstimo (Dias)
+                </label>
+                <input
+                  type="number"
+                  id="prazo_padrao_dias"
+                  name="prazo_padrao_dias"
+                  className="form-control"
+                  value={configs.prazo_padrao_dias}
+                  onChange={handleChange}
+                  min={1}
+                  required
+                />
+              </div>
 
-        <div>
-          <label>Prazo Padrão do Empréstimo (Dias): </label>
-          <input
-            type="number"
-            name="prazo_padrao_dias"
-            value={configs.prazo_padrao_dias}
-            onChange={handleChange}
-            min={1}
-            required
-          />
-        </div>
+              <div className="form-group">
+                <label htmlFor="dias_penalidade">
+                  Dias de Penalidade por Atraso
+                </label>
+                <input
+                  type="number"
+                  id="dias_penalidade"
+                  name="dias_penalidade"
+                  className="form-control"
+                  value={configs.dias_penalidade}
+                  onChange={handleChange}
+                  min={0}
+                  required
+                />
+              </div>
 
-        <br />
-
-        <div>
-          <label>Dias de Penalidade por Atraso: </label>
-          <input
-            type="number"
-            name="dias_penalidade"
-            value={configs.dias_penalidade}
-            onChange={handleChange}
-            min={0}
-            required
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">Salvar Parâmetros</button>
-      </form>
+              <div className="form-actions">
+                <button type="submit" className="btn-primary">
+                  Salvar Parâmetros
+                </button>
+              </div>
+            </form>
+          )}
+        </section>
+      </main>
     </div>
   );
 }

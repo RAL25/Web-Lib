@@ -2,15 +2,17 @@ import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { CarrinhoContext } from "../contexts/CarrinhoContext";
+import MenuLateral from "../components/common/MenuLateral";
+import "../assets/styles/ExemplaresLivro.css";
 
 interface Exemplar {
   id: number;
   livroId: number;
-  status: string; // "Disponivel" | "Emprestado"
+  status: string;
 }
 
 export default function ExemplaresLivro() {
-  const { id } = useParams<{ id: string }>(); // ID do livro recebido via URL
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [exemplares, setExemplares] = useState<Exemplar[]>([]);
@@ -23,7 +25,6 @@ export default function ExemplaresLivro() {
     const carregarExemplares = async () => {
       try {
         setCarregando(true);
-        // Chamada para a rota que retorna a lista de exemplares do livro
         const response = await api.get(`/livro/exemplar/${id}`);
         setExemplares(response.data);
       } catch (error: any) {
@@ -40,59 +41,75 @@ export default function ExemplaresLivro() {
     }
   }, [id]);
 
-  // Filtra no frontend apenas os exemplares prontos para empréstimo
   const disponiveis = exemplares.filter((item) => item.status === "Disponivel");
 
-  if (carregando) return <p>Carregando exemplares...</p>;
-  if (erro) return <p style={{ color: "red" }}>{erro}</p>;
-
   return (
-    <div>
-      <button onClick={() => navigate(-1)}>← Voltar</button>
+    <div className="app-container">
+      <MenuLateral />
 
-      <h1>Exemplares Disponíveis para Empréstimo</h1>
+      <main className="main-content">
+        <div className="header-actions">
+          <button className="btn-outline btn-back" onClick={() => navigate(-1)}>
+            ← Voltar
+          </button>
+        </div>
 
-      {disponiveis.length === 0 ? (
-        <p>No momento não há exemplares disponíveis para este livro.</p>
-      ) : (
-        <table
-          border={1}
-          cellPadding={8}
-          style={{ borderCollapse: "collapse", width: "100%" }}
-        >
-          <thead>
-            <tr>
-              <th>Código do Exemplar</th>
-              <th>Status</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
-          <tbody>
-            {disponiveis.map((exemplar) => (
-              <tr key={exemplar.id}>
-                <td>Exemplar #{exemplar.id}</td>
-                <td>
-                  <span style={{ color: "green", fontWeight: "bold" }}>
-                    {exemplar.status}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    onClick={() =>
-                      adicionarAoCarrinho({
-                        exemplarId: exemplar.id,
-                        titulo: `${exemplar.livroId} (Exemplar #${exemplar.id})`,
-                      })
-                    }
-                  >
-                    + Adicionar à Sacola
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+        <header className="page-header">
+          <h1>Exemplares Disponíveis para Empréstimo</h1>
+        </header>
+
+        {carregando && (
+          <p className="status-message">Carregando exemplares...</p>
+        )}
+        {erro && <div className="alert-error">{erro}</div>}
+
+        {!carregando && !erro && (
+          <section className="exemplares-card">
+            {disponiveis.length === 0 ? (
+              <p className="empty-message">
+                No momento não há exemplares disponíveis para este livro.
+              </p>
+            ) : (
+              <div className="table-responsive">
+                <table className="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Código do Exemplar</th>
+                      <th>Status</th>
+                      <th style={{ textAlign: "right" }}>Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {disponiveis.map((exemplar) => (
+                      <tr key={exemplar.id}>
+                        <td className="code-cell">Exemplar #{exemplar.id}</td>
+                        <td>
+                          <span className="badge badge-success">
+                            {exemplar.status}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: "right" }}>
+                          <button
+                            className="btn-primary"
+                            onClick={() =>
+                              adicionarAoCarrinho({
+                                exemplarId: exemplar.id,
+                                titulo: `${exemplar.livroId} (Exemplar #${exemplar.id})`,
+                              })
+                            }
+                          >
+                            + Adicionar à Sacola
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        )}
+      </main>
     </div>
   );
 }

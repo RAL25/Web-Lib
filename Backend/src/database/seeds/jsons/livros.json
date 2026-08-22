@@ -1,0 +1,70 @@
+[
+  {
+    "isbn": "9786550973100",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788576757344",
+    "status": "Emprestado"
+  },
+  {
+    "isbn": "9788571751248",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788582850145",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788572328753",
+    "status": "Emprestado"
+  },
+  {
+    "isbn": "9786555520804",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788501012074",
+    "status": "Emprestado"
+  },
+  {
+    "isbn": "9788582850350",
+    "status": "Emprestado"
+  },
+  {
+    "isbn": "9788584390670",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788535914849",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788532651181",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788525432186",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788580410792",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788580574517",
+    "status": "Emprestado"
+  },
+  {
+    "isbn": "9788595084742",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788535914061",
+    "status": "Disponivel"
+  },
+  {
+    "isbn": "9788535930313",
+    "status": "Disponivel"
+  }
+]

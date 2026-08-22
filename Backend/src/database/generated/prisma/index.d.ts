@@ -19,16 +19,6 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Usuario = $Result.DefaultSelection<Prisma.$UsuarioPayload>
 /**
- * Model Cliente
- * 
- */
-export type Cliente = $Result.DefaultSelection<Prisma.$ClientePayload>
-/**
- * Model Funcionario
- * 
- */
-export type Funcionario = $Result.DefaultSelection<Prisma.$FuncionarioPayload>
-/**
  * Model Livro
  * 
  */
@@ -59,9 +49,8 @@ export type Configuracao = $Result.DefaultSelection<Prisma.$ConfiguracaoPayload>
  */
 export namespace $Enums {
   export const Role: {
-  Cliente: 'Cliente',
-  Funcionario: 'Funcionario',
-  Admin: 'Admin'
+  ADMINISTRADOR: 'ADMINISTRADOR',
+  CLIENTE: 'CLIENTE'
 };
 
 export type Role = (typeof Role)[keyof typeof Role]
@@ -214,26 +203,6 @@ export class PrismaClient<
     * ```
     */
   get usuario(): Prisma.UsuarioDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.cliente`: Exposes CRUD operations for the **Cliente** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Clientes
-    * const clientes = await prisma.cliente.findMany()
-    * ```
-    */
-  get cliente(): Prisma.ClienteDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.funcionario`: Exposes CRUD operations for the **Funcionario** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Funcionarios
-    * const funcionarios = await prisma.funcionario.findMany()
-    * ```
-    */
-  get funcionario(): Prisma.FuncionarioDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.livro`: Exposes CRUD operations for the **Livro** model.
@@ -719,8 +688,6 @@ export namespace Prisma {
 
   export const ModelName: {
     Usuario: 'Usuario',
-    Cliente: 'Cliente',
-    Funcionario: 'Funcionario',
     Livro: 'Livro',
     ExemplarLivro: 'ExemplarLivro',
     Emprestimo: 'Emprestimo',
@@ -741,7 +708,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "usuario" | "cliente" | "funcionario" | "livro" | "exemplarLivro" | "emprestimo" | "itemEmprestimo" | "configuracao"
+      modelProps: "usuario" | "livro" | "exemplarLivro" | "emprestimo" | "itemEmprestimo" | "configuracao"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -808,138 +775,6 @@ export namespace Prisma {
           count: {
             args: Prisma.UsuarioCountArgs<ExtArgs>
             result: $Utils.Optional<UsuarioCountAggregateOutputType> | number
-          }
-        }
-      }
-      Cliente: {
-        payload: Prisma.$ClientePayload<ExtArgs>
-        fields: Prisma.ClienteFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ClienteFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClientePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ClienteFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClientePayload>
-          }
-          findFirst: {
-            args: Prisma.ClienteFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClientePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ClienteFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClientePayload>
-          }
-          findMany: {
-            args: Prisma.ClienteFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClientePayload>[]
-          }
-          create: {
-            args: Prisma.ClienteCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClientePayload>
-          }
-          createMany: {
-            args: Prisma.ClienteCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.ClienteDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClientePayload>
-          }
-          update: {
-            args: Prisma.ClienteUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClientePayload>
-          }
-          deleteMany: {
-            args: Prisma.ClienteDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ClienteUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.ClienteUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ClientePayload>
-          }
-          aggregate: {
-            args: Prisma.ClienteAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCliente>
-          }
-          groupBy: {
-            args: Prisma.ClienteGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ClienteGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ClienteCountArgs<ExtArgs>
-            result: $Utils.Optional<ClienteCountAggregateOutputType> | number
-          }
-        }
-      }
-      Funcionario: {
-        payload: Prisma.$FuncionarioPayload<ExtArgs>
-        fields: Prisma.FuncionarioFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.FuncionarioFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FuncionarioPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.FuncionarioFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FuncionarioPayload>
-          }
-          findFirst: {
-            args: Prisma.FuncionarioFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FuncionarioPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.FuncionarioFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FuncionarioPayload>
-          }
-          findMany: {
-            args: Prisma.FuncionarioFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FuncionarioPayload>[]
-          }
-          create: {
-            args: Prisma.FuncionarioCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FuncionarioPayload>
-          }
-          createMany: {
-            args: Prisma.FuncionarioCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.FuncionarioDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FuncionarioPayload>
-          }
-          update: {
-            args: Prisma.FuncionarioUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FuncionarioPayload>
-          }
-          deleteMany: {
-            args: Prisma.FuncionarioDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.FuncionarioUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.FuncionarioUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FuncionarioPayload>
-          }
-          aggregate: {
-            args: Prisma.FuncionarioAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateFuncionario>
-          }
-          groupBy: {
-            args: Prisma.FuncionarioGroupByArgs<ExtArgs>
-            result: $Utils.Optional<FuncionarioGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.FuncionarioCountArgs<ExtArgs>
-            result: $Utils.Optional<FuncionarioCountAggregateOutputType> | number
           }
         }
       }
@@ -1382,8 +1217,6 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     usuario?: UsuarioOmit
-    cliente?: ClienteOmit
-    funcionario?: FuncionarioOmit
     livro?: LivroOmit
     exemplarLivro?: ExemplarLivroOmit
     emprestimo?: EmprestimoOmit
@@ -1465,32 +1298,32 @@ export namespace Prisma {
 
 
   /**
-   * Count Type ClienteCountOutputType
+   * Count Type UsuarioCountOutputType
    */
 
-  export type ClienteCountOutputType = {
+  export type UsuarioCountOutputType = {
     emprestimos: number
   }
 
-  export type ClienteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emprestimos?: boolean | ClienteCountOutputTypeCountEmprestimosArgs
+  export type UsuarioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    emprestimos?: boolean | UsuarioCountOutputTypeCountEmprestimosArgs
   }
 
   // Custom InputTypes
   /**
-   * ClienteCountOutputType without action
+   * UsuarioCountOutputType without action
    */
-  export type ClienteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UsuarioCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ClienteCountOutputType
+     * Select specific fields to fetch from the UsuarioCountOutputType
      */
-    select?: ClienteCountOutputTypeSelect<ExtArgs> | null
+    select?: UsuarioCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * ClienteCountOutputType without action
+   * UsuarioCountOutputType without action
    */
-  export type ClienteCountOutputTypeCountEmprestimosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UsuarioCountOutputTypeCountEmprestimosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EmprestimoWhereInput
   }
 
@@ -1598,33 +1431,29 @@ export namespace Prisma {
 
   export type AggregateUsuario = {
     _count: UsuarioCountAggregateOutputType | null
-    _avg: UsuarioAvgAggregateOutputType | null
-    _sum: UsuarioSumAggregateOutputType | null
     _min: UsuarioMinAggregateOutputType | null
     _max: UsuarioMaxAggregateOutputType | null
   }
 
-  export type UsuarioAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type UsuarioSumAggregateOutputType = {
-    id: number | null
-  }
-
   export type UsuarioMinAggregateOutputType = {
-    id: number | null
+    id: string | null
     nome: string | null
     email: string | null
-    senha: string | null
+    senhaHash: string | null
+    cpf: string | null
+    telefone: string | null
+    bloqueado: boolean | null
     role: $Enums.Role | null
   }
 
   export type UsuarioMaxAggregateOutputType = {
-    id: number | null
+    id: string | null
     nome: string | null
     email: string | null
-    senha: string | null
+    senhaHash: string | null
+    cpf: string | null
+    telefone: string | null
+    bloqueado: boolean | null
     role: $Enums.Role | null
   }
 
@@ -1632,25 +1461,23 @@ export namespace Prisma {
     id: number
     nome: number
     email: number
-    senha: number
+    senhaHash: number
+    cpf: number
+    telefone: number
+    bloqueado: number
     role: number
     _all: number
   }
 
 
-  export type UsuarioAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type UsuarioSumAggregateInputType = {
-    id?: true
-  }
-
   export type UsuarioMinAggregateInputType = {
     id?: true
     nome?: true
     email?: true
-    senha?: true
+    senhaHash?: true
+    cpf?: true
+    telefone?: true
+    bloqueado?: true
     role?: true
   }
 
@@ -1658,7 +1485,10 @@ export namespace Prisma {
     id?: true
     nome?: true
     email?: true
-    senha?: true
+    senhaHash?: true
+    cpf?: true
+    telefone?: true
+    bloqueado?: true
     role?: true
   }
 
@@ -1666,7 +1496,10 @@ export namespace Prisma {
     id?: true
     nome?: true
     email?: true
-    senha?: true
+    senhaHash?: true
+    cpf?: true
+    telefone?: true
+    bloqueado?: true
     role?: true
     _all?: true
   }
@@ -1709,18 +1542,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: UsuarioAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: UsuarioSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: UsuarioMinAggregateInputType
@@ -1751,21 +1572,20 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UsuarioCountAggregateInputType | true
-    _avg?: UsuarioAvgAggregateInputType
-    _sum?: UsuarioSumAggregateInputType
     _min?: UsuarioMinAggregateInputType
     _max?: UsuarioMaxAggregateInputType
   }
 
   export type UsuarioGroupByOutputType = {
-    id: number
+    id: string
     nome: string
-    email: string | null
-    senha: string | null
+    email: string
+    senhaHash: string
+    cpf: string
+    telefone: string
+    bloqueado: boolean
     role: $Enums.Role
     _count: UsuarioCountAggregateOutputType | null
-    _avg: UsuarioAvgAggregateOutputType | null
-    _sum: UsuarioSumAggregateOutputType | null
     _min: UsuarioMinAggregateOutputType | null
     _max: UsuarioMaxAggregateOutputType | null
   }
@@ -1788,10 +1608,13 @@ export namespace Prisma {
     id?: boolean
     nome?: boolean
     email?: boolean
-    senha?: boolean
+    senhaHash?: boolean
+    cpf?: boolean
+    telefone?: boolean
+    bloqueado?: boolean
     role?: boolean
-    cliente?: boolean | Usuario$clienteArgs<ExtArgs>
-    funcionario?: boolean | Usuario$funcionarioArgs<ExtArgs>
+    emprestimos?: boolean | Usuario$emprestimosArgs<ExtArgs>
+    _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["usuario"]>
 
 
@@ -1800,27 +1623,32 @@ export namespace Prisma {
     id?: boolean
     nome?: boolean
     email?: boolean
-    senha?: boolean
+    senhaHash?: boolean
+    cpf?: boolean
+    telefone?: boolean
+    bloqueado?: boolean
     role?: boolean
   }
 
-  export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "email" | "senha" | "role", ExtArgs["result"]["usuario"]>
+  export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "email" | "senhaHash" | "cpf" | "telefone" | "bloqueado" | "role", ExtArgs["result"]["usuario"]>
   export type UsuarioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    cliente?: boolean | Usuario$clienteArgs<ExtArgs>
-    funcionario?: boolean | Usuario$funcionarioArgs<ExtArgs>
+    emprestimos?: boolean | Usuario$emprestimosArgs<ExtArgs>
+    _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $UsuarioPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Usuario"
     objects: {
-      cliente: Prisma.$ClientePayload<ExtArgs> | null
-      funcionario: Prisma.$FuncionarioPayload<ExtArgs> | null
+      emprestimos: Prisma.$EmprestimoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: number
+      id: string
       nome: string
-      email: string | null
-      senha: string | null
+      email: string
+      senhaHash: string
+      cpf: string
+      telefone: string
+      bloqueado: boolean
       role: $Enums.Role
     }, ExtArgs["result"]["usuario"]>
     composites: {}
@@ -2162,8 +1990,7 @@ export namespace Prisma {
    */
   export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    cliente<T extends Usuario$clienteArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$clienteArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    funcionario<T extends Usuario$funcionarioArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$funcionarioArgs<ExtArgs>>): Prisma__FuncionarioClient<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    emprestimos<T extends Usuario$emprestimosArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$emprestimosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmprestimoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2193,10 +2020,13 @@ export namespace Prisma {
    * Fields of the Usuario model
    */
   interface UsuarioFieldRefs {
-    readonly id: FieldRef<"Usuario", 'Int'>
+    readonly id: FieldRef<"Usuario", 'String'>
     readonly nome: FieldRef<"Usuario", 'String'>
     readonly email: FieldRef<"Usuario", 'String'>
-    readonly senha: FieldRef<"Usuario", 'String'>
+    readonly senhaHash: FieldRef<"Usuario", 'String'>
+    readonly cpf: FieldRef<"Usuario", 'String'>
+    readonly telefone: FieldRef<"Usuario", 'String'>
+    readonly bloqueado: FieldRef<"Usuario", 'Boolean'>
     readonly role: FieldRef<"Usuario", 'Role'>
   }
     
@@ -2546,1021 +2376,9 @@ export namespace Prisma {
   }
 
   /**
-   * Usuario.cliente
+   * Usuario.emprestimos
    */
-  export type Usuario$clienteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    where?: ClienteWhereInput
-  }
-
-  /**
-   * Usuario.funcionario
-   */
-  export type Usuario$funcionarioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    where?: FuncionarioWhereInput
-  }
-
-  /**
-   * Usuario without action
-   */
-  export type UsuarioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Usuario
-     */
-    select?: UsuarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Usuario
-     */
-    omit?: UsuarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UsuarioInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Cliente
-   */
-
-  export type AggregateCliente = {
-    _count: ClienteCountAggregateOutputType | null
-    _avg: ClienteAvgAggregateOutputType | null
-    _sum: ClienteSumAggregateOutputType | null
-    _min: ClienteMinAggregateOutputType | null
-    _max: ClienteMaxAggregateOutputType | null
-  }
-
-  export type ClienteAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type ClienteSumAggregateOutputType = {
-    id: number | null
-  }
-
-  export type ClienteMinAggregateOutputType = {
-    id: number | null
-    cpf: string | null
-    telefone: string | null
-    data_penalidade: Date | null
-    emailVerificado: boolean | null
-  }
-
-  export type ClienteMaxAggregateOutputType = {
-    id: number | null
-    cpf: string | null
-    telefone: string | null
-    data_penalidade: Date | null
-    emailVerificado: boolean | null
-  }
-
-  export type ClienteCountAggregateOutputType = {
-    id: number
-    cpf: number
-    telefone: number
-    data_penalidade: number
-    emailVerificado: number
-    _all: number
-  }
-
-
-  export type ClienteAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type ClienteSumAggregateInputType = {
-    id?: true
-  }
-
-  export type ClienteMinAggregateInputType = {
-    id?: true
-    cpf?: true
-    telefone?: true
-    data_penalidade?: true
-    emailVerificado?: true
-  }
-
-  export type ClienteMaxAggregateInputType = {
-    id?: true
-    cpf?: true
-    telefone?: true
-    data_penalidade?: true
-    emailVerificado?: true
-  }
-
-  export type ClienteCountAggregateInputType = {
-    id?: true
-    cpf?: true
-    telefone?: true
-    data_penalidade?: true
-    emailVerificado?: true
-    _all?: true
-  }
-
-  export type ClienteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Cliente to aggregate.
-     */
-    where?: ClienteWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Clientes to fetch.
-     */
-    orderBy?: ClienteOrderByWithRelationInput | ClienteOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ClienteWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Clientes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Clientes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Clientes
-    **/
-    _count?: true | ClienteCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ClienteAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ClienteSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ClienteMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ClienteMaxAggregateInputType
-  }
-
-  export type GetClienteAggregateType<T extends ClienteAggregateArgs> = {
-        [P in keyof T & keyof AggregateCliente]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateCliente[P]>
-      : GetScalarType<T[P], AggregateCliente[P]>
-  }
-
-
-
-
-  export type ClienteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ClienteWhereInput
-    orderBy?: ClienteOrderByWithAggregationInput | ClienteOrderByWithAggregationInput[]
-    by: ClienteScalarFieldEnum[] | ClienteScalarFieldEnum
-    having?: ClienteScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ClienteCountAggregateInputType | true
-    _avg?: ClienteAvgAggregateInputType
-    _sum?: ClienteSumAggregateInputType
-    _min?: ClienteMinAggregateInputType
-    _max?: ClienteMaxAggregateInputType
-  }
-
-  export type ClienteGroupByOutputType = {
-    id: number
-    cpf: string | null
-    telefone: string | null
-    data_penalidade: Date | null
-    emailVerificado: boolean
-    _count: ClienteCountAggregateOutputType | null
-    _avg: ClienteAvgAggregateOutputType | null
-    _sum: ClienteSumAggregateOutputType | null
-    _min: ClienteMinAggregateOutputType | null
-    _max: ClienteMaxAggregateOutputType | null
-  }
-
-  type GetClienteGroupByPayload<T extends ClienteGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ClienteGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ClienteGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ClienteGroupByOutputType[P]>
-            : GetScalarType<T[P], ClienteGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ClienteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    cpf?: boolean
-    telefone?: boolean
-    data_penalidade?: boolean
-    emailVerificado?: boolean
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-    emprestimos?: boolean | Cliente$emprestimosArgs<ExtArgs>
-    _count?: boolean | ClienteCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["cliente"]>
-
-
-
-  export type ClienteSelectScalar = {
-    id?: boolean
-    cpf?: boolean
-    telefone?: boolean
-    data_penalidade?: boolean
-    emailVerificado?: boolean
-  }
-
-  export type ClienteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cpf" | "telefone" | "data_penalidade" | "emailVerificado", ExtArgs["result"]["cliente"]>
-  export type ClienteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-    emprestimos?: boolean | Cliente$emprestimosArgs<ExtArgs>
-    _count?: boolean | ClienteCountOutputTypeDefaultArgs<ExtArgs>
-  }
-
-  export type $ClientePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Cliente"
-    objects: {
-      usuario: Prisma.$UsuarioPayload<ExtArgs>
-      emprestimos: Prisma.$EmprestimoPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      cpf: string | null
-      telefone: string | null
-      data_penalidade: Date | null
-      emailVerificado: boolean
-    }, ExtArgs["result"]["cliente"]>
-    composites: {}
-  }
-
-  type ClienteGetPayload<S extends boolean | null | undefined | ClienteDefaultArgs> = $Result.GetResult<Prisma.$ClientePayload, S>
-
-  type ClienteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ClienteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ClienteCountAggregateInputType | true
-    }
-
-  export interface ClienteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Cliente'], meta: { name: 'Cliente' } }
-    /**
-     * Find zero or one Cliente that matches the filter.
-     * @param {ClienteFindUniqueArgs} args - Arguments to find a Cliente
-     * @example
-     * // Get one Cliente
-     * const cliente = await prisma.cliente.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ClienteFindUniqueArgs>(args: SelectSubset<T, ClienteFindUniqueArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Cliente that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ClienteFindUniqueOrThrowArgs} args - Arguments to find a Cliente
-     * @example
-     * // Get one Cliente
-     * const cliente = await prisma.cliente.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ClienteFindUniqueOrThrowArgs>(args: SelectSubset<T, ClienteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Cliente that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClienteFindFirstArgs} args - Arguments to find a Cliente
-     * @example
-     * // Get one Cliente
-     * const cliente = await prisma.cliente.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ClienteFindFirstArgs>(args?: SelectSubset<T, ClienteFindFirstArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Cliente that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClienteFindFirstOrThrowArgs} args - Arguments to find a Cliente
-     * @example
-     * // Get one Cliente
-     * const cliente = await prisma.cliente.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ClienteFindFirstOrThrowArgs>(args?: SelectSubset<T, ClienteFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Clientes that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClienteFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Clientes
-     * const clientes = await prisma.cliente.findMany()
-     * 
-     * // Get first 10 Clientes
-     * const clientes = await prisma.cliente.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const clienteWithIdOnly = await prisma.cliente.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ClienteFindManyArgs>(args?: SelectSubset<T, ClienteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Cliente.
-     * @param {ClienteCreateArgs} args - Arguments to create a Cliente.
-     * @example
-     * // Create one Cliente
-     * const Cliente = await prisma.cliente.create({
-     *   data: {
-     *     // ... data to create a Cliente
-     *   }
-     * })
-     * 
-     */
-    create<T extends ClienteCreateArgs>(args: SelectSubset<T, ClienteCreateArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Clientes.
-     * @param {ClienteCreateManyArgs} args - Arguments to create many Clientes.
-     * @example
-     * // Create many Clientes
-     * const cliente = await prisma.cliente.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ClienteCreateManyArgs>(args?: SelectSubset<T, ClienteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Cliente.
-     * @param {ClienteDeleteArgs} args - Arguments to delete one Cliente.
-     * @example
-     * // Delete one Cliente
-     * const Cliente = await prisma.cliente.delete({
-     *   where: {
-     *     // ... filter to delete one Cliente
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ClienteDeleteArgs>(args: SelectSubset<T, ClienteDeleteArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Cliente.
-     * @param {ClienteUpdateArgs} args - Arguments to update one Cliente.
-     * @example
-     * // Update one Cliente
-     * const cliente = await prisma.cliente.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ClienteUpdateArgs>(args: SelectSubset<T, ClienteUpdateArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Clientes.
-     * @param {ClienteDeleteManyArgs} args - Arguments to filter Clientes to delete.
-     * @example
-     * // Delete a few Clientes
-     * const { count } = await prisma.cliente.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ClienteDeleteManyArgs>(args?: SelectSubset<T, ClienteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Clientes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClienteUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Clientes
-     * const cliente = await prisma.cliente.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ClienteUpdateManyArgs>(args: SelectSubset<T, ClienteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Cliente.
-     * @param {ClienteUpsertArgs} args - Arguments to update or create a Cliente.
-     * @example
-     * // Update or create a Cliente
-     * const cliente = await prisma.cliente.upsert({
-     *   create: {
-     *     // ... data to create a Cliente
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Cliente we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ClienteUpsertArgs>(args: SelectSubset<T, ClienteUpsertArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Clientes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClienteCountArgs} args - Arguments to filter Clientes to count.
-     * @example
-     * // Count the number of Clientes
-     * const count = await prisma.cliente.count({
-     *   where: {
-     *     // ... the filter for the Clientes we want to count
-     *   }
-     * })
-    **/
-    count<T extends ClienteCountArgs>(
-      args?: Subset<T, ClienteCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ClienteCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Cliente.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClienteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ClienteAggregateArgs>(args: Subset<T, ClienteAggregateArgs>): Prisma.PrismaPromise<GetClienteAggregateType<T>>
-
-    /**
-     * Group by Cliente.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ClienteGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ClienteGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ClienteGroupByArgs['orderBy'] }
-        : { orderBy?: ClienteGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ClienteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClienteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Cliente model
-   */
-  readonly fields: ClienteFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Cliente.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ClienteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    emprestimos<T extends Cliente$emprestimosArgs<ExtArgs> = {}>(args?: Subset<T, Cliente$emprestimosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmprestimoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Cliente model
-   */
-  interface ClienteFieldRefs {
-    readonly id: FieldRef<"Cliente", 'Int'>
-    readonly cpf: FieldRef<"Cliente", 'String'>
-    readonly telefone: FieldRef<"Cliente", 'String'>
-    readonly data_penalidade: FieldRef<"Cliente", 'DateTime'>
-    readonly emailVerificado: FieldRef<"Cliente", 'Boolean'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Cliente findUnique
-   */
-  export type ClienteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    /**
-     * Filter, which Cliente to fetch.
-     */
-    where: ClienteWhereUniqueInput
-  }
-
-  /**
-   * Cliente findUniqueOrThrow
-   */
-  export type ClienteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    /**
-     * Filter, which Cliente to fetch.
-     */
-    where: ClienteWhereUniqueInput
-  }
-
-  /**
-   * Cliente findFirst
-   */
-  export type ClienteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    /**
-     * Filter, which Cliente to fetch.
-     */
-    where?: ClienteWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Clientes to fetch.
-     */
-    orderBy?: ClienteOrderByWithRelationInput | ClienteOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Clientes.
-     */
-    cursor?: ClienteWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Clientes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Clientes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Clientes.
-     */
-    distinct?: ClienteScalarFieldEnum | ClienteScalarFieldEnum[]
-  }
-
-  /**
-   * Cliente findFirstOrThrow
-   */
-  export type ClienteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    /**
-     * Filter, which Cliente to fetch.
-     */
-    where?: ClienteWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Clientes to fetch.
-     */
-    orderBy?: ClienteOrderByWithRelationInput | ClienteOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Clientes.
-     */
-    cursor?: ClienteWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Clientes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Clientes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Clientes.
-     */
-    distinct?: ClienteScalarFieldEnum | ClienteScalarFieldEnum[]
-  }
-
-  /**
-   * Cliente findMany
-   */
-  export type ClienteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    /**
-     * Filter, which Clientes to fetch.
-     */
-    where?: ClienteWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Clientes to fetch.
-     */
-    orderBy?: ClienteOrderByWithRelationInput | ClienteOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Clientes.
-     */
-    cursor?: ClienteWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Clientes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Clientes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Clientes.
-     */
-    distinct?: ClienteScalarFieldEnum | ClienteScalarFieldEnum[]
-  }
-
-  /**
-   * Cliente create
-   */
-  export type ClienteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Cliente.
-     */
-    data: XOR<ClienteCreateInput, ClienteUncheckedCreateInput>
-  }
-
-  /**
-   * Cliente createMany
-   */
-  export type ClienteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Clientes.
-     */
-    data: ClienteCreateManyInput | ClienteCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Cliente update
-   */
-  export type ClienteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Cliente.
-     */
-    data: XOR<ClienteUpdateInput, ClienteUncheckedUpdateInput>
-    /**
-     * Choose, which Cliente to update.
-     */
-    where: ClienteWhereUniqueInput
-  }
-
-  /**
-   * Cliente updateMany
-   */
-  export type ClienteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Clientes.
-     */
-    data: XOR<ClienteUpdateManyMutationInput, ClienteUncheckedUpdateManyInput>
-    /**
-     * Filter which Clientes to update
-     */
-    where?: ClienteWhereInput
-    /**
-     * Limit how many Clientes to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Cliente upsert
-   */
-  export type ClienteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Cliente to update in case it exists.
-     */
-    where: ClienteWhereUniqueInput
-    /**
-     * In case the Cliente found by the `where` argument doesn't exist, create a new Cliente with this data.
-     */
-    create: XOR<ClienteCreateInput, ClienteUncheckedCreateInput>
-    /**
-     * In case the Cliente was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ClienteUpdateInput, ClienteUncheckedUpdateInput>
-  }
-
-  /**
-   * Cliente delete
-   */
-  export type ClienteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Cliente
-     */
-    select?: ClienteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Cliente
-     */
-    omit?: ClienteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClienteInclude<ExtArgs> | null
-    /**
-     * Filter which Cliente to delete.
-     */
-    where: ClienteWhereUniqueInput
-  }
-
-  /**
-   * Cliente deleteMany
-   */
-  export type ClienteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Clientes to delete
-     */
-    where?: ClienteWhereInput
-    /**
-     * Limit how many Clientes to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Cliente.emprestimos
-   */
-  export type Cliente$emprestimosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Usuario$emprestimosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Emprestimo
      */
@@ -3582,971 +2400,21 @@ export namespace Prisma {
   }
 
   /**
-   * Cliente without action
+   * Usuario without action
    */
-  export type ClienteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UsuarioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Cliente
+     * Select specific fields to fetch from the Usuario
      */
-    select?: ClienteSelect<ExtArgs> | null
+    select?: UsuarioSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Cliente
+     * Omit specific fields from the Usuario
      */
-    omit?: ClienteOmit<ExtArgs> | null
+    omit?: UsuarioOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClienteInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Funcionario
-   */
-
-  export type AggregateFuncionario = {
-    _count: FuncionarioCountAggregateOutputType | null
-    _avg: FuncionarioAvgAggregateOutputType | null
-    _sum: FuncionarioSumAggregateOutputType | null
-    _min: FuncionarioMinAggregateOutputType | null
-    _max: FuncionarioMaxAggregateOutputType | null
-  }
-
-  export type FuncionarioAvgAggregateOutputType = {
-    id: number | null
-    salario: Decimal | null
-  }
-
-  export type FuncionarioSumAggregateOutputType = {
-    id: number | null
-    salario: Decimal | null
-  }
-
-  export type FuncionarioMinAggregateOutputType = {
-    id: number | null
-    salario: Decimal | null
-    data_contratacao: Date | null
-  }
-
-  export type FuncionarioMaxAggregateOutputType = {
-    id: number | null
-    salario: Decimal | null
-    data_contratacao: Date | null
-  }
-
-  export type FuncionarioCountAggregateOutputType = {
-    id: number
-    salario: number
-    data_contratacao: number
-    _all: number
-  }
-
-
-  export type FuncionarioAvgAggregateInputType = {
-    id?: true
-    salario?: true
-  }
-
-  export type FuncionarioSumAggregateInputType = {
-    id?: true
-    salario?: true
-  }
-
-  export type FuncionarioMinAggregateInputType = {
-    id?: true
-    salario?: true
-    data_contratacao?: true
-  }
-
-  export type FuncionarioMaxAggregateInputType = {
-    id?: true
-    salario?: true
-    data_contratacao?: true
-  }
-
-  export type FuncionarioCountAggregateInputType = {
-    id?: true
-    salario?: true
-    data_contratacao?: true
-    _all?: true
-  }
-
-  export type FuncionarioAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Funcionario to aggregate.
-     */
-    where?: FuncionarioWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Funcionarios to fetch.
-     */
-    orderBy?: FuncionarioOrderByWithRelationInput | FuncionarioOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: FuncionarioWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Funcionarios from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Funcionarios.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Funcionarios
-    **/
-    _count?: true | FuncionarioCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: FuncionarioAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: FuncionarioSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: FuncionarioMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: FuncionarioMaxAggregateInputType
-  }
-
-  export type GetFuncionarioAggregateType<T extends FuncionarioAggregateArgs> = {
-        [P in keyof T & keyof AggregateFuncionario]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateFuncionario[P]>
-      : GetScalarType<T[P], AggregateFuncionario[P]>
-  }
-
-
-
-
-  export type FuncionarioGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FuncionarioWhereInput
-    orderBy?: FuncionarioOrderByWithAggregationInput | FuncionarioOrderByWithAggregationInput[]
-    by: FuncionarioScalarFieldEnum[] | FuncionarioScalarFieldEnum
-    having?: FuncionarioScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: FuncionarioCountAggregateInputType | true
-    _avg?: FuncionarioAvgAggregateInputType
-    _sum?: FuncionarioSumAggregateInputType
-    _min?: FuncionarioMinAggregateInputType
-    _max?: FuncionarioMaxAggregateInputType
-  }
-
-  export type FuncionarioGroupByOutputType = {
-    id: number
-    salario: Decimal
-    data_contratacao: Date
-    _count: FuncionarioCountAggregateOutputType | null
-    _avg: FuncionarioAvgAggregateOutputType | null
-    _sum: FuncionarioSumAggregateOutputType | null
-    _min: FuncionarioMinAggregateOutputType | null
-    _max: FuncionarioMaxAggregateOutputType | null
-  }
-
-  type GetFuncionarioGroupByPayload<T extends FuncionarioGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<FuncionarioGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof FuncionarioGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], FuncionarioGroupByOutputType[P]>
-            : GetScalarType<T[P], FuncionarioGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type FuncionarioSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    salario?: boolean
-    data_contratacao?: boolean
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["funcionario"]>
-
-
-
-  export type FuncionarioSelectScalar = {
-    id?: boolean
-    salario?: boolean
-    data_contratacao?: boolean
-  }
-
-  export type FuncionarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "salario" | "data_contratacao", ExtArgs["result"]["funcionario"]>
-  export type FuncionarioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-  }
-
-  export type $FuncionarioPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Funcionario"
-    objects: {
-      usuario: Prisma.$UsuarioPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      salario: Prisma.Decimal
-      data_contratacao: Date
-    }, ExtArgs["result"]["funcionario"]>
-    composites: {}
-  }
-
-  type FuncionarioGetPayload<S extends boolean | null | undefined | FuncionarioDefaultArgs> = $Result.GetResult<Prisma.$FuncionarioPayload, S>
-
-  type FuncionarioCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<FuncionarioFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: FuncionarioCountAggregateInputType | true
-    }
-
-  export interface FuncionarioDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Funcionario'], meta: { name: 'Funcionario' } }
-    /**
-     * Find zero or one Funcionario that matches the filter.
-     * @param {FuncionarioFindUniqueArgs} args - Arguments to find a Funcionario
-     * @example
-     * // Get one Funcionario
-     * const funcionario = await prisma.funcionario.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends FuncionarioFindUniqueArgs>(args: SelectSubset<T, FuncionarioFindUniqueArgs<ExtArgs>>): Prisma__FuncionarioClient<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Funcionario that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {FuncionarioFindUniqueOrThrowArgs} args - Arguments to find a Funcionario
-     * @example
-     * // Get one Funcionario
-     * const funcionario = await prisma.funcionario.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends FuncionarioFindUniqueOrThrowArgs>(args: SelectSubset<T, FuncionarioFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FuncionarioClient<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Funcionario that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FuncionarioFindFirstArgs} args - Arguments to find a Funcionario
-     * @example
-     * // Get one Funcionario
-     * const funcionario = await prisma.funcionario.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends FuncionarioFindFirstArgs>(args?: SelectSubset<T, FuncionarioFindFirstArgs<ExtArgs>>): Prisma__FuncionarioClient<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Funcionario that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FuncionarioFindFirstOrThrowArgs} args - Arguments to find a Funcionario
-     * @example
-     * // Get one Funcionario
-     * const funcionario = await prisma.funcionario.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends FuncionarioFindFirstOrThrowArgs>(args?: SelectSubset<T, FuncionarioFindFirstOrThrowArgs<ExtArgs>>): Prisma__FuncionarioClient<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Funcionarios that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FuncionarioFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Funcionarios
-     * const funcionarios = await prisma.funcionario.findMany()
-     * 
-     * // Get first 10 Funcionarios
-     * const funcionarios = await prisma.funcionario.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const funcionarioWithIdOnly = await prisma.funcionario.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends FuncionarioFindManyArgs>(args?: SelectSubset<T, FuncionarioFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Funcionario.
-     * @param {FuncionarioCreateArgs} args - Arguments to create a Funcionario.
-     * @example
-     * // Create one Funcionario
-     * const Funcionario = await prisma.funcionario.create({
-     *   data: {
-     *     // ... data to create a Funcionario
-     *   }
-     * })
-     * 
-     */
-    create<T extends FuncionarioCreateArgs>(args: SelectSubset<T, FuncionarioCreateArgs<ExtArgs>>): Prisma__FuncionarioClient<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Funcionarios.
-     * @param {FuncionarioCreateManyArgs} args - Arguments to create many Funcionarios.
-     * @example
-     * // Create many Funcionarios
-     * const funcionario = await prisma.funcionario.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends FuncionarioCreateManyArgs>(args?: SelectSubset<T, FuncionarioCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Funcionario.
-     * @param {FuncionarioDeleteArgs} args - Arguments to delete one Funcionario.
-     * @example
-     * // Delete one Funcionario
-     * const Funcionario = await prisma.funcionario.delete({
-     *   where: {
-     *     // ... filter to delete one Funcionario
-     *   }
-     * })
-     * 
-     */
-    delete<T extends FuncionarioDeleteArgs>(args: SelectSubset<T, FuncionarioDeleteArgs<ExtArgs>>): Prisma__FuncionarioClient<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Funcionario.
-     * @param {FuncionarioUpdateArgs} args - Arguments to update one Funcionario.
-     * @example
-     * // Update one Funcionario
-     * const funcionario = await prisma.funcionario.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends FuncionarioUpdateArgs>(args: SelectSubset<T, FuncionarioUpdateArgs<ExtArgs>>): Prisma__FuncionarioClient<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Funcionarios.
-     * @param {FuncionarioDeleteManyArgs} args - Arguments to filter Funcionarios to delete.
-     * @example
-     * // Delete a few Funcionarios
-     * const { count } = await prisma.funcionario.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends FuncionarioDeleteManyArgs>(args?: SelectSubset<T, FuncionarioDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Funcionarios.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FuncionarioUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Funcionarios
-     * const funcionario = await prisma.funcionario.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends FuncionarioUpdateManyArgs>(args: SelectSubset<T, FuncionarioUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Funcionario.
-     * @param {FuncionarioUpsertArgs} args - Arguments to update or create a Funcionario.
-     * @example
-     * // Update or create a Funcionario
-     * const funcionario = await prisma.funcionario.upsert({
-     *   create: {
-     *     // ... data to create a Funcionario
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Funcionario we want to update
-     *   }
-     * })
-     */
-    upsert<T extends FuncionarioUpsertArgs>(args: SelectSubset<T, FuncionarioUpsertArgs<ExtArgs>>): Prisma__FuncionarioClient<$Result.GetResult<Prisma.$FuncionarioPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Funcionarios.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FuncionarioCountArgs} args - Arguments to filter Funcionarios to count.
-     * @example
-     * // Count the number of Funcionarios
-     * const count = await prisma.funcionario.count({
-     *   where: {
-     *     // ... the filter for the Funcionarios we want to count
-     *   }
-     * })
-    **/
-    count<T extends FuncionarioCountArgs>(
-      args?: Subset<T, FuncionarioCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], FuncionarioCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Funcionario.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FuncionarioAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends FuncionarioAggregateArgs>(args: Subset<T, FuncionarioAggregateArgs>): Prisma.PrismaPromise<GetFuncionarioAggregateType<T>>
-
-    /**
-     * Group by Funcionario.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {FuncionarioGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends FuncionarioGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: FuncionarioGroupByArgs['orderBy'] }
-        : { orderBy?: FuncionarioGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, FuncionarioGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFuncionarioGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Funcionario model
-   */
-  readonly fields: FuncionarioFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Funcionario.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__FuncionarioClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Funcionario model
-   */
-  interface FuncionarioFieldRefs {
-    readonly id: FieldRef<"Funcionario", 'Int'>
-    readonly salario: FieldRef<"Funcionario", 'Decimal'>
-    readonly data_contratacao: FieldRef<"Funcionario", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Funcionario findUnique
-   */
-  export type FuncionarioFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    /**
-     * Filter, which Funcionario to fetch.
-     */
-    where: FuncionarioWhereUniqueInput
-  }
-
-  /**
-   * Funcionario findUniqueOrThrow
-   */
-  export type FuncionarioFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    /**
-     * Filter, which Funcionario to fetch.
-     */
-    where: FuncionarioWhereUniqueInput
-  }
-
-  /**
-   * Funcionario findFirst
-   */
-  export type FuncionarioFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    /**
-     * Filter, which Funcionario to fetch.
-     */
-    where?: FuncionarioWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Funcionarios to fetch.
-     */
-    orderBy?: FuncionarioOrderByWithRelationInput | FuncionarioOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Funcionarios.
-     */
-    cursor?: FuncionarioWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Funcionarios from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Funcionarios.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Funcionarios.
-     */
-    distinct?: FuncionarioScalarFieldEnum | FuncionarioScalarFieldEnum[]
-  }
-
-  /**
-   * Funcionario findFirstOrThrow
-   */
-  export type FuncionarioFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    /**
-     * Filter, which Funcionario to fetch.
-     */
-    where?: FuncionarioWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Funcionarios to fetch.
-     */
-    orderBy?: FuncionarioOrderByWithRelationInput | FuncionarioOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Funcionarios.
-     */
-    cursor?: FuncionarioWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Funcionarios from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Funcionarios.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Funcionarios.
-     */
-    distinct?: FuncionarioScalarFieldEnum | FuncionarioScalarFieldEnum[]
-  }
-
-  /**
-   * Funcionario findMany
-   */
-  export type FuncionarioFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    /**
-     * Filter, which Funcionarios to fetch.
-     */
-    where?: FuncionarioWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Funcionarios to fetch.
-     */
-    orderBy?: FuncionarioOrderByWithRelationInput | FuncionarioOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Funcionarios.
-     */
-    cursor?: FuncionarioWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Funcionarios from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Funcionarios.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Funcionarios.
-     */
-    distinct?: FuncionarioScalarFieldEnum | FuncionarioScalarFieldEnum[]
-  }
-
-  /**
-   * Funcionario create
-   */
-  export type FuncionarioCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Funcionario.
-     */
-    data: XOR<FuncionarioCreateInput, FuncionarioUncheckedCreateInput>
-  }
-
-  /**
-   * Funcionario createMany
-   */
-  export type FuncionarioCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Funcionarios.
-     */
-    data: FuncionarioCreateManyInput | FuncionarioCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Funcionario update
-   */
-  export type FuncionarioUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Funcionario.
-     */
-    data: XOR<FuncionarioUpdateInput, FuncionarioUncheckedUpdateInput>
-    /**
-     * Choose, which Funcionario to update.
-     */
-    where: FuncionarioWhereUniqueInput
-  }
-
-  /**
-   * Funcionario updateMany
-   */
-  export type FuncionarioUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Funcionarios.
-     */
-    data: XOR<FuncionarioUpdateManyMutationInput, FuncionarioUncheckedUpdateManyInput>
-    /**
-     * Filter which Funcionarios to update
-     */
-    where?: FuncionarioWhereInput
-    /**
-     * Limit how many Funcionarios to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Funcionario upsert
-   */
-  export type FuncionarioUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Funcionario to update in case it exists.
-     */
-    where: FuncionarioWhereUniqueInput
-    /**
-     * In case the Funcionario found by the `where` argument doesn't exist, create a new Funcionario with this data.
-     */
-    create: XOR<FuncionarioCreateInput, FuncionarioUncheckedCreateInput>
-    /**
-     * In case the Funcionario was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<FuncionarioUpdateInput, FuncionarioUncheckedUpdateInput>
-  }
-
-  /**
-   * Funcionario delete
-   */
-  export type FuncionarioDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
-    /**
-     * Filter which Funcionario to delete.
-     */
-    where: FuncionarioWhereUniqueInput
-  }
-
-  /**
-   * Funcionario deleteMany
-   */
-  export type FuncionarioDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Funcionarios to delete
-     */
-    where?: FuncionarioWhereInput
-    /**
-     * Limit how many Funcionarios to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Funcionario without action
-   */
-  export type FuncionarioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Funcionario
-     */
-    select?: FuncionarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Funcionario
-     */
-    omit?: FuncionarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FuncionarioInclude<ExtArgs> | null
+    include?: UsuarioInclude<ExtArgs> | null
   }
 
 
@@ -6516,29 +4384,27 @@ export namespace Prisma {
 
   export type EmprestimoAvgAggregateOutputType = {
     id: number | null
-    id_cliente: number | null
   }
 
   export type EmprestimoSumAggregateOutputType = {
     id: number | null
-    id_cliente: number | null
   }
 
   export type EmprestimoMinAggregateOutputType = {
     id: number | null
-    id_cliente: number | null
+    usuarioId: string | null
     data_saida: Date | null
   }
 
   export type EmprestimoMaxAggregateOutputType = {
     id: number | null
-    id_cliente: number | null
+    usuarioId: string | null
     data_saida: Date | null
   }
 
   export type EmprestimoCountAggregateOutputType = {
     id: number
-    id_cliente: number
+    usuarioId: number
     data_saida: number
     _all: number
   }
@@ -6546,29 +4412,27 @@ export namespace Prisma {
 
   export type EmprestimoAvgAggregateInputType = {
     id?: true
-    id_cliente?: true
   }
 
   export type EmprestimoSumAggregateInputType = {
     id?: true
-    id_cliente?: true
   }
 
   export type EmprestimoMinAggregateInputType = {
     id?: true
-    id_cliente?: true
+    usuarioId?: true
     data_saida?: true
   }
 
   export type EmprestimoMaxAggregateInputType = {
     id?: true
-    id_cliente?: true
+    usuarioId?: true
     data_saida?: true
   }
 
   export type EmprestimoCountAggregateInputType = {
     id?: true
-    id_cliente?: true
+    usuarioId?: true
     data_saida?: true
     _all?: true
   }
@@ -6661,7 +4525,7 @@ export namespace Prisma {
 
   export type EmprestimoGroupByOutputType = {
     id: number
-    id_cliente: number
+    usuarioId: string
     data_saida: Date
     _count: EmprestimoCountAggregateOutputType | null
     _avg: EmprestimoAvgAggregateOutputType | null
@@ -6686,10 +4550,10 @@ export namespace Prisma {
 
   export type EmprestimoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    id_cliente?: boolean
+    usuarioId?: boolean
     data_saida?: boolean
     itens?: boolean | Emprestimo$itensArgs<ExtArgs>
-    cliente?: boolean | ClienteDefaultArgs<ExtArgs>
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
     _count?: boolean | EmprestimoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emprestimo"]>
 
@@ -6697,14 +4561,14 @@ export namespace Prisma {
 
   export type EmprestimoSelectScalar = {
     id?: boolean
-    id_cliente?: boolean
+    usuarioId?: boolean
     data_saida?: boolean
   }
 
-  export type EmprestimoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "id_cliente" | "data_saida", ExtArgs["result"]["emprestimo"]>
+  export type EmprestimoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "usuarioId" | "data_saida", ExtArgs["result"]["emprestimo"]>
   export type EmprestimoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     itens?: boolean | Emprestimo$itensArgs<ExtArgs>
-    cliente?: boolean | ClienteDefaultArgs<ExtArgs>
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
     _count?: boolean | EmprestimoCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -6712,11 +4576,11 @@ export namespace Prisma {
     name: "Emprestimo"
     objects: {
       itens: Prisma.$ItemEmprestimoPayload<ExtArgs>[]
-      cliente: Prisma.$ClientePayload<ExtArgs>
+      usuario: Prisma.$UsuarioPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      id_cliente: number
+      usuarioId: string
       data_saida: Date
     }, ExtArgs["result"]["emprestimo"]>
     composites: {}
@@ -7059,7 +4923,7 @@ export namespace Prisma {
   export interface Prisma__EmprestimoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     itens<T extends Emprestimo$itensArgs<ExtArgs> = {}>(args?: Subset<T, Emprestimo$itensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemEmprestimoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    cliente<T extends ClienteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClienteDefaultArgs<ExtArgs>>): Prisma__ClienteClient<$Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7090,7 +4954,7 @@ export namespace Prisma {
    */
   interface EmprestimoFieldRefs {
     readonly id: FieldRef<"Emprestimo", 'Int'>
-    readonly id_cliente: FieldRef<"Emprestimo", 'Int'>
+    readonly usuarioId: FieldRef<"Emprestimo", 'String'>
     readonly data_saida: FieldRef<"Emprestimo", 'DateTime'>
   }
     
@@ -9432,31 +7296,14 @@ export namespace Prisma {
     id: 'id',
     nome: 'nome',
     email: 'email',
-    senha: 'senha',
+    senhaHash: 'senhaHash',
+    cpf: 'cpf',
+    telefone: 'telefone',
+    bloqueado: 'bloqueado',
     role: 'role'
   };
 
   export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
-
-
-  export const ClienteScalarFieldEnum: {
-    id: 'id',
-    cpf: 'cpf',
-    telefone: 'telefone',
-    data_penalidade: 'data_penalidade',
-    emailVerificado: 'emailVerificado'
-  };
-
-  export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
-
-
-  export const FuncionarioScalarFieldEnum: {
-    id: 'id',
-    salario: 'salario',
-    data_contratacao: 'data_contratacao'
-  };
-
-  export type FuncionarioScalarFieldEnum = (typeof FuncionarioScalarFieldEnum)[keyof typeof FuncionarioScalarFieldEnum]
 
 
   export const LivroScalarFieldEnum: {
@@ -9479,7 +7326,7 @@ export namespace Prisma {
 
   export const EmprestimoScalarFieldEnum: {
     id: 'id',
-    id_cliente: 'id_cliente',
+    usuarioId: 'usuarioId',
     data_saida: 'data_saida'
   };
 
@@ -9517,29 +7364,24 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const UsuarioOrderByRelevanceFieldEnum: {
+    id: 'id',
+    nome: 'nome',
+    email: 'email',
+    senhaHash: 'senhaHash',
+    cpf: 'cpf',
+    telefone: 'telefone'
+  };
+
+  export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]
+
+
   export const NullsOrder: {
     first: 'first',
     last: 'last'
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-  export const UsuarioOrderByRelevanceFieldEnum: {
-    nome: 'nome',
-    email: 'email',
-    senha: 'senha'
-  };
-
-  export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]
-
-
-  export const ClienteOrderByRelevanceFieldEnum: {
-    cpf: 'cpf',
-    telefone: 'telefone'
-  };
-
-  export type ClienteOrderByRelevanceFieldEnum = (typeof ClienteOrderByRelevanceFieldEnum)[keyof typeof ClienteOrderByRelevanceFieldEnum]
 
 
   export const LivroOrderByRelevanceFieldEnum: {
@@ -9550,36 +7392,22 @@ export namespace Prisma {
   export type LivroOrderByRelevanceFieldEnum = (typeof LivroOrderByRelevanceFieldEnum)[keyof typeof LivroOrderByRelevanceFieldEnum]
 
 
+  export const EmprestimoOrderByRelevanceFieldEnum: {
+    usuarioId: 'usuarioId'
+  };
+
+  export type EmprestimoOrderByRelevanceFieldEnum = (typeof EmprestimoOrderByRelevanceFieldEnum)[keyof typeof EmprestimoOrderByRelevanceFieldEnum]
+
+
   /**
    * Field references
    */
 
 
   /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
    * Reference to a field of type 'String'
    */
   export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
-    
-
-
-  /**
-   * Reference to a field of type 'Role'
-   */
-  export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
     
 
 
@@ -9591,9 +7419,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Decimal'
+   * Reference to a field of type 'Role'
    */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+  export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
@@ -9601,6 +7436,13 @@ export namespace Prisma {
    * Reference to a field of type 'LivroStatus'
    */
   export type EnumLivroStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LivroStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
     
 
 
@@ -9618,169 +7460,71 @@ export namespace Prisma {
     AND?: UsuarioWhereInput | UsuarioWhereInput[]
     OR?: UsuarioWhereInput[]
     NOT?: UsuarioWhereInput | UsuarioWhereInput[]
-    id?: IntFilter<"Usuario"> | number
+    id?: StringFilter<"Usuario"> | string
     nome?: StringFilter<"Usuario"> | string
-    email?: StringNullableFilter<"Usuario"> | string | null
-    senha?: StringNullableFilter<"Usuario"> | string | null
+    email?: StringFilter<"Usuario"> | string
+    senhaHash?: StringFilter<"Usuario"> | string
+    cpf?: StringFilter<"Usuario"> | string
+    telefone?: StringFilter<"Usuario"> | string
+    bloqueado?: BoolFilter<"Usuario"> | boolean
     role?: EnumRoleFilter<"Usuario"> | $Enums.Role
-    cliente?: XOR<ClienteNullableScalarRelationFilter, ClienteWhereInput> | null
-    funcionario?: XOR<FuncionarioNullableScalarRelationFilter, FuncionarioWhereInput> | null
+    emprestimos?: EmprestimoListRelationFilter
   }
 
   export type UsuarioOrderByWithRelationInput = {
     id?: SortOrder
     nome?: SortOrder
-    email?: SortOrderInput | SortOrder
-    senha?: SortOrderInput | SortOrder
+    email?: SortOrder
+    senhaHash?: SortOrder
+    cpf?: SortOrder
+    telefone?: SortOrder
+    bloqueado?: SortOrder
     role?: SortOrder
-    cliente?: ClienteOrderByWithRelationInput
-    funcionario?: FuncionarioOrderByWithRelationInput
+    emprestimos?: EmprestimoOrderByRelationAggregateInput
     _relevance?: UsuarioOrderByRelevanceInput
   }
 
   export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
+    id?: string
     email?: string
+    cpf?: string
     AND?: UsuarioWhereInput | UsuarioWhereInput[]
     OR?: UsuarioWhereInput[]
     NOT?: UsuarioWhereInput | UsuarioWhereInput[]
     nome?: StringFilter<"Usuario"> | string
-    senha?: StringNullableFilter<"Usuario"> | string | null
+    senhaHash?: StringFilter<"Usuario"> | string
+    telefone?: StringFilter<"Usuario"> | string
+    bloqueado?: BoolFilter<"Usuario"> | boolean
     role?: EnumRoleFilter<"Usuario"> | $Enums.Role
-    cliente?: XOR<ClienteNullableScalarRelationFilter, ClienteWhereInput> | null
-    funcionario?: XOR<FuncionarioNullableScalarRelationFilter, FuncionarioWhereInput> | null
-  }, "id" | "email">
+    emprestimos?: EmprestimoListRelationFilter
+  }, "id" | "email" | "cpf">
 
   export type UsuarioOrderByWithAggregationInput = {
     id?: SortOrder
     nome?: SortOrder
-    email?: SortOrderInput | SortOrder
-    senha?: SortOrderInput | SortOrder
+    email?: SortOrder
+    senhaHash?: SortOrder
+    cpf?: SortOrder
+    telefone?: SortOrder
+    bloqueado?: SortOrder
     role?: SortOrder
     _count?: UsuarioCountOrderByAggregateInput
-    _avg?: UsuarioAvgOrderByAggregateInput
     _max?: UsuarioMaxOrderByAggregateInput
     _min?: UsuarioMinOrderByAggregateInput
-    _sum?: UsuarioSumOrderByAggregateInput
   }
 
   export type UsuarioScalarWhereWithAggregatesInput = {
     AND?: UsuarioScalarWhereWithAggregatesInput | UsuarioScalarWhereWithAggregatesInput[]
     OR?: UsuarioScalarWhereWithAggregatesInput[]
     NOT?: UsuarioScalarWhereWithAggregatesInput | UsuarioScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Usuario"> | number
+    id?: StringWithAggregatesFilter<"Usuario"> | string
     nome?: StringWithAggregatesFilter<"Usuario"> | string
-    email?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
-    senha?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
+    email?: StringWithAggregatesFilter<"Usuario"> | string
+    senhaHash?: StringWithAggregatesFilter<"Usuario"> | string
+    cpf?: StringWithAggregatesFilter<"Usuario"> | string
+    telefone?: StringWithAggregatesFilter<"Usuario"> | string
+    bloqueado?: BoolWithAggregatesFilter<"Usuario"> | boolean
     role?: EnumRoleWithAggregatesFilter<"Usuario"> | $Enums.Role
-  }
-
-  export type ClienteWhereInput = {
-    AND?: ClienteWhereInput | ClienteWhereInput[]
-    OR?: ClienteWhereInput[]
-    NOT?: ClienteWhereInput | ClienteWhereInput[]
-    id?: IntFilter<"Cliente"> | number
-    cpf?: StringNullableFilter<"Cliente"> | string | null
-    telefone?: StringNullableFilter<"Cliente"> | string | null
-    data_penalidade?: DateTimeNullableFilter<"Cliente"> | Date | string | null
-    emailVerificado?: BoolFilter<"Cliente"> | boolean
-    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
-    emprestimos?: EmprestimoListRelationFilter
-  }
-
-  export type ClienteOrderByWithRelationInput = {
-    id?: SortOrder
-    cpf?: SortOrderInput | SortOrder
-    telefone?: SortOrderInput | SortOrder
-    data_penalidade?: SortOrderInput | SortOrder
-    emailVerificado?: SortOrder
-    usuario?: UsuarioOrderByWithRelationInput
-    emprestimos?: EmprestimoOrderByRelationAggregateInput
-    _relevance?: ClienteOrderByRelevanceInput
-  }
-
-  export type ClienteWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    cpf?: string
-    AND?: ClienteWhereInput | ClienteWhereInput[]
-    OR?: ClienteWhereInput[]
-    NOT?: ClienteWhereInput | ClienteWhereInput[]
-    telefone?: StringNullableFilter<"Cliente"> | string | null
-    data_penalidade?: DateTimeNullableFilter<"Cliente"> | Date | string | null
-    emailVerificado?: BoolFilter<"Cliente"> | boolean
-    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
-    emprestimos?: EmprestimoListRelationFilter
-  }, "id" | "cpf">
-
-  export type ClienteOrderByWithAggregationInput = {
-    id?: SortOrder
-    cpf?: SortOrderInput | SortOrder
-    telefone?: SortOrderInput | SortOrder
-    data_penalidade?: SortOrderInput | SortOrder
-    emailVerificado?: SortOrder
-    _count?: ClienteCountOrderByAggregateInput
-    _avg?: ClienteAvgOrderByAggregateInput
-    _max?: ClienteMaxOrderByAggregateInput
-    _min?: ClienteMinOrderByAggregateInput
-    _sum?: ClienteSumOrderByAggregateInput
-  }
-
-  export type ClienteScalarWhereWithAggregatesInput = {
-    AND?: ClienteScalarWhereWithAggregatesInput | ClienteScalarWhereWithAggregatesInput[]
-    OR?: ClienteScalarWhereWithAggregatesInput[]
-    NOT?: ClienteScalarWhereWithAggregatesInput | ClienteScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Cliente"> | number
-    cpf?: StringNullableWithAggregatesFilter<"Cliente"> | string | null
-    telefone?: StringNullableWithAggregatesFilter<"Cliente"> | string | null
-    data_penalidade?: DateTimeNullableWithAggregatesFilter<"Cliente"> | Date | string | null
-    emailVerificado?: BoolWithAggregatesFilter<"Cliente"> | boolean
-  }
-
-  export type FuncionarioWhereInput = {
-    AND?: FuncionarioWhereInput | FuncionarioWhereInput[]
-    OR?: FuncionarioWhereInput[]
-    NOT?: FuncionarioWhereInput | FuncionarioWhereInput[]
-    id?: IntFilter<"Funcionario"> | number
-    salario?: DecimalFilter<"Funcionario"> | Decimal | DecimalJsLike | number | string
-    data_contratacao?: DateTimeFilter<"Funcionario"> | Date | string
-    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
-  }
-
-  export type FuncionarioOrderByWithRelationInput = {
-    id?: SortOrder
-    salario?: SortOrder
-    data_contratacao?: SortOrder
-    usuario?: UsuarioOrderByWithRelationInput
-  }
-
-  export type FuncionarioWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: FuncionarioWhereInput | FuncionarioWhereInput[]
-    OR?: FuncionarioWhereInput[]
-    NOT?: FuncionarioWhereInput | FuncionarioWhereInput[]
-    salario?: DecimalFilter<"Funcionario"> | Decimal | DecimalJsLike | number | string
-    data_contratacao?: DateTimeFilter<"Funcionario"> | Date | string
-    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
-  }, "id">
-
-  export type FuncionarioOrderByWithAggregationInput = {
-    id?: SortOrder
-    salario?: SortOrder
-    data_contratacao?: SortOrder
-    _count?: FuncionarioCountOrderByAggregateInput
-    _avg?: FuncionarioAvgOrderByAggregateInput
-    _max?: FuncionarioMaxOrderByAggregateInput
-    _min?: FuncionarioMinOrderByAggregateInput
-    _sum?: FuncionarioSumOrderByAggregateInput
-  }
-
-  export type FuncionarioScalarWhereWithAggregatesInput = {
-    AND?: FuncionarioScalarWhereWithAggregatesInput | FuncionarioScalarWhereWithAggregatesInput[]
-    OR?: FuncionarioScalarWhereWithAggregatesInput[]
-    NOT?: FuncionarioScalarWhereWithAggregatesInput | FuncionarioScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Funcionario"> | number
-    salario?: DecimalWithAggregatesFilter<"Funcionario"> | Decimal | DecimalJsLike | number | string
-    data_contratacao?: DateTimeWithAggregatesFilter<"Funcionario"> | Date | string
   }
 
   export type LivroWhereInput = {
@@ -9886,18 +7630,19 @@ export namespace Prisma {
     OR?: EmprestimoWhereInput[]
     NOT?: EmprestimoWhereInput | EmprestimoWhereInput[]
     id?: IntFilter<"Emprestimo"> | number
-    id_cliente?: IntFilter<"Emprestimo"> | number
+    usuarioId?: StringFilter<"Emprestimo"> | string
     data_saida?: DateTimeFilter<"Emprestimo"> | Date | string
     itens?: ItemEmprestimoListRelationFilter
-    cliente?: XOR<ClienteScalarRelationFilter, ClienteWhereInput>
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
   }
 
   export type EmprestimoOrderByWithRelationInput = {
     id?: SortOrder
-    id_cliente?: SortOrder
+    usuarioId?: SortOrder
     data_saida?: SortOrder
     itens?: ItemEmprestimoOrderByRelationAggregateInput
-    cliente?: ClienteOrderByWithRelationInput
+    usuario?: UsuarioOrderByWithRelationInput
+    _relevance?: EmprestimoOrderByRelevanceInput
   }
 
   export type EmprestimoWhereUniqueInput = Prisma.AtLeast<{
@@ -9905,15 +7650,15 @@ export namespace Prisma {
     AND?: EmprestimoWhereInput | EmprestimoWhereInput[]
     OR?: EmprestimoWhereInput[]
     NOT?: EmprestimoWhereInput | EmprestimoWhereInput[]
-    id_cliente?: IntFilter<"Emprestimo"> | number
+    usuarioId?: StringFilter<"Emprestimo"> | string
     data_saida?: DateTimeFilter<"Emprestimo"> | Date | string
     itens?: ItemEmprestimoListRelationFilter
-    cliente?: XOR<ClienteScalarRelationFilter, ClienteWhereInput>
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
   }, "id">
 
   export type EmprestimoOrderByWithAggregationInput = {
     id?: SortOrder
-    id_cliente?: SortOrder
+    usuarioId?: SortOrder
     data_saida?: SortOrder
     _count?: EmprestimoCountOrderByAggregateInput
     _avg?: EmprestimoAvgOrderByAggregateInput
@@ -9927,7 +7672,7 @@ export namespace Prisma {
     OR?: EmprestimoScalarWhereWithAggregatesInput[]
     NOT?: EmprestimoScalarWhereWithAggregatesInput | EmprestimoScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Emprestimo"> | number
-    id_cliente?: IntWithAggregatesFilter<"Emprestimo"> | number
+    usuarioId?: StringWithAggregatesFilter<"Emprestimo"> | string
     data_saida?: DateTimeWithAggregatesFilter<"Emprestimo"> | Date | string
   }
 
@@ -10051,164 +7796,84 @@ export namespace Prisma {
   }
 
   export type UsuarioCreateInput = {
+    id?: string
     nome: string
-    email?: string | null
-    senha?: string | null
+    email: string
+    senhaHash: string
+    cpf: string
+    telefone: string
+    bloqueado?: boolean
     role?: $Enums.Role
-    cliente?: ClienteCreateNestedOneWithoutUsuarioInput
-    funcionario?: FuncionarioCreateNestedOneWithoutUsuarioInput
+    emprestimos?: EmprestimoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateInput = {
-    id?: number
+    id?: string
     nome: string
-    email?: string | null
-    senha?: string | null
+    email: string
+    senhaHash: string
+    cpf: string
+    telefone: string
+    bloqueado?: boolean
     role?: $Enums.Role
-    cliente?: ClienteUncheckedCreateNestedOneWithoutUsuarioInput
-    funcionario?: FuncionarioUncheckedCreateNestedOneWithoutUsuarioInput
+    emprestimos?: EmprestimoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    senha?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    cpf?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    bloqueado?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    cliente?: ClienteUpdateOneWithoutUsuarioNestedInput
-    funcionario?: FuncionarioUpdateOneWithoutUsuarioNestedInput
+    emprestimos?: EmprestimoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    senha?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    cpf?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    bloqueado?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    cliente?: ClienteUncheckedUpdateOneWithoutUsuarioNestedInput
-    funcionario?: FuncionarioUncheckedUpdateOneWithoutUsuarioNestedInput
+    emprestimos?: EmprestimoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioCreateManyInput = {
-    id?: number
+    id?: string
     nome: string
-    email?: string | null
-    senha?: string | null
+    email: string
+    senhaHash: string
+    cpf: string
+    telefone: string
+    bloqueado?: boolean
     role?: $Enums.Role
   }
 
   export type UsuarioUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    senha?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    cpf?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    bloqueado?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
   export type UsuarioUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    senha?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    cpf?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    bloqueado?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  }
-
-  export type ClienteCreateInput = {
-    cpf?: string | null
-    telefone?: string | null
-    data_penalidade?: Date | string | null
-    emailVerificado?: boolean
-    usuario: UsuarioCreateNestedOneWithoutClienteInput
-    emprestimos?: EmprestimoCreateNestedManyWithoutClienteInput
-  }
-
-  export type ClienteUncheckedCreateInput = {
-    id: number
-    cpf?: string | null
-    telefone?: string | null
-    data_penalidade?: Date | string | null
-    emailVerificado?: boolean
-    emprestimos?: EmprestimoUncheckedCreateNestedManyWithoutClienteInput
-  }
-
-  export type ClienteUpdateInput = {
-    cpf?: NullableStringFieldUpdateOperationsInput | string | null
-    telefone?: NullableStringFieldUpdateOperationsInput | string | null
-    data_penalidade?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emailVerificado?: BoolFieldUpdateOperationsInput | boolean
-    usuario?: UsuarioUpdateOneRequiredWithoutClienteNestedInput
-    emprestimos?: EmprestimoUpdateManyWithoutClienteNestedInput
-  }
-
-  export type ClienteUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    cpf?: NullableStringFieldUpdateOperationsInput | string | null
-    telefone?: NullableStringFieldUpdateOperationsInput | string | null
-    data_penalidade?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emailVerificado?: BoolFieldUpdateOperationsInput | boolean
-    emprestimos?: EmprestimoUncheckedUpdateManyWithoutClienteNestedInput
-  }
-
-  export type ClienteCreateManyInput = {
-    id: number
-    cpf?: string | null
-    telefone?: string | null
-    data_penalidade?: Date | string | null
-    emailVerificado?: boolean
-  }
-
-  export type ClienteUpdateManyMutationInput = {
-    cpf?: NullableStringFieldUpdateOperationsInput | string | null
-    telefone?: NullableStringFieldUpdateOperationsInput | string | null
-    data_penalidade?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emailVerificado?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type ClienteUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    cpf?: NullableStringFieldUpdateOperationsInput | string | null
-    telefone?: NullableStringFieldUpdateOperationsInput | string | null
-    data_penalidade?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emailVerificado?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type FuncionarioCreateInput = {
-    salario: Decimal | DecimalJsLike | number | string
-    data_contratacao: Date | string
-    usuario: UsuarioCreateNestedOneWithoutFuncionarioInput
-  }
-
-  export type FuncionarioUncheckedCreateInput = {
-    id: number
-    salario: Decimal | DecimalJsLike | number | string
-    data_contratacao: Date | string
-  }
-
-  export type FuncionarioUpdateInput = {
-    salario?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    data_contratacao?: DateTimeFieldUpdateOperationsInput | Date | string
-    usuario?: UsuarioUpdateOneRequiredWithoutFuncionarioNestedInput
-  }
-
-  export type FuncionarioUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    salario?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    data_contratacao?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FuncionarioCreateManyInput = {
-    id: number
-    salario: Decimal | DecimalJsLike | number | string
-    data_contratacao: Date | string
-  }
-
-  export type FuncionarioUpdateManyMutationInput = {
-    salario?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    data_contratacao?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FuncionarioUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    salario?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    data_contratacao?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LivroCreateInput = {
@@ -10299,12 +7964,12 @@ export namespace Prisma {
   export type EmprestimoCreateInput = {
     data_saida?: Date | string
     itens?: ItemEmprestimoCreateNestedManyWithoutEmprestimoInput
-    cliente: ClienteCreateNestedOneWithoutEmprestimosInput
+    usuario: UsuarioCreateNestedOneWithoutEmprestimosInput
   }
 
   export type EmprestimoUncheckedCreateInput = {
     id?: number
-    id_cliente: number
+    usuarioId: string
     data_saida?: Date | string
     itens?: ItemEmprestimoUncheckedCreateNestedManyWithoutEmprestimoInput
   }
@@ -10312,19 +7977,19 @@ export namespace Prisma {
   export type EmprestimoUpdateInput = {
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
     itens?: ItemEmprestimoUpdateManyWithoutEmprestimoNestedInput
-    cliente?: ClienteUpdateOneRequiredWithoutEmprestimosNestedInput
+    usuario?: UsuarioUpdateOneRequiredWithoutEmprestimosNestedInput
   }
 
   export type EmprestimoUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    id_cliente?: IntFieldUpdateOperationsInput | number
+    usuarioId?: StringFieldUpdateOperationsInput | string
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
     itens?: ItemEmprestimoUncheckedUpdateManyWithoutEmprestimoNestedInput
   }
 
   export type EmprestimoCreateManyInput = {
     id?: number
-    id_cliente: number
+    usuarioId: string
     data_saida?: Date | string
   }
 
@@ -10334,7 +7999,7 @@ export namespace Prisma {
 
   export type EmprestimoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    id_cliente?: IntFieldUpdateOperationsInput | number
+    usuarioId?: StringFieldUpdateOperationsInput | string
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10452,17 +8117,6 @@ export namespace Prisma {
     dias_penalidade?: IntFieldUpdateOperationsInput | number
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -10478,19 +8132,9 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type EnumRoleFilter<$PrismaModel = never> = {
@@ -10500,19 +8144,14 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
-  export type ClienteNullableScalarRelationFilter = {
-    is?: ClienteWhereInput | null
-    isNot?: ClienteWhereInput | null
+  export type EmprestimoListRelationFilter = {
+    every?: EmprestimoWhereInput
+    some?: EmprestimoWhereInput
+    none?: EmprestimoWhereInput
   }
 
-  export type FuncionarioNullableScalarRelationFilter = {
-    is?: FuncionarioWhereInput | null
-    isNot?: FuncionarioWhereInput | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
+  export type EmprestimoOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UsuarioOrderByRelevanceInput = {
@@ -10525,19 +8164,21 @@ export namespace Prisma {
     id?: SortOrder
     nome?: SortOrder
     email?: SortOrder
-    senha?: SortOrder
+    senhaHash?: SortOrder
+    cpf?: SortOrder
+    telefone?: SortOrder
+    bloqueado?: SortOrder
     role?: SortOrder
-  }
-
-  export type UsuarioAvgOrderByAggregateInput = {
-    id?: SortOrder
   }
 
   export type UsuarioMaxOrderByAggregateInput = {
     id?: SortOrder
     nome?: SortOrder
     email?: SortOrder
-    senha?: SortOrder
+    senhaHash?: SortOrder
+    cpf?: SortOrder
+    telefone?: SortOrder
+    bloqueado?: SortOrder
     role?: SortOrder
   }
 
@@ -10545,28 +8186,11 @@ export namespace Prisma {
     id?: SortOrder
     nome?: SortOrder
     email?: SortOrder
-    senha?: SortOrder
+    senhaHash?: SortOrder
+    cpf?: SortOrder
+    telefone?: SortOrder
+    bloqueado?: SortOrder
     role?: SortOrder
-  }
-
-  export type UsuarioSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -10587,22 +8211,12 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -10615,181 +8229,41 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type UsuarioScalarRelationFilter = {
-    is?: UsuarioWhereInput
-    isNot?: UsuarioWhereInput
-  }
-
-  export type EmprestimoListRelationFilter = {
-    every?: EmprestimoWhereInput
-    some?: EmprestimoWhereInput
-    none?: EmprestimoWhereInput
-  }
-
-  export type EmprestimoOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ClienteOrderByRelevanceInput = {
-    fields: ClienteOrderByRelevanceFieldEnum | ClienteOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type ClienteCountOrderByAggregateInput = {
-    id?: SortOrder
-    cpf?: SortOrder
-    telefone?: SortOrder
-    data_penalidade?: SortOrder
-    emailVerificado?: SortOrder
-  }
-
-  export type ClienteAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type ClienteMaxOrderByAggregateInput = {
-    id?: SortOrder
-    cpf?: SortOrder
-    telefone?: SortOrder
-    data_penalidade?: SortOrder
-    emailVerificado?: SortOrder
-  }
-
-  export type ClienteMinOrderByAggregateInput = {
-    id?: SortOrder
-    cpf?: SortOrder
-    telefone?: SortOrder
-    data_penalidade?: SortOrder
-    emailVerificado?: SortOrder
-  }
-
-  export type ClienteSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type DecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type FuncionarioCountOrderByAggregateInput = {
-    id?: SortOrder
-    salario?: SortOrder
-    data_contratacao?: SortOrder
-  }
-
-  export type FuncionarioAvgOrderByAggregateInput = {
-    id?: SortOrder
-    salario?: SortOrder
-  }
-
-  export type FuncionarioMaxOrderByAggregateInput = {
-    id?: SortOrder
-    salario?: SortOrder
-    data_contratacao?: SortOrder
-  }
-
-  export type FuncionarioMinOrderByAggregateInput = {
-    id?: SortOrder
-    salario?: SortOrder
-    data_contratacao?: SortOrder
-  }
-
-  export type FuncionarioSumOrderByAggregateInput = {
-    id?: SortOrder
-    salario?: SortOrder
-  }
-
-  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type ExemplarLivroListRelationFilter = {
     every?: ExemplarLivroWhereInput
     some?: ExemplarLivroWhereInput
     none?: ExemplarLivroWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type ExemplarLivroOrderByRelationAggregateInput = {
@@ -10826,6 +8300,40 @@ export namespace Prisma {
 
   export type LivroSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type EnumLivroStatusFilter<$PrismaModel = never> = {
@@ -10888,37 +8396,77 @@ export namespace Prisma {
     _max?: NestedEnumLivroStatusFilter<$PrismaModel>
   }
 
-  export type ClienteScalarRelationFilter = {
-    is?: ClienteWhereInput
-    isNot?: ClienteWhereInput
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type UsuarioScalarRelationFilter = {
+    is?: UsuarioWhereInput
+    isNot?: UsuarioWhereInput
+  }
+
+  export type EmprestimoOrderByRelevanceInput = {
+    fields: EmprestimoOrderByRelevanceFieldEnum | EmprestimoOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
   }
 
   export type EmprestimoCountOrderByAggregateInput = {
     id?: SortOrder
-    id_cliente?: SortOrder
+    usuarioId?: SortOrder
     data_saida?: SortOrder
   }
 
   export type EmprestimoAvgOrderByAggregateInput = {
     id?: SortOrder
-    id_cliente?: SortOrder
   }
 
   export type EmprestimoMaxOrderByAggregateInput = {
     id?: SortOrder
-    id_cliente?: SortOrder
+    usuarioId?: SortOrder
     data_saida?: SortOrder
   }
 
   export type EmprestimoMinOrderByAggregateInput = {
     id?: SortOrder
-    id_cliente?: SortOrder
+    usuarioId?: SortOrder
     data_saida?: SortOrder
   }
 
   export type EmprestimoSumOrderByAggregateInput = {
     id?: SortOrder
-    id_cliente?: SortOrder
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type EmprestimoScalarRelationFilter = {
@@ -10972,6 +8520,20 @@ export namespace Prisma {
     count_adiar?: SortOrder
   }
 
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type ConfiguracaoCountOrderByAggregateInput = {
     id?: SortOrder
     limite_global?: SortOrder
@@ -11012,178 +8574,58 @@ export namespace Prisma {
     dias_penalidade?: SortOrder
   }
 
-  export type ClienteCreateNestedOneWithoutUsuarioInput = {
-    create?: XOR<ClienteCreateWithoutUsuarioInput, ClienteUncheckedCreateWithoutUsuarioInput>
-    connectOrCreate?: ClienteCreateOrConnectWithoutUsuarioInput
-    connect?: ClienteWhereUniqueInput
+  export type EmprestimoCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<EmprestimoCreateWithoutUsuarioInput, EmprestimoUncheckedCreateWithoutUsuarioInput> | EmprestimoCreateWithoutUsuarioInput[] | EmprestimoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: EmprestimoCreateOrConnectWithoutUsuarioInput | EmprestimoCreateOrConnectWithoutUsuarioInput[]
+    createMany?: EmprestimoCreateManyUsuarioInputEnvelope
+    connect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
   }
 
-  export type FuncionarioCreateNestedOneWithoutUsuarioInput = {
-    create?: XOR<FuncionarioCreateWithoutUsuarioInput, FuncionarioUncheckedCreateWithoutUsuarioInput>
-    connectOrCreate?: FuncionarioCreateOrConnectWithoutUsuarioInput
-    connect?: FuncionarioWhereUniqueInput
-  }
-
-  export type ClienteUncheckedCreateNestedOneWithoutUsuarioInput = {
-    create?: XOR<ClienteCreateWithoutUsuarioInput, ClienteUncheckedCreateWithoutUsuarioInput>
-    connectOrCreate?: ClienteCreateOrConnectWithoutUsuarioInput
-    connect?: ClienteWhereUniqueInput
-  }
-
-  export type FuncionarioUncheckedCreateNestedOneWithoutUsuarioInput = {
-    create?: XOR<FuncionarioCreateWithoutUsuarioInput, FuncionarioUncheckedCreateWithoutUsuarioInput>
-    connectOrCreate?: FuncionarioCreateOrConnectWithoutUsuarioInput
-    connect?: FuncionarioWhereUniqueInput
+  export type EmprestimoUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<EmprestimoCreateWithoutUsuarioInput, EmprestimoUncheckedCreateWithoutUsuarioInput> | EmprestimoCreateWithoutUsuarioInput[] | EmprestimoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: EmprestimoCreateOrConnectWithoutUsuarioInput | EmprestimoCreateOrConnectWithoutUsuarioInput[]
+    createMany?: EmprestimoCreateManyUsuarioInputEnvelope
+    connect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
   }
 
-  export type ClienteUpdateOneWithoutUsuarioNestedInput = {
-    create?: XOR<ClienteCreateWithoutUsuarioInput, ClienteUncheckedCreateWithoutUsuarioInput>
-    connectOrCreate?: ClienteCreateOrConnectWithoutUsuarioInput
-    upsert?: ClienteUpsertWithoutUsuarioInput
-    disconnect?: ClienteWhereInput | boolean
-    delete?: ClienteWhereInput | boolean
-    connect?: ClienteWhereUniqueInput
-    update?: XOR<XOR<ClienteUpdateToOneWithWhereWithoutUsuarioInput, ClienteUpdateWithoutUsuarioInput>, ClienteUncheckedUpdateWithoutUsuarioInput>
-  }
-
-  export type FuncionarioUpdateOneWithoutUsuarioNestedInput = {
-    create?: XOR<FuncionarioCreateWithoutUsuarioInput, FuncionarioUncheckedCreateWithoutUsuarioInput>
-    connectOrCreate?: FuncionarioCreateOrConnectWithoutUsuarioInput
-    upsert?: FuncionarioUpsertWithoutUsuarioInput
-    disconnect?: FuncionarioWhereInput | boolean
-    delete?: FuncionarioWhereInput | boolean
-    connect?: FuncionarioWhereUniqueInput
-    update?: XOR<XOR<FuncionarioUpdateToOneWithWhereWithoutUsuarioInput, FuncionarioUpdateWithoutUsuarioInput>, FuncionarioUncheckedUpdateWithoutUsuarioInput>
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type ClienteUncheckedUpdateOneWithoutUsuarioNestedInput = {
-    create?: XOR<ClienteCreateWithoutUsuarioInput, ClienteUncheckedCreateWithoutUsuarioInput>
-    connectOrCreate?: ClienteCreateOrConnectWithoutUsuarioInput
-    upsert?: ClienteUpsertWithoutUsuarioInput
-    disconnect?: ClienteWhereInput | boolean
-    delete?: ClienteWhereInput | boolean
-    connect?: ClienteWhereUniqueInput
-    update?: XOR<XOR<ClienteUpdateToOneWithWhereWithoutUsuarioInput, ClienteUpdateWithoutUsuarioInput>, ClienteUncheckedUpdateWithoutUsuarioInput>
-  }
-
-  export type FuncionarioUncheckedUpdateOneWithoutUsuarioNestedInput = {
-    create?: XOR<FuncionarioCreateWithoutUsuarioInput, FuncionarioUncheckedCreateWithoutUsuarioInput>
-    connectOrCreate?: FuncionarioCreateOrConnectWithoutUsuarioInput
-    upsert?: FuncionarioUpsertWithoutUsuarioInput
-    disconnect?: FuncionarioWhereInput | boolean
-    delete?: FuncionarioWhereInput | boolean
-    connect?: FuncionarioWhereUniqueInput
-    update?: XOR<XOR<FuncionarioUpdateToOneWithWhereWithoutUsuarioInput, FuncionarioUpdateWithoutUsuarioInput>, FuncionarioUncheckedUpdateWithoutUsuarioInput>
-  }
-
-  export type UsuarioCreateNestedOneWithoutClienteInput = {
-    create?: XOR<UsuarioCreateWithoutClienteInput, UsuarioUncheckedCreateWithoutClienteInput>
-    connectOrCreate?: UsuarioCreateOrConnectWithoutClienteInput
-    connect?: UsuarioWhereUniqueInput
-  }
-
-  export type EmprestimoCreateNestedManyWithoutClienteInput = {
-    create?: XOR<EmprestimoCreateWithoutClienteInput, EmprestimoUncheckedCreateWithoutClienteInput> | EmprestimoCreateWithoutClienteInput[] | EmprestimoUncheckedCreateWithoutClienteInput[]
-    connectOrCreate?: EmprestimoCreateOrConnectWithoutClienteInput | EmprestimoCreateOrConnectWithoutClienteInput[]
-    createMany?: EmprestimoCreateManyClienteInputEnvelope
-    connect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
-  }
-
-  export type EmprestimoUncheckedCreateNestedManyWithoutClienteInput = {
-    create?: XOR<EmprestimoCreateWithoutClienteInput, EmprestimoUncheckedCreateWithoutClienteInput> | EmprestimoCreateWithoutClienteInput[] | EmprestimoUncheckedCreateWithoutClienteInput[]
-    connectOrCreate?: EmprestimoCreateOrConnectWithoutClienteInput | EmprestimoCreateOrConnectWithoutClienteInput[]
-    createMany?: EmprestimoCreateManyClienteInputEnvelope
-    connect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type UsuarioUpdateOneRequiredWithoutClienteNestedInput = {
-    create?: XOR<UsuarioCreateWithoutClienteInput, UsuarioUncheckedCreateWithoutClienteInput>
-    connectOrCreate?: UsuarioCreateOrConnectWithoutClienteInput
-    upsert?: UsuarioUpsertWithoutClienteInput
-    connect?: UsuarioWhereUniqueInput
-    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutClienteInput, UsuarioUpdateWithoutClienteInput>, UsuarioUncheckedUpdateWithoutClienteInput>
-  }
-
-  export type EmprestimoUpdateManyWithoutClienteNestedInput = {
-    create?: XOR<EmprestimoCreateWithoutClienteInput, EmprestimoUncheckedCreateWithoutClienteInput> | EmprestimoCreateWithoutClienteInput[] | EmprestimoUncheckedCreateWithoutClienteInput[]
-    connectOrCreate?: EmprestimoCreateOrConnectWithoutClienteInput | EmprestimoCreateOrConnectWithoutClienteInput[]
-    upsert?: EmprestimoUpsertWithWhereUniqueWithoutClienteInput | EmprestimoUpsertWithWhereUniqueWithoutClienteInput[]
-    createMany?: EmprestimoCreateManyClienteInputEnvelope
+  export type EmprestimoUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<EmprestimoCreateWithoutUsuarioInput, EmprestimoUncheckedCreateWithoutUsuarioInput> | EmprestimoCreateWithoutUsuarioInput[] | EmprestimoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: EmprestimoCreateOrConnectWithoutUsuarioInput | EmprestimoCreateOrConnectWithoutUsuarioInput[]
+    upsert?: EmprestimoUpsertWithWhereUniqueWithoutUsuarioInput | EmprestimoUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: EmprestimoCreateManyUsuarioInputEnvelope
     set?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
     disconnect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
     delete?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
     connect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
-    update?: EmprestimoUpdateWithWhereUniqueWithoutClienteInput | EmprestimoUpdateWithWhereUniqueWithoutClienteInput[]
-    updateMany?: EmprestimoUpdateManyWithWhereWithoutClienteInput | EmprestimoUpdateManyWithWhereWithoutClienteInput[]
+    update?: EmprestimoUpdateWithWhereUniqueWithoutUsuarioInput | EmprestimoUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: EmprestimoUpdateManyWithWhereWithoutUsuarioInput | EmprestimoUpdateManyWithWhereWithoutUsuarioInput[]
     deleteMany?: EmprestimoScalarWhereInput | EmprestimoScalarWhereInput[]
   }
 
-  export type EmprestimoUncheckedUpdateManyWithoutClienteNestedInput = {
-    create?: XOR<EmprestimoCreateWithoutClienteInput, EmprestimoUncheckedCreateWithoutClienteInput> | EmprestimoCreateWithoutClienteInput[] | EmprestimoUncheckedCreateWithoutClienteInput[]
-    connectOrCreate?: EmprestimoCreateOrConnectWithoutClienteInput | EmprestimoCreateOrConnectWithoutClienteInput[]
-    upsert?: EmprestimoUpsertWithWhereUniqueWithoutClienteInput | EmprestimoUpsertWithWhereUniqueWithoutClienteInput[]
-    createMany?: EmprestimoCreateManyClienteInputEnvelope
+  export type EmprestimoUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<EmprestimoCreateWithoutUsuarioInput, EmprestimoUncheckedCreateWithoutUsuarioInput> | EmprestimoCreateWithoutUsuarioInput[] | EmprestimoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: EmprestimoCreateOrConnectWithoutUsuarioInput | EmprestimoCreateOrConnectWithoutUsuarioInput[]
+    upsert?: EmprestimoUpsertWithWhereUniqueWithoutUsuarioInput | EmprestimoUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: EmprestimoCreateManyUsuarioInputEnvelope
     set?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
     disconnect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
     delete?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
     connect?: EmprestimoWhereUniqueInput | EmprestimoWhereUniqueInput[]
-    update?: EmprestimoUpdateWithWhereUniqueWithoutClienteInput | EmprestimoUpdateWithWhereUniqueWithoutClienteInput[]
-    updateMany?: EmprestimoUpdateManyWithWhereWithoutClienteInput | EmprestimoUpdateManyWithWhereWithoutClienteInput[]
+    update?: EmprestimoUpdateWithWhereUniqueWithoutUsuarioInput | EmprestimoUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: EmprestimoUpdateManyWithWhereWithoutUsuarioInput | EmprestimoUpdateManyWithWhereWithoutUsuarioInput[]
     deleteMany?: EmprestimoScalarWhereInput | EmprestimoScalarWhereInput[]
-  }
-
-  export type UsuarioCreateNestedOneWithoutFuncionarioInput = {
-    create?: XOR<UsuarioCreateWithoutFuncionarioInput, UsuarioUncheckedCreateWithoutFuncionarioInput>
-    connectOrCreate?: UsuarioCreateOrConnectWithoutFuncionarioInput
-    connect?: UsuarioWhereUniqueInput
-  }
-
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
-  }
-
-  export type UsuarioUpdateOneRequiredWithoutFuncionarioNestedInput = {
-    create?: XOR<UsuarioCreateWithoutFuncionarioInput, UsuarioUncheckedCreateWithoutFuncionarioInput>
-    connectOrCreate?: UsuarioCreateOrConnectWithoutFuncionarioInput
-    upsert?: UsuarioUpsertWithoutFuncionarioInput
-    connect?: UsuarioWhereUniqueInput
-    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutFuncionarioInput, UsuarioUpdateWithoutFuncionarioInput>, UsuarioUncheckedUpdateWithoutFuncionarioInput>
   }
 
   export type ExemplarLivroCreateNestedManyWithoutLivroInput = {
@@ -11200,6 +8642,10 @@ export namespace Prisma {
     connect?: ExemplarLivroWhereUniqueInput | ExemplarLivroWhereUniqueInput[]
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type ExemplarLivroUpdateManyWithoutLivroNestedInput = {
     create?: XOR<ExemplarLivroCreateWithoutLivroInput, ExemplarLivroUncheckedCreateWithoutLivroInput> | ExemplarLivroCreateWithoutLivroInput[] | ExemplarLivroUncheckedCreateWithoutLivroInput[]
     connectOrCreate?: ExemplarLivroCreateOrConnectWithoutLivroInput | ExemplarLivroCreateOrConnectWithoutLivroInput[]
@@ -11212,6 +8658,14 @@ export namespace Prisma {
     update?: ExemplarLivroUpdateWithWhereUniqueWithoutLivroInput | ExemplarLivroUpdateWithWhereUniqueWithoutLivroInput[]
     updateMany?: ExemplarLivroUpdateManyWithWhereWithoutLivroInput | ExemplarLivroUpdateManyWithWhereWithoutLivroInput[]
     deleteMany?: ExemplarLivroScalarWhereInput | ExemplarLivroScalarWhereInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type ExemplarLivroUncheckedUpdateManyWithoutLivroNestedInput = {
@@ -11295,10 +8749,10 @@ export namespace Prisma {
     connect?: ItemEmprestimoWhereUniqueInput | ItemEmprestimoWhereUniqueInput[]
   }
 
-  export type ClienteCreateNestedOneWithoutEmprestimosInput = {
-    create?: XOR<ClienteCreateWithoutEmprestimosInput, ClienteUncheckedCreateWithoutEmprestimosInput>
-    connectOrCreate?: ClienteCreateOrConnectWithoutEmprestimosInput
-    connect?: ClienteWhereUniqueInput
+  export type UsuarioCreateNestedOneWithoutEmprestimosInput = {
+    create?: XOR<UsuarioCreateWithoutEmprestimosInput, UsuarioUncheckedCreateWithoutEmprestimosInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutEmprestimosInput
+    connect?: UsuarioWhereUniqueInput
   }
 
   export type ItemEmprestimoUncheckedCreateNestedManyWithoutEmprestimoInput = {
@@ -11306,6 +8760,10 @@ export namespace Prisma {
     connectOrCreate?: ItemEmprestimoCreateOrConnectWithoutEmprestimoInput | ItemEmprestimoCreateOrConnectWithoutEmprestimoInput[]
     createMany?: ItemEmprestimoCreateManyEmprestimoInputEnvelope
     connect?: ItemEmprestimoWhereUniqueInput | ItemEmprestimoWhereUniqueInput[]
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type ItemEmprestimoUpdateManyWithoutEmprestimoNestedInput = {
@@ -11322,12 +8780,12 @@ export namespace Prisma {
     deleteMany?: ItemEmprestimoScalarWhereInput | ItemEmprestimoScalarWhereInput[]
   }
 
-  export type ClienteUpdateOneRequiredWithoutEmprestimosNestedInput = {
-    create?: XOR<ClienteCreateWithoutEmprestimosInput, ClienteUncheckedCreateWithoutEmprestimosInput>
-    connectOrCreate?: ClienteCreateOrConnectWithoutEmprestimosInput
-    upsert?: ClienteUpsertWithoutEmprestimosInput
-    connect?: ClienteWhereUniqueInput
-    update?: XOR<XOR<ClienteUpdateToOneWithWhereWithoutEmprestimosInput, ClienteUpdateWithoutEmprestimosInput>, ClienteUncheckedUpdateWithoutEmprestimosInput>
+  export type UsuarioUpdateOneRequiredWithoutEmprestimosNestedInput = {
+    create?: XOR<UsuarioCreateWithoutEmprestimosInput, UsuarioUncheckedCreateWithoutEmprestimosInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutEmprestimosInput
+    upsert?: UsuarioUpsertWithoutEmprestimosInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutEmprestimosInput, UsuarioUpdateWithoutEmprestimosInput>, UsuarioUncheckedUpdateWithoutEmprestimosInput>
   }
 
   export type ItemEmprestimoUncheckedUpdateManyWithoutEmprestimoNestedInput = {
@@ -11356,6 +8814,10 @@ export namespace Prisma {
     connect?: ExemplarLivroWhereUniqueInput
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type EmprestimoUpdateOneRequiredWithoutItensNestedInput = {
     create?: XOR<EmprestimoCreateWithoutItensInput, EmprestimoUncheckedCreateWithoutItensInput>
     connectOrCreate?: EmprestimoCreateOrConnectWithoutItensInput
@@ -11370,17 +8832,6 @@ export namespace Prisma {
     upsert?: ExemplarLivroUpsertWithoutItensInput
     connect?: ExemplarLivroWhereUniqueInput
     update?: XOR<XOR<ExemplarLivroUpdateToOneWithWhereWithoutItensInput, ExemplarLivroUpdateWithoutItensInput>, ExemplarLivroUncheckedUpdateWithoutItensInput>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -11398,6 +8849,65 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[]
+    notIn?: $Enums.Role[]
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
+  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[]
+    notIn?: string[]
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[]
+    notIn?: $Enums.Role[]
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -11411,13 +8921,6 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     search?: string
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedEnumRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[]
-    notIn?: $Enums.Role[]
-    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -11445,24 +8948,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11494,106 +8979,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[]
-    notIn?: $Enums.Role[]
-    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRoleFilter<$PrismaModel>
-    _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedDecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
   export type NestedEnumLivroStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LivroStatus | EnumLivroStatusFieldRefInput<$PrismaModel>
     in?: $Enums.LivroStatus[]
@@ -11611,175 +8996,91 @@ export namespace Prisma {
     _max?: NestedEnumLivroStatusFilter<$PrismaModel>
   }
 
-  export type ClienteCreateWithoutUsuarioInput = {
-    cpf?: string | null
-    telefone?: string | null
-    data_penalidade?: Date | string | null
-    emailVerificado?: boolean
-    emprestimos?: EmprestimoCreateNestedManyWithoutClienteInput
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type ClienteUncheckedCreateWithoutUsuarioInput = {
-    cpf?: string | null
-    telefone?: string | null
-    data_penalidade?: Date | string | null
-    emailVerificado?: boolean
-    emprestimos?: EmprestimoUncheckedCreateNestedManyWithoutClienteInput
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type ClienteCreateOrConnectWithoutUsuarioInput = {
-    where: ClienteWhereUniqueInput
-    create: XOR<ClienteCreateWithoutUsuarioInput, ClienteUncheckedCreateWithoutUsuarioInput>
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type FuncionarioCreateWithoutUsuarioInput = {
-    salario: Decimal | DecimalJsLike | number | string
-    data_contratacao: Date | string
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type FuncionarioUncheckedCreateWithoutUsuarioInput = {
-    salario: Decimal | DecimalJsLike | number | string
-    data_contratacao: Date | string
-  }
-
-  export type FuncionarioCreateOrConnectWithoutUsuarioInput = {
-    where: FuncionarioWhereUniqueInput
-    create: XOR<FuncionarioCreateWithoutUsuarioInput, FuncionarioUncheckedCreateWithoutUsuarioInput>
-  }
-
-  export type ClienteUpsertWithoutUsuarioInput = {
-    update: XOR<ClienteUpdateWithoutUsuarioInput, ClienteUncheckedUpdateWithoutUsuarioInput>
-    create: XOR<ClienteCreateWithoutUsuarioInput, ClienteUncheckedCreateWithoutUsuarioInput>
-    where?: ClienteWhereInput
-  }
-
-  export type ClienteUpdateToOneWithWhereWithoutUsuarioInput = {
-    where?: ClienteWhereInput
-    data: XOR<ClienteUpdateWithoutUsuarioInput, ClienteUncheckedUpdateWithoutUsuarioInput>
-  }
-
-  export type ClienteUpdateWithoutUsuarioInput = {
-    cpf?: NullableStringFieldUpdateOperationsInput | string | null
-    telefone?: NullableStringFieldUpdateOperationsInput | string | null
-    data_penalidade?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emailVerificado?: BoolFieldUpdateOperationsInput | boolean
-    emprestimos?: EmprestimoUpdateManyWithoutClienteNestedInput
-  }
-
-  export type ClienteUncheckedUpdateWithoutUsuarioInput = {
-    cpf?: NullableStringFieldUpdateOperationsInput | string | null
-    telefone?: NullableStringFieldUpdateOperationsInput | string | null
-    data_penalidade?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emailVerificado?: BoolFieldUpdateOperationsInput | boolean
-    emprestimos?: EmprestimoUncheckedUpdateManyWithoutClienteNestedInput
-  }
-
-  export type FuncionarioUpsertWithoutUsuarioInput = {
-    update: XOR<FuncionarioUpdateWithoutUsuarioInput, FuncionarioUncheckedUpdateWithoutUsuarioInput>
-    create: XOR<FuncionarioCreateWithoutUsuarioInput, FuncionarioUncheckedCreateWithoutUsuarioInput>
-    where?: FuncionarioWhereInput
-  }
-
-  export type FuncionarioUpdateToOneWithWhereWithoutUsuarioInput = {
-    where?: FuncionarioWhereInput
-    data: XOR<FuncionarioUpdateWithoutUsuarioInput, FuncionarioUncheckedUpdateWithoutUsuarioInput>
-  }
-
-  export type FuncionarioUpdateWithoutUsuarioInput = {
-    salario?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    data_contratacao?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FuncionarioUncheckedUpdateWithoutUsuarioInput = {
-    salario?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    data_contratacao?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UsuarioCreateWithoutClienteInput = {
-    nome: string
-    email?: string | null
-    senha?: string | null
-    role?: $Enums.Role
-    funcionario?: FuncionarioCreateNestedOneWithoutUsuarioInput
-  }
-
-  export type UsuarioUncheckedCreateWithoutClienteInput = {
-    id?: number
-    nome: string
-    email?: string | null
-    senha?: string | null
-    role?: $Enums.Role
-    funcionario?: FuncionarioUncheckedCreateNestedOneWithoutUsuarioInput
-  }
-
-  export type UsuarioCreateOrConnectWithoutClienteInput = {
-    where: UsuarioWhereUniqueInput
-    create: XOR<UsuarioCreateWithoutClienteInput, UsuarioUncheckedCreateWithoutClienteInput>
-  }
-
-  export type EmprestimoCreateWithoutClienteInput = {
+  export type EmprestimoCreateWithoutUsuarioInput = {
     data_saida?: Date | string
     itens?: ItemEmprestimoCreateNestedManyWithoutEmprestimoInput
   }
 
-  export type EmprestimoUncheckedCreateWithoutClienteInput = {
+  export type EmprestimoUncheckedCreateWithoutUsuarioInput = {
     id?: number
     data_saida?: Date | string
     itens?: ItemEmprestimoUncheckedCreateNestedManyWithoutEmprestimoInput
   }
 
-  export type EmprestimoCreateOrConnectWithoutClienteInput = {
+  export type EmprestimoCreateOrConnectWithoutUsuarioInput = {
     where: EmprestimoWhereUniqueInput
-    create: XOR<EmprestimoCreateWithoutClienteInput, EmprestimoUncheckedCreateWithoutClienteInput>
+    create: XOR<EmprestimoCreateWithoutUsuarioInput, EmprestimoUncheckedCreateWithoutUsuarioInput>
   }
 
-  export type EmprestimoCreateManyClienteInputEnvelope = {
-    data: EmprestimoCreateManyClienteInput | EmprestimoCreateManyClienteInput[]
+  export type EmprestimoCreateManyUsuarioInputEnvelope = {
+    data: EmprestimoCreateManyUsuarioInput | EmprestimoCreateManyUsuarioInput[]
     skipDuplicates?: boolean
   }
 
-  export type UsuarioUpsertWithoutClienteInput = {
-    update: XOR<UsuarioUpdateWithoutClienteInput, UsuarioUncheckedUpdateWithoutClienteInput>
-    create: XOR<UsuarioCreateWithoutClienteInput, UsuarioUncheckedCreateWithoutClienteInput>
-    where?: UsuarioWhereInput
-  }
-
-  export type UsuarioUpdateToOneWithWhereWithoutClienteInput = {
-    where?: UsuarioWhereInput
-    data: XOR<UsuarioUpdateWithoutClienteInput, UsuarioUncheckedUpdateWithoutClienteInput>
-  }
-
-  export type UsuarioUpdateWithoutClienteInput = {
-    nome?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    senha?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    funcionario?: FuncionarioUpdateOneWithoutUsuarioNestedInput
-  }
-
-  export type UsuarioUncheckedUpdateWithoutClienteInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    nome?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    senha?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    funcionario?: FuncionarioUncheckedUpdateOneWithoutUsuarioNestedInput
-  }
-
-  export type EmprestimoUpsertWithWhereUniqueWithoutClienteInput = {
+  export type EmprestimoUpsertWithWhereUniqueWithoutUsuarioInput = {
     where: EmprestimoWhereUniqueInput
-    update: XOR<EmprestimoUpdateWithoutClienteInput, EmprestimoUncheckedUpdateWithoutClienteInput>
-    create: XOR<EmprestimoCreateWithoutClienteInput, EmprestimoUncheckedCreateWithoutClienteInput>
+    update: XOR<EmprestimoUpdateWithoutUsuarioInput, EmprestimoUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<EmprestimoCreateWithoutUsuarioInput, EmprestimoUncheckedCreateWithoutUsuarioInput>
   }
 
-  export type EmprestimoUpdateWithWhereUniqueWithoutClienteInput = {
+  export type EmprestimoUpdateWithWhereUniqueWithoutUsuarioInput = {
     where: EmprestimoWhereUniqueInput
-    data: XOR<EmprestimoUpdateWithoutClienteInput, EmprestimoUncheckedUpdateWithoutClienteInput>
+    data: XOR<EmprestimoUpdateWithoutUsuarioInput, EmprestimoUncheckedUpdateWithoutUsuarioInput>
   }
 
-  export type EmprestimoUpdateManyWithWhereWithoutClienteInput = {
+  export type EmprestimoUpdateManyWithWhereWithoutUsuarioInput = {
     where: EmprestimoScalarWhereInput
-    data: XOR<EmprestimoUpdateManyMutationInput, EmprestimoUncheckedUpdateManyWithoutClienteInput>
+    data: XOR<EmprestimoUpdateManyMutationInput, EmprestimoUncheckedUpdateManyWithoutUsuarioInput>
   }
 
   export type EmprestimoScalarWhereInput = {
@@ -11787,58 +9088,8 @@ export namespace Prisma {
     OR?: EmprestimoScalarWhereInput[]
     NOT?: EmprestimoScalarWhereInput | EmprestimoScalarWhereInput[]
     id?: IntFilter<"Emprestimo"> | number
-    id_cliente?: IntFilter<"Emprestimo"> | number
+    usuarioId?: StringFilter<"Emprestimo"> | string
     data_saida?: DateTimeFilter<"Emprestimo"> | Date | string
-  }
-
-  export type UsuarioCreateWithoutFuncionarioInput = {
-    nome: string
-    email?: string | null
-    senha?: string | null
-    role?: $Enums.Role
-    cliente?: ClienteCreateNestedOneWithoutUsuarioInput
-  }
-
-  export type UsuarioUncheckedCreateWithoutFuncionarioInput = {
-    id?: number
-    nome: string
-    email?: string | null
-    senha?: string | null
-    role?: $Enums.Role
-    cliente?: ClienteUncheckedCreateNestedOneWithoutUsuarioInput
-  }
-
-  export type UsuarioCreateOrConnectWithoutFuncionarioInput = {
-    where: UsuarioWhereUniqueInput
-    create: XOR<UsuarioCreateWithoutFuncionarioInput, UsuarioUncheckedCreateWithoutFuncionarioInput>
-  }
-
-  export type UsuarioUpsertWithoutFuncionarioInput = {
-    update: XOR<UsuarioUpdateWithoutFuncionarioInput, UsuarioUncheckedUpdateWithoutFuncionarioInput>
-    create: XOR<UsuarioCreateWithoutFuncionarioInput, UsuarioUncheckedCreateWithoutFuncionarioInput>
-    where?: UsuarioWhereInput
-  }
-
-  export type UsuarioUpdateToOneWithWhereWithoutFuncionarioInput = {
-    where?: UsuarioWhereInput
-    data: XOR<UsuarioUpdateWithoutFuncionarioInput, UsuarioUncheckedUpdateWithoutFuncionarioInput>
-  }
-
-  export type UsuarioUpdateWithoutFuncionarioInput = {
-    nome?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    senha?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    cliente?: ClienteUpdateOneWithoutUsuarioNestedInput
-  }
-
-  export type UsuarioUncheckedUpdateWithoutFuncionarioInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    nome?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    senha?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    cliente?: ClienteUncheckedUpdateOneWithoutUsuarioNestedInput
   }
 
   export type ExemplarLivroCreateWithoutLivroInput = {
@@ -12003,25 +9254,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ClienteCreateWithoutEmprestimosInput = {
-    cpf?: string | null
-    telefone?: string | null
-    data_penalidade?: Date | string | null
-    emailVerificado?: boolean
-    usuario: UsuarioCreateNestedOneWithoutClienteInput
+  export type UsuarioCreateWithoutEmprestimosInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    cpf: string
+    telefone: string
+    bloqueado?: boolean
+    role?: $Enums.Role
   }
 
-  export type ClienteUncheckedCreateWithoutEmprestimosInput = {
-    id: number
-    cpf?: string | null
-    telefone?: string | null
-    data_penalidade?: Date | string | null
-    emailVerificado?: boolean
+  export type UsuarioUncheckedCreateWithoutEmprestimosInput = {
+    id?: string
+    nome: string
+    email: string
+    senhaHash: string
+    cpf: string
+    telefone: string
+    bloqueado?: boolean
+    role?: $Enums.Role
   }
 
-  export type ClienteCreateOrConnectWithoutEmprestimosInput = {
-    where: ClienteWhereUniqueInput
-    create: XOR<ClienteCreateWithoutEmprestimosInput, ClienteUncheckedCreateWithoutEmprestimosInput>
+  export type UsuarioCreateOrConnectWithoutEmprestimosInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutEmprestimosInput, UsuarioUncheckedCreateWithoutEmprestimosInput>
   }
 
   export type ItemEmprestimoUpsertWithWhereUniqueWithoutEmprestimoInput = {
@@ -12040,41 +9297,47 @@ export namespace Prisma {
     data: XOR<ItemEmprestimoUpdateManyMutationInput, ItemEmprestimoUncheckedUpdateManyWithoutEmprestimoInput>
   }
 
-  export type ClienteUpsertWithoutEmprestimosInput = {
-    update: XOR<ClienteUpdateWithoutEmprestimosInput, ClienteUncheckedUpdateWithoutEmprestimosInput>
-    create: XOR<ClienteCreateWithoutEmprestimosInput, ClienteUncheckedCreateWithoutEmprestimosInput>
-    where?: ClienteWhereInput
+  export type UsuarioUpsertWithoutEmprestimosInput = {
+    update: XOR<UsuarioUpdateWithoutEmprestimosInput, UsuarioUncheckedUpdateWithoutEmprestimosInput>
+    create: XOR<UsuarioCreateWithoutEmprestimosInput, UsuarioUncheckedCreateWithoutEmprestimosInput>
+    where?: UsuarioWhereInput
   }
 
-  export type ClienteUpdateToOneWithWhereWithoutEmprestimosInput = {
-    where?: ClienteWhereInput
-    data: XOR<ClienteUpdateWithoutEmprestimosInput, ClienteUncheckedUpdateWithoutEmprestimosInput>
+  export type UsuarioUpdateToOneWithWhereWithoutEmprestimosInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutEmprestimosInput, UsuarioUncheckedUpdateWithoutEmprestimosInput>
   }
 
-  export type ClienteUpdateWithoutEmprestimosInput = {
-    cpf?: NullableStringFieldUpdateOperationsInput | string | null
-    telefone?: NullableStringFieldUpdateOperationsInput | string | null
-    data_penalidade?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emailVerificado?: BoolFieldUpdateOperationsInput | boolean
-    usuario?: UsuarioUpdateOneRequiredWithoutClienteNestedInput
+  export type UsuarioUpdateWithoutEmprestimosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    cpf?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    bloqueado?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
-  export type ClienteUncheckedUpdateWithoutEmprestimosInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    cpf?: NullableStringFieldUpdateOperationsInput | string | null
-    telefone?: NullableStringFieldUpdateOperationsInput | string | null
-    data_penalidade?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emailVerificado?: BoolFieldUpdateOperationsInput | boolean
+  export type UsuarioUncheckedUpdateWithoutEmprestimosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senhaHash?: StringFieldUpdateOperationsInput | string
+    cpf?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    bloqueado?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
   export type EmprestimoCreateWithoutItensInput = {
     data_saida?: Date | string
-    cliente: ClienteCreateNestedOneWithoutEmprestimosInput
+    usuario: UsuarioCreateNestedOneWithoutEmprestimosInput
   }
 
   export type EmprestimoUncheckedCreateWithoutItensInput = {
     id?: number
-    id_cliente: number
+    usuarioId: string
     data_saida?: Date | string
   }
 
@@ -12112,12 +9375,12 @@ export namespace Prisma {
 
   export type EmprestimoUpdateWithoutItensInput = {
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
-    cliente?: ClienteUpdateOneRequiredWithoutEmprestimosNestedInput
+    usuario?: UsuarioUpdateOneRequiredWithoutEmprestimosNestedInput
   }
 
   export type EmprestimoUncheckedUpdateWithoutItensInput = {
     id?: IntFieldUpdateOperationsInput | number
-    id_cliente?: IntFieldUpdateOperationsInput | number
+    usuarioId?: StringFieldUpdateOperationsInput | string
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -12143,23 +9406,23 @@ export namespace Prisma {
     status?: EnumLivroStatusFieldUpdateOperationsInput | $Enums.LivroStatus
   }
 
-  export type EmprestimoCreateManyClienteInput = {
+  export type EmprestimoCreateManyUsuarioInput = {
     id?: number
     data_saida?: Date | string
   }
 
-  export type EmprestimoUpdateWithoutClienteInput = {
+  export type EmprestimoUpdateWithoutUsuarioInput = {
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
     itens?: ItemEmprestimoUpdateManyWithoutEmprestimoNestedInput
   }
 
-  export type EmprestimoUncheckedUpdateWithoutClienteInput = {
+  export type EmprestimoUncheckedUpdateWithoutUsuarioInput = {
     id?: IntFieldUpdateOperationsInput | number
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
     itens?: ItemEmprestimoUncheckedUpdateManyWithoutEmprestimoNestedInput
   }
 
-  export type EmprestimoUncheckedUpdateManyWithoutClienteInput = {
+  export type EmprestimoUncheckedUpdateManyWithoutUsuarioInput = {
     id?: IntFieldUpdateOperationsInput | number
     data_saida?: DateTimeFieldUpdateOperationsInput | Date | string
   }

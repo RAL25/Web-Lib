@@ -1,4 +1,4 @@
-import { PrismaClient } from "../generated/prisma/client";
+import { PrismaClient } from "../generated/prisma";
 
 export async function seedConfiguracoes(prisma: PrismaClient) {
   await prisma.configuracao.upsert({

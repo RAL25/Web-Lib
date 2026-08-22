@@ -14,45 +14,26 @@ datasource db {
 
 // Esquemas
 
-enum Role{
-  Cliente
-  Funcionario
-  Admin
+enum Role {
+  ADMINISTRADOR
+  CLIENTE
 }
 
 model Usuario {
-  id    Int       @id @default(autoincrement())
-  nome  String    @db.VarChar(50)
-  email String?   @db.VarChar(100) @unique
-  senha String?   @db.VarChar(255)
-  role  Role      @default(Cliente)
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  nome      String
+  email     String   @unique
+  senhaHash String   @map("senha_hash")
+  cpf       String   @unique
+  telefone  String
+  bloqueado Boolean  @default(false)
+  role      Role     @default(CLIENTE)
 
-  // Relações 1:1 (Opcionais no objeto, pois um usuário é apenas UM desses)
-  cliente      Cliente?
-  funcionario  Funcionario?
-}
-
-model Cliente {
-  id              Int       @id
-  cpf             String?   @db.VarChar(11)   @unique
-  telefone        String?   @db.VarChar(11)
-  data_penalidade DateTime?   // Data de penalidade do cliente
-  emailVerificado Boolean   @default(false)
-
-  usuario   Usuario @relation(fields: [id], references: [id], onDelete: Cascade)
-  emprestimos  Emprestimo[]
-}
-
-model Funcionario {
-  id               Int @id
-  salario          Decimal @db.Decimal(10, 2)
-  data_contratacao DateTime
-
-  usuario Usuario @relation(fields:[id], references: [id], onDelete: Cascade)
+  emprestimos Emprestimo[]
 }
 
 //-----------Início parte livros
-enum LivroStatus{
+enum LivroStatus {
   Disponivel
   Emprestado
   // futuramente: Manutencao (caso o livro esteja danificado), Reservado
@@ -76,14 +57,14 @@ model ExemplarLivro {
 }
 //-----------Fim parte livros
 
-model Emprestimo{
+model Emprestimo {
   id           Int       @id @default(autoincrement())
-  id_cliente   Int
+  usuarioId    String    @map("usuario_id") @db.VarChar(36)
   data_saida   DateTime  @default(now())
 
   // Um empréstimo pode ter vários itens (livros diferentes)
   itens        ItemEmprestimo[]
-  cliente      Cliente @relation(fields:[id_cliente], references: [id])
+  usuario      Usuario   @relation(fields: [usuarioId], references: [id])
 }
 
 model ItemEmprestimo {
@@ -105,7 +86,3 @@ model Configuracao {
   prazo_padrao_dias   Int    @default(7)  // Quantos dias dura o empréstimo
   dias_penalidade     Int    @default(7)  // Quanto tempo dura o bloqueio por atraso
 }
-
-// Rodar as migrations: npx prisma migrate dev --name nome_migration
-// Gerar arquivos com modelos das migrations: npx prisma generate
-// Para rodar as seeds: npx prisma db seed

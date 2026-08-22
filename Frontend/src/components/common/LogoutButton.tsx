@@ -9,8 +9,8 @@ export default function LogoutButton() {
   };
 
   return (
-    <button onClick={handleLogout} style={{ color: "red" }}>
-      Sair (Logout)
+    <button onClick={handleLogout} className="btn-logout">
+      🚪 Sair (Logout)
     </button>
   );
 }

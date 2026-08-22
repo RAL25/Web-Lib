@@ -1,49 +1,68 @@
-import { Router, type Request, type Response } from "express";
+import { Router } from "express";
 import * as usuarioController from "../controllers/usuarioController";
 import {
   autorizar,
-  funcionario,
+  admin,
   usuarioOuAdmin,
 } from "../middleware/authMiddleware";
+
 const router = Router();
 
-// Cadastrar novo usuário é público (e só cliente pode fazer isso)
+// 1. Rotas Públicas
+// Cadastro público de novo usuário (Cliente)
 router.post("/", usuarioController.createUsuarioPublico);
 
-// Verificar se o cliente já confirmou o email de cadastro
-router.get("/verifica_email/:token", usuarioController.verificarEmail);
+// 2. Rotas do Usuário Autenticado (Própria Conta)
+// Visualizar o próprio perfil
+router.get("/perfil", autorizar, usuarioController.findUsuario);
 
-// Somente o próprio usuário pode acessar a sua conta ou o administrador
-router.get("/perfil", autorizar, usuarioOuAdmin, usuarioController.findUsuario);
-
-// O usuário altera os seus próprios dados
+// Alterar os próprios dados
 router.put("/alterar", autorizar, usuarioController.updateUsuario);
 
-// Administrador pode criar qualquer usuário
+// 3. Rotas Administrativas (Gestão de Usuários)
+// Listar todos os usuários (com suporte a ?role= e ?busca=)
+router.get("/", autorizar, admin, usuarioController.index);
+
+// Administrador cria um novo usuário
 router.post(
   "/adicionar_usuario",
   autorizar,
-  usuarioOuAdmin,
+  admin,
   usuarioController.createUsuarioAdmin,
 );
 
+// Bloquear / Desbloquear usuário
+router.put(
+  "/bloquear/:id",
+  autorizar,
+  admin,
+  usuarioController.toggleBloqueioUsuario,
+);
+router.patch(
+  "/bloquear/:id",
+  autorizar,
+  admin,
+  usuarioController.toggleBloqueioUsuario,
+);
+
+// Deletar usuário (apenas admin)
+router.delete(
+  "/deletar/:id",
+  autorizar,
+  admin,
+  usuarioController.deleteUsuario,
+);
+
+// 4. Rotas de Usuário ou Admin
+// Buscar usuário específico por ID
 router.get("/:id", autorizar, usuarioOuAdmin, usuarioController.buscarUsuario);
 
+// Atualizar usuário por ID
 router.put(
   "/alterar/:id",
   autorizar,
   usuarioOuAdmin,
   usuarioController.updateUsuarioAdmin,
 );
-
-router.delete(
-  "/deletar/:id",
-  autorizar,
-  usuarioOuAdmin,
-  usuarioController.deleteUsuario,
-);
-
-// Apenas administradores ou funcionários podem listar todos os usuários
-router.get("/", autorizar, funcionario, usuarioController.index);
 
 export default router;

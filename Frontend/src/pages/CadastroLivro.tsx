@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "../services/api";
 import MenuLateral from "../components/common/MenuLateral";
+import "../assets/styles/CadastroLivro.css";
 
 export default function CadastroLivro() {
   const [titulo, setTitulo] = useState("");
@@ -15,7 +16,6 @@ export default function CadastroLivro() {
     setErro("");
     setSucesso("");
 
-    // Recupera o token salvo no momento do login
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -26,7 +26,6 @@ export default function CadastroLivro() {
     }
 
     try {
-      // Faz a requisição enviando o token no cabeçalho (Header)
       const response = await api.post("/livro", {
         titulo,
         autor,
@@ -37,12 +36,10 @@ export default function CadastroLivro() {
         response.data.message || "Livro e exemplares cadastrados com sucesso!",
       );
 
-      // Limpa o formulário
       setTitulo("");
       setAutor("");
       setQuantidade("");
     } catch (error: any) {
-      // Captura erros do backend (ex: erro 403 de acesso negado pelo middleware)
       const mensagemErro =
         error.response?.data?.erro ||
         error.response?.data?.error ||
@@ -53,59 +50,64 @@ export default function CadastroLivro() {
   };
 
   return (
-    <div>
-      <h1>Cadastrar Novo Livro</h1>
-      {/* <p>
-        <em>Acesso restrito a Funcionários e Administradores</em>
-      </p> */}
+    <div className="app-container">
       <MenuLateral />
 
-      {erro && <p style={{ color: "red" }}>{erro}</p>}
-      {sucesso && <p style={{ color: "green" }}>{sucesso}</p>}
+      <main className="main-content">
+        <header className="page-header">
+          <h1>Cadastrar Novo Livro</h1>
+        </header>
 
-      <form onSubmit={handleCadastrarLivro}>
-        <div>
-          <label htmlFor="titulo">Título do Livro: </label>
-          <input
-            type="text"
-            id="titulo"
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-            required
-          />
-        </div>
+        {erro && <div className="alert-error">{erro}</div>}
+        {sucesso && <div className="alert-success">{sucesso}</div>}
 
-        <br />
+        <section className="form-card">
+          <form onSubmit={handleCadastrarLivro} className="custom-form">
+            <div className="form-group">
+              <label htmlFor="titulo">Título do Livro</label>
+              <input
+                type="text"
+                id="titulo"
+                className="form-control"
+                value={titulo}
+                onChange={(e) => setTitulo(e.target.value)}
+                required
+              />
+            </div>
 
-        <div>
-          <label htmlFor="autor">Autor: </label>
-          <input
-            type="text"
-            id="autor"
-            value={autor}
-            onChange={(e) => setAutor(e.target.value)}
-            required
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="autor">Autor</label>
+              <input
+                type="text"
+                id="autor"
+                className="form-control"
+                value={autor}
+                onChange={(e) => setAutor(e.target.value)}
+                required
+              />
+            </div>
 
-        <br />
+            <div className="form-group">
+              <label htmlFor="quantidade">Quantidade de Exemplares</label>
+              <input
+                type="number"
+                id="quantidade"
+                className="form-control"
+                min="1"
+                value={quantidade}
+                onChange={(e) => setQuantidade(e.target.value)}
+                required
+              />
+            </div>
 
-        <div>
-          <label htmlFor="quantidade">Quantidade de Exemplares: </label>
-          <input
-            type="number"
-            id="quantidade"
-            min="1"
-            value={quantidade}
-            onChange={(e) => setQuantidade(e.target.value)}
-            required
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">Salvar Livro</button>
-      </form>
+            <div className="form-actions">
+              <button type="submit" className="btn-primary">
+                Salvar Livro
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
     </div>
   );
 }

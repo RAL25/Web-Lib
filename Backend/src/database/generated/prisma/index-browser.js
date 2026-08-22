@@ -124,22 +124,11 @@ exports.Prisma.UsuarioScalarFieldEnum = {
   id: 'id',
   nome: 'nome',
   email: 'email',
-  senha: 'senha',
-  role: 'role'
-};
-
-exports.Prisma.ClienteScalarFieldEnum = {
-  id: 'id',
+  senhaHash: 'senhaHash',
   cpf: 'cpf',
   telefone: 'telefone',
-  data_penalidade: 'data_penalidade',
-  emailVerificado: 'emailVerificado'
-};
-
-exports.Prisma.FuncionarioScalarFieldEnum = {
-  id: 'id',
-  salario: 'salario',
-  data_contratacao: 'data_contratacao'
+  bloqueado: 'bloqueado',
+  role: 'role'
 };
 
 exports.Prisma.LivroScalarFieldEnum = {
@@ -156,7 +145,7 @@ exports.Prisma.ExemplarLivroScalarFieldEnum = {
 
 exports.Prisma.EmprestimoScalarFieldEnum = {
   id: 'id',
-  id_cliente: 'id_cliente',
+  usuarioId: 'usuarioId',
   data_saida: 'data_saida'
 };
 
@@ -182,30 +171,31 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.UsuarioOrderByRelevanceFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  email: 'email',
+  senhaHash: 'senhaHash',
+  cpf: 'cpf',
+  telefone: 'telefone'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.UsuarioOrderByRelevanceFieldEnum = {
-  nome: 'nome',
-  email: 'email',
-  senha: 'senha'
-};
-
-exports.Prisma.ClienteOrderByRelevanceFieldEnum = {
-  cpf: 'cpf',
-  telefone: 'telefone'
 };
 
 exports.Prisma.LivroOrderByRelevanceFieldEnum = {
   titulo: 'titulo',
   autor: 'autor'
 };
+
+exports.Prisma.EmprestimoOrderByRelevanceFieldEnum = {
+  usuarioId: 'usuarioId'
+};
 exports.Role = exports.$Enums.Role = {
-  Cliente: 'Cliente',
-  Funcionario: 'Funcionario',
-  Admin: 'Admin'
+  ADMINISTRADOR: 'ADMINISTRADOR',
+  CLIENTE: 'CLIENTE'
 };
 
 exports.LivroStatus = exports.$Enums.LivroStatus = {
@@ -215,8 +205,6 @@ exports.LivroStatus = exports.$Enums.LivroStatus = {
 
 exports.Prisma.ModelName = {
   Usuario: 'Usuario',
-  Cliente: 'Cliente',
-  Funcionario: 'Funcionario',
   Livro: 'Livro',
   ExemplarLivro: 'ExemplarLivro',
   Emprestimo: 'Emprestimo',

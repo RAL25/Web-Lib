@@ -4,23 +4,27 @@ import { AuthContext } from "../contexts/AuthContext";
 
 interface RotaPrivadaProps {
   children: ReactNode;
-  rolesPermitidas?: string[];
+  rolesPermitidas?: ("ADMINISTRADOR" | "CLIENTE")[];
 }
 
 export function RotaPrivada({ children, rolesPermitidas }: RotaPrivadaProps) {
-  const { token, role, carregando } = useContext(AuthContext); // <-- 1. Importa carregando
+  const { token, role, carregando } = useContext(AuthContext);
 
-  // 0. Enquanto estiver lendo o localStorage, impede a execução dos redirecionamentos
+  // 0. Enquanto estiver lendo o localStorage, impede redirecionamentos prematuros
   if (carregando) {
-    return <div>Carregando...</div>; // Pode substituir por um Spinner ou componente de Loading
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        Carregando...
+      </div>
+    );
   }
 
-  // 1. Se não tem token (e já terminou de carregar), vai pro Login
+  // 1. Se não tem token, redireciona para Login
   if (!token) {
     return <Navigate to="/login" replace />;
   }
 
-  // 2. Se a rota exige um perfil específico e o usuário não possui -> Vai pra Home
+  // 2. Se a rota exige um perfil específico e o usuário não possui -> Redireciona para Home
   if (rolesPermitidas && role && !rolesPermitidas.includes(role)) {
     return <Navigate to="/" replace />;
   }

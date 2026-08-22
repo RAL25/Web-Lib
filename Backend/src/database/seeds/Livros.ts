@@ -1,4 +1,4 @@
-import { PrismaClient } from "../generated/prisma/client";
+import { PrismaClient } from "../generated/prisma";
 
 export async function seedLivros(prisma: PrismaClient) {
   const livro1 = await prisma.livro.create({

@@ -1,4 +1,4 @@
-import { PrismaClient, LivroStatus } from "../generated/prisma/client";
+import { PrismaClient, LivroStatus } from "../generated/prisma";
 
 export async function seedExemplarLivros(
   prisma: PrismaClient,

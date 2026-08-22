@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
 import MenuLateral from "../components/common/MenuLateral";
+import "../assets/styles/MeuEmprestimo.css";
 
 interface ItemEmprestado {
   id: number;
@@ -12,8 +13,8 @@ interface ItemEmprestado {
   renovacoes_disponiveis: number;
   atrasado: boolean;
   status_prazo: string;
-  pode_renovar: boolean; // Flag do backend
-  motivo_bloqueio: string; // Explicação para o botão desabilitado
+  pode_renovar: boolean;
+  motivo_bloqueio: string;
 }
 
 export default function MeuEmprestimo() {
@@ -65,102 +66,100 @@ export default function MeuEmprestimo() {
     }
   };
 
-  if (carregando) return <p>Carregando empréstimos ativos...</p>;
-
   return (
-    <div>
-      <h1>Meus Empréstimos Ativos</h1>
+    <div className="app-container">
       <MenuLateral />
 
-      {mensagem && (
-        <p style={{ color: "green", fontWeight: "bold" }}>{mensagem}</p>
-      )}
-      {erro && <p style={{ color: "red", fontWeight: "bold" }}>{erro}</p>}
+      <main className="main-content">
+        <header className="page-header">
+          <h1>Meus Empréstimos Ativos</h1>
+        </header>
 
-      {emprestimos.length === 0 ? (
-        <p>Você não possui livros empréstados no momento.</p>
-      ) : (
-        <table
-          border={1}
-          cellPadding={8}
-          style={{
-            borderCollapse: "collapse",
-            width: "85%",
-            marginTop: "16px",
-          }}
-        >
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Autor</th>
-              <th>Data Empréstimo</th>
-              <th>Prazo de Devolução</th>
-              <th>Status do Prazo</th>
-              <th>Renovações Restantes</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {emprestimos.map((item) => (
-              <tr key={item.id}>
-                <td>{item.titulo}</td>
-                <td>{item.autor || "Não informado"}</td>
-                <td>
-                  {new Date(item.data_emprestimo).toLocaleDateString("pt-BR")}
-                </td>
-                <td>{new Date(item.data_prazo).toLocaleDateString("pt-BR")}</td>
-                <td>
-                  <span
-                    style={{
-                      color: item.atrasado ? "#dc2626" : "#16a34a",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {item.status_prazo}
-                  </span>
-                </td>
-                <td style={{ textAlign: "center" }}>
-                  {item.renovacoes_disponiveis}
-                </td>
-                <td>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "4px",
-                    }}
-                  >
-                    <button
-                      onClick={() => handleRenovar(item.id)}
-                      disabled={!item.pode_renovar}
-                      style={{
-                        cursor: item.pode_renovar ? "pointer" : "not-allowed",
-                      }}
-                      title={
-                        item.motivo_bloqueio ||
-                        "Renovar o livro por mais 7 dias"
-                      }
-                    >
-                      Renovar
-                    </button>
-                    {!item.pode_renovar && (
-                      <span style={{ fontSize: "11px", color: "#6b7280" }}>
-                        {item.motivo_bloqueio}
-                      </span>
-                    )}
-                    <button
-                      onClick={() => handleDevolver(item.id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      Devolver
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+        {mensagem && <div className="alert-success">{mensagem}</div>}
+        {erro && <div className="alert-error">{erro}</div>}
+
+        <section className="loans-card">
+          {carregando ? (
+            <p className="status-message">Carregando empréstimos ativos...</p>
+          ) : emprestimos.length === 0 ? (
+            <p className="empty-message">
+              Você não possui livros empréstados no momento.
+            </p>
+          ) : (
+            <div className="table-responsive">
+              <table className="custom-table">
+                <thead>
+                  <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Data Empréstimo</th>
+                    <th>Prazo de Devolução</th>
+                    <th>Status do Prazo</th>
+                    <th style={{ textAlign: "center" }}>Renovações</th>
+                    <th style={{ textAlign: "right" }}>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {emprestimos.map((item) => (
+                    <tr key={item.id}>
+                      <td className="title-cell">{item.titulo}</td>
+                      <td>{item.autor || "Não informado"}</td>
+                      <td>
+                        {new Date(item.data_emprestimo).toLocaleDateString(
+                          "pt-BR",
+                        )}
+                      </td>
+                      <td>
+                        {new Date(item.data_prazo).toLocaleDateString("pt-BR")}
+                      </td>
+                      <td>
+                        <span
+                          className={`badge ${
+                            item.atrasado ? "badge-danger" : "badge-success"
+                          }`}
+                        >
+                          {item.status_prazo}
+                        </span>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <span className="renovacoes-pill">
+                          {item.renovacoes_disponiveis}
+                        </span>
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <div className="actions-cell">
+                          <button
+                            className="btn-primary btn-sm"
+                            onClick={() => handleRenovar(item.id)}
+                            disabled={!item.pode_renovar}
+                            title={
+                              item.motivo_bloqueio ||
+                              "Renovar o livro por mais 7 dias"
+                            }
+                          >
+                            Renovar
+                          </button>
+                          {!item.pode_renovar && (
+                            <span className="block-reason">
+                              {item.motivo_bloqueio}
+                            </span>
+                          )}
+                          <button
+                            className="btn-outline-danger btn-sm"
+                            onClick={() => handleDevolver(item.id)}
+                          >
+                            Devolver
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+      </main>
     </div>
   );
 }
