@@ -35,10 +35,10 @@ O **Web-Lib** é uma aplicação Full-Stack desenvolvida para modernizar e autom
 
 ## 📂 Documentação do Projeto
 
-A documentação detalhada das regras e requisitos do sistema está centralizada na pasta [`/docs`](https://www.google.com/search?q=./docs/):
+A documentação detalhada das regras e requisitos do sistema está centralizada na pasta [`/docs`](/docs/):
 
-- 📜 **[Casos de Uso (use_cases.md)](https://www.google.com/search?q=./docs/use_cases.md):** Especificação completa de todos os fluxos de uso por atores (`CLIENTE`, `ADMINISTRADOR` e `PÚBLICO`)[cite: 8].
-- 📑 **[Regras de Negócio (business_rules.md)](https://www.google.com/search?q=./docs/business_rules.md):** Diretivas de integridade, cálculo de prazos, controle de renovação e restrições de permissão[cite: 7].
+- 📜 **[Casos de Uso (use_cases.md)](/docs/use_cases.md):** Especificação completa de todos os fluxos de uso por atores (`CLIENTE`, `ADMINISTRADOR` e `PÚBLICO`)[cite: 8].
+- 📑 **[Regras de Negócio (business_rules.md)](/docs/business_rules.md):** Diretivas de integridade, cálculo de prazos, controle de renovação e restrições de permissão[cite: 7].
 
 ---
 
