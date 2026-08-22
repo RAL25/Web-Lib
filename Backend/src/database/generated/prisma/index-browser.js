@@ -133,8 +133,8 @@ exports.Prisma.UsuarioScalarFieldEnum = {
 
 exports.Prisma.LivroScalarFieldEnum = {
   id: 'id',
-  titulo: 'titulo',
-  autor: 'autor'
+  isbn: 'isbn',
+  mediaAvaliacoes: 'mediaAvaliacoes'
 };
 
 exports.Prisma.ExemplarLivroScalarFieldEnum = {
@@ -180,18 +180,17 @@ exports.Prisma.UsuarioOrderByRelevanceFieldEnum = {
   telefone: 'telefone'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.LivroOrderByRelevanceFieldEnum = {
-  titulo: 'titulo',
-  autor: 'autor'
+  isbn: 'isbn'
 };
 
 exports.Prisma.EmprestimoOrderByRelevanceFieldEnum = {
   usuarioId: 'usuarioId'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.Role = exports.$Enums.Role = {
   ADMINISTRADOR: 'ADMINISTRADOR',

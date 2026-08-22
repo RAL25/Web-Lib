@@ -2432,56 +2432,60 @@ export namespace Prisma {
 
   export type LivroAvgAggregateOutputType = {
     id: number | null
+    mediaAvaliacoes: number | null
   }
 
   export type LivroSumAggregateOutputType = {
     id: number | null
+    mediaAvaliacoes: number | null
   }
 
   export type LivroMinAggregateOutputType = {
     id: number | null
-    titulo: string | null
-    autor: string | null
+    isbn: string | null
+    mediaAvaliacoes: number | null
   }
 
   export type LivroMaxAggregateOutputType = {
     id: number | null
-    titulo: string | null
-    autor: string | null
+    isbn: string | null
+    mediaAvaliacoes: number | null
   }
 
   export type LivroCountAggregateOutputType = {
     id: number
-    titulo: number
-    autor: number
+    isbn: number
+    mediaAvaliacoes: number
     _all: number
   }
 
 
   export type LivroAvgAggregateInputType = {
     id?: true
+    mediaAvaliacoes?: true
   }
 
   export type LivroSumAggregateInputType = {
     id?: true
+    mediaAvaliacoes?: true
   }
 
   export type LivroMinAggregateInputType = {
     id?: true
-    titulo?: true
-    autor?: true
+    isbn?: true
+    mediaAvaliacoes?: true
   }
 
   export type LivroMaxAggregateInputType = {
     id?: true
-    titulo?: true
-    autor?: true
+    isbn?: true
+    mediaAvaliacoes?: true
   }
 
   export type LivroCountAggregateInputType = {
     id?: true
-    titulo?: true
-    autor?: true
+    isbn?: true
+    mediaAvaliacoes?: true
     _all?: true
   }
 
@@ -2573,8 +2577,8 @@ export namespace Prisma {
 
   export type LivroGroupByOutputType = {
     id: number
-    titulo: string
-    autor: string | null
+    isbn: string
+    mediaAvaliacoes: number
     _count: LivroCountAggregateOutputType | null
     _avg: LivroAvgAggregateOutputType | null
     _sum: LivroSumAggregateOutputType | null
@@ -2598,8 +2602,8 @@ export namespace Prisma {
 
   export type LivroSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    titulo?: boolean
-    autor?: boolean
+    isbn?: boolean
+    mediaAvaliacoes?: boolean
     exemplares?: boolean | Livro$exemplaresArgs<ExtArgs>
     _count?: boolean | LivroCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["livro"]>
@@ -2608,11 +2612,11 @@ export namespace Prisma {
 
   export type LivroSelectScalar = {
     id?: boolean
-    titulo?: boolean
-    autor?: boolean
+    isbn?: boolean
+    mediaAvaliacoes?: boolean
   }
 
-  export type LivroOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "autor", ExtArgs["result"]["livro"]>
+  export type LivroOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "isbn" | "mediaAvaliacoes", ExtArgs["result"]["livro"]>
   export type LivroInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     exemplares?: boolean | Livro$exemplaresArgs<ExtArgs>
     _count?: boolean | LivroCountOutputTypeDefaultArgs<ExtArgs>
@@ -2625,8 +2629,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      titulo: string
-      autor: string | null
+      isbn: string
+      mediaAvaliacoes: number
     }, ExtArgs["result"]["livro"]>
     composites: {}
   }
@@ -2998,8 +3002,8 @@ export namespace Prisma {
    */
   interface LivroFieldRefs {
     readonly id: FieldRef<"Livro", 'Int'>
-    readonly titulo: FieldRef<"Livro", 'String'>
-    readonly autor: FieldRef<"Livro", 'String'>
+    readonly isbn: FieldRef<"Livro", 'String'>
+    readonly mediaAvaliacoes: FieldRef<"Livro", 'Float'>
   }
     
 
@@ -7308,8 +7312,8 @@ export namespace Prisma {
 
   export const LivroScalarFieldEnum: {
     id: 'id',
-    titulo: 'titulo',
-    autor: 'autor'
+    isbn: 'isbn',
+    mediaAvaliacoes: 'mediaAvaliacoes'
   };
 
   export type LivroScalarFieldEnum = (typeof LivroScalarFieldEnum)[keyof typeof LivroScalarFieldEnum]
@@ -7376,17 +7380,8 @@ export namespace Prisma {
   export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]
 
 
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
-  };
-
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
   export const LivroOrderByRelevanceFieldEnum: {
-    titulo: 'titulo',
-    autor: 'autor'
+    isbn: 'isbn'
   };
 
   export type LivroOrderByRelevanceFieldEnum = (typeof LivroOrderByRelevanceFieldEnum)[keyof typeof LivroOrderByRelevanceFieldEnum]
@@ -7397,6 +7392,14 @@ export namespace Prisma {
   };
 
   export type EmprestimoOrderByRelevanceFieldEnum = (typeof EmprestimoOrderByRelevanceFieldEnum)[keyof typeof EmprestimoOrderByRelevanceFieldEnum]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -7433,6 +7436,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
    * Reference to a field of type 'LivroStatus'
    */
   export type EnumLivroStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LivroStatus'>
@@ -7443,13 +7453,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
   /**
    * Deep Input Types
@@ -7532,33 +7535,33 @@ export namespace Prisma {
     OR?: LivroWhereInput[]
     NOT?: LivroWhereInput | LivroWhereInput[]
     id?: IntFilter<"Livro"> | number
-    titulo?: StringFilter<"Livro"> | string
-    autor?: StringNullableFilter<"Livro"> | string | null
+    isbn?: StringFilter<"Livro"> | string
+    mediaAvaliacoes?: FloatFilter<"Livro"> | number
     exemplares?: ExemplarLivroListRelationFilter
   }
 
   export type LivroOrderByWithRelationInput = {
     id?: SortOrder
-    titulo?: SortOrder
-    autor?: SortOrderInput | SortOrder
+    isbn?: SortOrder
+    mediaAvaliacoes?: SortOrder
     exemplares?: ExemplarLivroOrderByRelationAggregateInput
     _relevance?: LivroOrderByRelevanceInput
   }
 
   export type LivroWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    isbn?: string
     AND?: LivroWhereInput | LivroWhereInput[]
     OR?: LivroWhereInput[]
     NOT?: LivroWhereInput | LivroWhereInput[]
-    titulo?: StringFilter<"Livro"> | string
-    autor?: StringNullableFilter<"Livro"> | string | null
+    mediaAvaliacoes?: FloatFilter<"Livro"> | number
     exemplares?: ExemplarLivroListRelationFilter
-  }, "id">
+  }, "id" | "isbn">
 
   export type LivroOrderByWithAggregationInput = {
     id?: SortOrder
-    titulo?: SortOrder
-    autor?: SortOrderInput | SortOrder
+    isbn?: SortOrder
+    mediaAvaliacoes?: SortOrder
     _count?: LivroCountOrderByAggregateInput
     _avg?: LivroAvgOrderByAggregateInput
     _max?: LivroMaxOrderByAggregateInput
@@ -7571,8 +7574,8 @@ export namespace Prisma {
     OR?: LivroScalarWhereWithAggregatesInput[]
     NOT?: LivroScalarWhereWithAggregatesInput | LivroScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Livro"> | number
-    titulo?: StringWithAggregatesFilter<"Livro"> | string
-    autor?: StringNullableWithAggregatesFilter<"Livro"> | string | null
+    isbn?: StringWithAggregatesFilter<"Livro"> | string
+    mediaAvaliacoes?: FloatWithAggregatesFilter<"Livro"> | number
   }
 
   export type ExemplarLivroWhereInput = {
@@ -7877,46 +7880,46 @@ export namespace Prisma {
   }
 
   export type LivroCreateInput = {
-    titulo: string
-    autor?: string | null
+    isbn: string
+    mediaAvaliacoes?: number
     exemplares?: ExemplarLivroCreateNestedManyWithoutLivroInput
   }
 
   export type LivroUncheckedCreateInput = {
     id?: number
-    titulo: string
-    autor?: string | null
+    isbn: string
+    mediaAvaliacoes?: number
     exemplares?: ExemplarLivroUncheckedCreateNestedManyWithoutLivroInput
   }
 
   export type LivroUpdateInput = {
-    titulo?: StringFieldUpdateOperationsInput | string
-    autor?: NullableStringFieldUpdateOperationsInput | string | null
+    isbn?: StringFieldUpdateOperationsInput | string
+    mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
     exemplares?: ExemplarLivroUpdateManyWithoutLivroNestedInput
   }
 
   export type LivroUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    titulo?: StringFieldUpdateOperationsInput | string
-    autor?: NullableStringFieldUpdateOperationsInput | string | null
+    isbn?: StringFieldUpdateOperationsInput | string
+    mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
     exemplares?: ExemplarLivroUncheckedUpdateManyWithoutLivroNestedInput
   }
 
   export type LivroCreateManyInput = {
     id?: number
-    titulo: string
-    autor?: string | null
+    isbn: string
+    mediaAvaliacoes?: number
   }
 
   export type LivroUpdateManyMutationInput = {
-    titulo?: StringFieldUpdateOperationsInput | string
-    autor?: NullableStringFieldUpdateOperationsInput | string | null
+    isbn?: StringFieldUpdateOperationsInput | string
+    mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
   }
 
   export type LivroUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    titulo?: StringFieldUpdateOperationsInput | string
-    autor?: NullableStringFieldUpdateOperationsInput | string | null
+    isbn?: StringFieldUpdateOperationsInput | string
+    mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
   }
 
   export type ExemplarLivroCreateInput = {
@@ -8240,30 +8243,21 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type ExemplarLivroListRelationFilter = {
     every?: ExemplarLivroWhereInput
     some?: ExemplarLivroWhereInput
     none?: ExemplarLivroWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type ExemplarLivroOrderByRelationAggregateInput = {
@@ -8278,28 +8272,30 @@ export namespace Prisma {
 
   export type LivroCountOrderByAggregateInput = {
     id?: SortOrder
-    titulo?: SortOrder
-    autor?: SortOrder
+    isbn?: SortOrder
+    mediaAvaliacoes?: SortOrder
   }
 
   export type LivroAvgOrderByAggregateInput = {
     id?: SortOrder
+    mediaAvaliacoes?: SortOrder
   }
 
   export type LivroMaxOrderByAggregateInput = {
     id?: SortOrder
-    titulo?: SortOrder
-    autor?: SortOrder
+    isbn?: SortOrder
+    mediaAvaliacoes?: SortOrder
   }
 
   export type LivroMinOrderByAggregateInput = {
     id?: SortOrder
-    titulo?: SortOrder
-    autor?: SortOrder
+    isbn?: SortOrder
+    mediaAvaliacoes?: SortOrder
   }
 
   export type LivroSumOrderByAggregateInput = {
     id?: SortOrder
+    mediaAvaliacoes?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -8318,22 +8314,20 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type EnumLivroStatusFilter<$PrismaModel = never> = {
@@ -8477,6 +8471,11 @@ export namespace Prisma {
   export type ExemplarLivroScalarRelationFilter = {
     is?: ExemplarLivroWhereInput
     isNot?: ExemplarLivroWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type ItemEmprestimoCountOrderByAggregateInput = {
@@ -8642,8 +8641,12 @@ export namespace Prisma {
     connect?: ExemplarLivroWhereUniqueInput | ExemplarLivroWhereUniqueInput[]
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type ExemplarLivroUpdateManyWithoutLivroNestedInput = {
@@ -8908,19 +8911,15 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -8939,7 +8938,7 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type NestedFloatFilter<$PrismaModel = never> = {
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[]
     notIn?: number[]
@@ -8947,36 +8946,12 @@ export namespace Prisma {
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type NestedEnumLivroStatusFilter<$PrismaModel = never> = {
@@ -9044,6 +9019,17 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type EmprestimoCreateWithoutUsuarioInput = {
@@ -9139,14 +9125,14 @@ export namespace Prisma {
   }
 
   export type LivroCreateWithoutExemplaresInput = {
-    titulo: string
-    autor?: string | null
+    isbn: string
+    mediaAvaliacoes?: number
   }
 
   export type LivroUncheckedCreateWithoutExemplaresInput = {
     id?: number
-    titulo: string
-    autor?: string | null
+    isbn: string
+    mediaAvaliacoes?: number
   }
 
   export type LivroCreateOrConnectWithoutExemplaresInput = {
@@ -9191,14 +9177,14 @@ export namespace Prisma {
   }
 
   export type LivroUpdateWithoutExemplaresInput = {
-    titulo?: StringFieldUpdateOperationsInput | string
-    autor?: NullableStringFieldUpdateOperationsInput | string | null
+    isbn?: StringFieldUpdateOperationsInput | string
+    mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
   }
 
   export type LivroUncheckedUpdateWithoutExemplaresInput = {
     id?: IntFieldUpdateOperationsInput | number
-    titulo?: StringFieldUpdateOperationsInput | string
-    autor?: NullableStringFieldUpdateOperationsInput | string | null
+    isbn?: StringFieldUpdateOperationsInput | string
+    mediaAvaliacoes?: FloatFieldUpdateOperationsInput | number
   }
 
   export type ItemEmprestimoUpsertWithWhereUniqueWithoutExemplarLivroInput = {

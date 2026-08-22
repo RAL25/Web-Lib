@@ -5,7 +5,17 @@ import path from "path";
 
 export async function seedUsuarios(prisma: PrismaClient) {
   const jsonPath = path.join(__dirname, "jsons", "usuarios.json");
-  let usersData = [];
+  let usersData: Array<{
+    id?: string;
+    nome: string;
+    email: string;
+    senha_hash?: string;
+    senha?: string;
+    cpf: string;
+    telefone: string;
+    bloqueado: boolean | string;
+    role: string;
+  }> = [];
 
   if (fs.existsSync(jsonPath)) {
     const rawData = fs.readFileSync(jsonPath, "utf-8");
@@ -16,11 +26,15 @@ export async function seedUsuarios(prisma: PrismaClient) {
   let clienteUser: any = null;
 
   for (const user of usersData) {
-    const senhaHash = await bcrypt.hash(user.senha || "123456", 10);
+    const senhaHash =
+      user.senha_hash ||
+      (user.senha ? await bcrypt.hash(user.senha, 10) : await bcrypt.hash("123456", 10));
     const userRole =
       user.role === "ADMINISTRADOR" ? Role.ADMINISTRADOR : Role.CLIENTE;
     const isBloqueado =
-      user.bloqueado === true || user.bloqueado === "true";
+      typeof user.bloqueado === "boolean"
+        ? user.bloqueado
+        : user.bloqueado === "true";
 
     const created = await prisma.usuario.upsert({
       where: { email: user.email },
@@ -33,6 +47,7 @@ export async function seedUsuarios(prisma: PrismaClient) {
         role: userRole,
       },
       create: {
+        ...(user.id ? { id: user.id } : {}),
         nome: user.nome,
         email: user.email,
         senhaHash: senhaHash,

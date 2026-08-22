@@ -1,17 +1,21 @@
 import { PrismaClient } from "../generated/prisma";
 
 export async function seedLivros(prisma: PrismaClient) {
-  const livro1 = await prisma.livro.create({
-    data: {
-      titulo: "Dom Casmurro",
-      autor: "Machado de Assis",
+  const livro1 = await prisma.livro.upsert({
+    where: { isbn: "9788572328753" },
+    update: {},
+    create: {
+      isbn: "9788572328753",
+      mediaAvaliacoes: 4.5,
     },
   });
 
-  const livro2 = await prisma.livro.create({
-    data: {
-      titulo: "O Cortiço",
-      autor: "Aluísio Azevedo",
+  const livro2 = await prisma.livro.upsert({
+    where: { isbn: "9788535914849" },
+    update: {},
+    create: {
+      isbn: "9788535914849",
+      mediaAvaliacoes: 4.8,
     },
   });
 

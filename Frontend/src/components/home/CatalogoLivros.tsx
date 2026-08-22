@@ -2,57 +2,29 @@ import { useState, useEffect } from "react";
 import { api } from "../../services/api";
 import "./CatalogoLivros.css";
 
-interface Livro {
+export interface Livro {
   id: number;
+  isbn: string;
+  mediaAvaliacoes: number;
   titulo: string;
   autor: string;
+  editora: string;
+  categoria: string;
+  capa?: string;
+  descricao?: string;
 }
 
-interface CapaLivroProps {
-  titulo: string;
-  autor: string;
-}
-
-// Sub-componente responsável por buscar a capa de cada livro individualmente
-function CapaLivro({ titulo, autor }: CapaLivroProps) {
-  const [capaUrl, setCapaUrl] = useState<string>("");
-  const [carregandoCapa, setCarregandoCapa] = useState<boolean>(true);
-
-  useEffect(() => {
-    const buscarCapaGoogle = async () => {
-      try {
-        const apiKey = "AIzaSyC-qB1kug9MVmHgFTxygYUAB5a3RpSudWo"; // Opcional para buscas simples
-        const query = encodeURIComponent(`${titulo} inauthor:${autor}`);
-        const url = `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${apiKey}`;
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.items && data.items.length > 0) {
-          const thumbnail = data.items[0].volumeInfo.imageLinks?.thumbnail;
-          // Subtitui HTTP por HTTPS para evitar problemas de segurança
-          const urlSegura = thumbnail?.replace("http://", "https://");
-          setCapaUrl(
-            urlSegura || "https://via.placeholder.com/128x192?text=Sem+Capa",
-          );
-        } else {
-          setCapaUrl("https://via.placeholder.com/128x192?text=Sem+Capa");
-        }
-      } catch (error) {
-        setCapaUrl("https://via.placeholder.com/128x192?text=Sem+Capa");
-      } finally {
-        setCarregandoCapa(false);
-      }
-    };
-
-    buscarCapaGoogle();
-  }, [titulo, autor]);
-
-  if (carregandoCapa) {
-    return <div className="book-cover-loading">Carregando capa...</div>;
-  }
-
-  return <img src={capaUrl} alt={`Capa de ${titulo}`} className="book-cover" />;
+function RenderEstrelas({ nota }: { nota: number }) {
+  const notaArredondada = Math.round(nota);
+  return (
+    <div className="book-rating" title={`Nota: ${nota.toFixed(1)} / 5.0`}>
+      <span className="stars-icons">
+        {"★".repeat(Math.min(5, Math.max(0, notaArredondada)))}
+        {"☆".repeat(Math.max(0, 5 - notaArredondada))}
+      </span>
+      <span className="rating-number">{nota > 0 ? nota.toFixed(1) : "Sem avaliações"}</span>
+    </div>
+  );
 }
 
 export default function CatalogoLivros() {
@@ -96,10 +68,26 @@ export default function CatalogoLivros() {
         <ul className="books-grid">
           {livros.map((livro) => (
             <li key={livro.id} className="book-card">
-              <CapaLivro titulo={livro.titulo} autor={livro.autor} />
+              <img
+                src={
+                  livro.capa ||
+                  `https://covers.openlibrary.org/b/isbn/${livro.isbn}-M.jpg`
+                }
+                alt={`Capa de ${livro.titulo}`}
+                className="book-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    "https://via.placeholder.com/128x192?text=Sem+Capa";
+                }}
+              />
               <div className="book-info">
                 <div className="book-title">{livro.titulo}</div>
                 <div className="book-author">{livro.autor}</div>
+                <div className="book-meta">
+                  <span className="badge-meta">{livro.categoria}</span>
+                  <span className="publisher-text">{livro.editora}</span>
+                </div>
+                <RenderEstrelas nota={livro.mediaAvaliacoes ?? 0} />
               </div>
             </li>
           ))}

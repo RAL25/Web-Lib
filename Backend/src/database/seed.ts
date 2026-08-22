@@ -1,15 +1,11 @@
 import "dotenv/config";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-import { PrismaClient } from "./generated/prisma";
+import { prisma } from "../config/prisma-configDB";
 import { seedConfiguracoes } from "./seeds/Configuracaos";
 import { seedUsuarios } from "./seeds/Usuarios";
 import { seedLivros } from "./seeds/Livros";
 import { seedExemplarLivros } from "./seeds/ExemplarLivros";
 import { seedEmprestimos } from "./seeds/Emprestimos";
 import { seedItemEmprestimos } from "./seeds/ItemEmprestimos";
-
-const adapter = new PrismaMariaDb(process.env.DATABASE_URL!);
-const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log("🧹 Limpando dados antigos...");

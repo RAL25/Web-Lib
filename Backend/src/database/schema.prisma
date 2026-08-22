@@ -40,11 +40,11 @@ enum LivroStatus {
 }
 
 model Livro {
-  id      Int @id @default(autoincrement())
-  titulo  String  @db.VarChar(50)
-  autor   String? @db.VarChar(50)
+  id              Int             @id @default(autoincrement())
+  isbn            String          @unique
+  mediaAvaliacoes Float           @default(0.0) @map("media_avaliacoes")
 
-  exemplares ExemplarLivro[]
+  exemplares      ExemplarLivro[]
 }
 
 model ExemplarLivro {

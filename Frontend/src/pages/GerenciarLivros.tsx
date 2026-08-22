@@ -36,6 +36,9 @@ export default function GerenciarLivros() {
     return (
       livro.titulo?.toLowerCase().includes(f) ||
       livro.autor?.toLowerCase().includes(f) ||
+      livro.isbn?.toLowerCase().includes(f) ||
+      livro.categoria?.toLowerCase().includes(f) ||
+      livro.editora?.toLowerCase().includes(f) ||
       String(livro.id).includes(f)
     );
   });

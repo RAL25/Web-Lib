@@ -1,6 +1,7 @@
 import { type Request, type Response } from "express";
 import { prisma } from "../config/prisma-configDB";
 import { LivroStatus } from "../database/generated/prisma/client";
+import { buscarLivroPorIsbn } from "../services/googleBooksService";
 
 /**
  * GET /dashboard/kpis
@@ -98,9 +99,7 @@ export async function getAlertas(
         },
         exemplarLivro: {
           include: {
-            livro: {
-              select: { id: true, titulo: true, autor: true },
-            },
+            livro: true,
           },
         },
       },
@@ -109,23 +108,26 @@ export async function getAlertas(
       },
     });
 
-    const devolucoesPendentes = itensAtrasados.map((item) => {
-      const dataPrazo = new Date(item.data_prazo);
-      const diffMs = dataAtual.getTime() - dataPrazo.getTime();
-      const diasAtraso = Math.max(1, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+    const devolucoesPendentes = await Promise.all(
+      itensAtrasados.map(async (item) => {
+        const dataPrazo = new Date(item.data_prazo);
+        const diffMs = dataAtual.getTime() - dataPrazo.getTime();
+        const diasAtraso = Math.max(1, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+        const meta = await buscarLivroPorIsbn(item.exemplarLivro.livro.isbn);
 
-      return {
-        id: item.id,
-        clienteId: item.emprestimo.usuarioId,
-        clienteNome: item.emprestimo.usuario.nome,
-        clienteCpf: item.emprestimo.usuario.cpf || "Não informado",
-        livroId: item.exemplarLivro.livro.id,
-        livroTitulo: item.exemplarLivro.livro.titulo,
-        exemplarId: item.exemplarId,
-        dataPrazo: item.data_prazo,
-        diasAtraso,
-      };
-    });
+        return {
+          id: item.id,
+          clienteId: item.emprestimo.usuarioId,
+          clienteNome: item.emprestimo.usuario.nome,
+          clienteCpf: item.emprestimo.usuario.cpf || "Não informado",
+          livroId: item.exemplarLivro.livro.id,
+          livroTitulo: meta?.titulo || "Título Desconhecido",
+          exemplarId: item.exemplarId,
+          dataPrazo: item.data_prazo,
+          diasAtraso,
+        };
+      }),
+    );
 
     // 2. Últimas Movimentações (limite 5)
     const itensRecentes = await prisma.itemEmprestimo.findMany({
@@ -143,9 +145,7 @@ export async function getAlertas(
         },
         exemplarLivro: {
           include: {
-            livro: {
-              select: { titulo: true },
-            },
+            livro: true,
           },
         },
       },
@@ -161,9 +161,10 @@ export async function getAlertas(
 
     const movimentacoes: Movimentacao[] = [];
 
-    itensRecentes.forEach((item) => {
+    for (const item of itensRecentes) {
       const usuarioNome = item.emprestimo.usuario.nome;
-      const livroTitulo = item.exemplarLivro.livro.titulo;
+      const meta = await buscarLivroPorIsbn(item.exemplarLivro.livro.isbn);
+      const livroTitulo = meta?.titulo || "Título Desconhecido";
 
       if (item.emprestimo.data_saida) {
         movimentacoes.push({
@@ -184,7 +185,7 @@ export async function getAlertas(
           data: new Date(item.data_devolucao),
         });
       }
-    });
+    }
 
     movimentacoes.sort((a, b) => b.data.getTime() - a.data.getTime());
     const ultimasMovimentacoes = movimentacoes.slice(0, 5);
@@ -196,20 +197,24 @@ export async function getAlertas(
       },
     });
 
-    const livrosEstoque = todosLivros.map((livro) => {
-      const totalExemplares = livro.exemplares.length;
-      const disponiveis = livro.exemplares.filter(
-        (ex) => ex.status === LivroStatus.Disponivel,
-      ).length;
+    const livrosEstoque = await Promise.all(
+      todosLivros.map(async (livro) => {
+        const totalExemplares = livro.exemplares.length;
+        const disponiveis = livro.exemplares.filter(
+          (ex) => ex.status === LivroStatus.Disponivel,
+        ).length;
+        const meta = await buscarLivroPorIsbn(livro.isbn);
 
-      return {
-        id: livro.id,
-        titulo: livro.titulo,
-        autor: livro.autor || "Autor desconhecido",
-        totalExemplares,
-        disponiveis,
-      };
-    });
+        return {
+          id: livro.id,
+          isbn: livro.isbn,
+          titulo: meta?.titulo || "Título Desconhecido",
+          autor: meta?.autor || "Autor Desconhecido",
+          totalExemplares,
+          disponiveis,
+        };
+      }),
+    );
 
     const estoqueZerado = livrosEstoque.filter((l) => l.disponiveis === 0);
     const estoqueBaixo = livrosEstoque.filter(
@@ -338,13 +343,12 @@ export async function getEstatisticas(
       },
     });
 
-    let contagemPorLivro = new Map<number, { titulo: string; autor: string; total: number }>();
+    let contagemPorLivro = new Map<number, { isbn: string; total: number }>();
 
     itensMesAtual.forEach((item) => {
       const livro = item.exemplarLivro.livro;
       const atual = contagemPorLivro.get(livro.id) || {
-        titulo: livro.titulo,
-        autor: livro.autor || "Desconhecido",
+        isbn: livro.isbn,
         total: 0,
       };
       atual.total += 1;
@@ -362,12 +366,11 @@ export async function getEstatisticas(
         },
       });
 
-      const contagemGeral = new Map<number, { titulo: string; autor: string; total: number }>();
+      const contagemGeral = new Map<number, { isbn: string; total: number }>();
       todosItens.forEach((item) => {
         const livro = item.exemplarLivro.livro;
         const atual = contagemGeral.get(livro.id) || {
-          titulo: livro.titulo,
-          autor: livro.autor || "Desconhecido",
+          isbn: livro.isbn,
           total: 0,
         };
         atual.total += 1;
@@ -379,15 +382,28 @@ export async function getEstatisticas(
       }
     }
 
-    const topLivros = Array.from(contagemPorLivro.entries())
+    const topLivrosRaw = Array.from(contagemPorLivro.entries())
       .map(([id, info]) => ({
         id,
-        titulo: info.titulo,
-        autor: info.autor,
+        isbn: info.isbn,
         totalEmprestimos: info.total,
       }))
       .sort((a, b) => b.totalEmprestimos - a.totalEmprestimos)
       .slice(0, 5);
+
+    const topLivros = await Promise.all(
+      topLivrosRaw.map(async (item) => {
+        const meta = await buscarLivroPorIsbn(item.isbn);
+        return {
+          id: item.id,
+          isbn: item.isbn,
+          titulo: meta?.titulo || "Título Desconhecido",
+          autor: meta?.autor || "Desconhecido",
+          capa: meta?.capa || "",
+          totalEmprestimos: item.totalEmprestimos,
+        };
+      }),
+    );
 
     response.status(200).json({
       fluxoMensal,

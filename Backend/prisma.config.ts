@@ -8,7 +8,7 @@ export default {
   schema: "src/database/schema.prisma",
   migrations: {
     path: "src/database/migrations",
-    seed: "tsx src/database/seed.ts",
+    seed: "ts-node src/database/seeds/seed.ts",
   },
   datasource: {
     url: env("DATABASE_URL"),

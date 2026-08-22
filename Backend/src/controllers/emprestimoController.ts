@@ -1,6 +1,7 @@
 import { type Request, type Response } from "express";
 import { prisma } from "../config/prisma-configDB";
 import { LivroStatus } from "../database/generated/prisma/client";
+import { buscarLivroPorIsbn } from "../services/googleBooksService";
 
 /**
  * GET /listar_itens
@@ -43,50 +44,54 @@ export async function index(
       },
     });
 
-    const resultado = itensEmprestados.map((item) => {
-      const dataPrazo = new Date(item.data_prazo);
-      const atrasado = dataPrazo < dataAtual;
+    const resultado = await Promise.all(
+      itensEmprestados.map(async (item) => {
+        const dataPrazo = new Date(item.data_prazo);
+        const atrasado = dataPrazo < dataAtual;
 
-      // Cálculo de dias decorridos desde a última renovação/empréstimo
-      const diffTempoMs = dataPrazo.getTime() - dataAtual.getTime();
-      const diasRestantes = diffTempoMs / (1000 * 60 * 60 * 24);
-      const diasPassados = prazoPadrao - diasRestantes;
+        // Cálculo de dias decorridos desde a última renovação/empréstimo
+        const diffTempoMs = dataPrazo.getTime() - dataAtual.getTime();
+        const diasRestantes = diffTempoMs / (1000 * 60 * 60 * 24);
+        const diasPassados = prazoPadrao - diasRestantes;
 
-      // Regra 1: Bloqueia se a última renovação ocorreu há menos de 3 dias
-      const bloqueadoPorIntervalo = diasPassados < 3;
+        // Regra 1: Bloqueia se a última renovação ocorreu há menos de 3 dias
+        const bloqueadoPorIntervalo = diasPassados < 3;
 
-      // Regra 2 & Definição do status de renovação
-      let pode_renovar = true;
-      let motivo_bloqueio = "";
+        // Regra 2 & Definição do status de renovação
+        let pode_renovar = true;
+        let motivo_bloqueio = "";
 
-      if (atrasado) {
-        // REGRA 2: Bloqueia renovação se estiver em atraso
-        pode_renovar = false;
-        motivo_bloqueio = "Empréstimo em atraso";
-      } else if (item.count_adiar === 0) {
-        pode_renovar = false;
-        motivo_bloqueio = "Sem renovações restantes";
-      } else if (bloqueadoPorIntervalo) {
-        // REGRA 1: Bloqueia por pelo menos 3 dias
-        pode_renovar = false;
-        const diasFaltantes = Math.ceil(3 - diasPassados);
-        motivo_bloqueio = `Aguarde ${diasFaltantes} dia(s) para renovar novamente`;
-      }
+        if (atrasado) {
+          pode_renovar = false;
+          motivo_bloqueio = "Empréstimo em atraso";
+        } else if (item.count_adiar === 0) {
+          pode_renovar = false;
+          motivo_bloqueio = "Sem renovações restantes";
+        } else if (bloqueadoPorIntervalo) {
+          pode_renovar = false;
+          const diasFaltantes = Math.ceil(3 - diasPassados);
+          motivo_bloqueio = `Aguarde ${diasFaltantes} dia(s) para renovar novamente`;
+        }
 
-      return {
-        id: item.id,
-        exemplarId: item.exemplarId,
-        titulo: item.exemplarLivro.livro.titulo,
-        autor: item.exemplarLivro.livro.autor,
-        data_emprestimo: item.emprestimo.data_saida,
-        data_prazo: item.data_prazo,
-        renovacoes_disponiveis: item.count_adiar,
-        atrasado: atrasado,
-        status_prazo: atrasado ? "Atrasado" : "Em dia",
-        pode_renovar: pode_renovar,
-        motivo_bloqueio: motivo_bloqueio,
-      };
-    });
+        const meta = await buscarLivroPorIsbn(item.exemplarLivro.livro.isbn);
+
+        return {
+          id: item.id,
+          exemplarId: item.exemplarId,
+          isbn: item.exemplarLivro.livro.isbn,
+          titulo: meta?.titulo || "Título Desconhecido",
+          autor: meta?.autor || "Autor Desconhecido",
+          capa: meta?.capa || "",
+          data_emprestimo: item.emprestimo.data_saida,
+          data_prazo: item.data_prazo,
+          renovacoes_disponiveis: item.count_adiar,
+          atrasado: atrasado,
+          status_prazo: atrasado ? "Atrasado" : "Em dia",
+          pode_renovar: pode_renovar,
+          motivo_bloqueio: motivo_bloqueio,
+        };
+      }),
+    );
 
     response.status(200).json(resultado);
   } catch (error) {
@@ -131,14 +136,21 @@ export async function HistoricoEmprestimo(
       },
     });
 
-    const resultado = historicoItens.map((item) => ({
-      id: item.id,
-      exemplarId: item.exemplarId,
-      titulo: item.exemplarLivro.livro.titulo,
-      autor: item.exemplarLivro.livro.autor,
-      data_emprestimo: item.emprestimo.data_saida,
-      data_devolucao: item.data_devolucao,
-    }));
+    const resultado = await Promise.all(
+      historicoItens.map(async (item) => {
+        const meta = await buscarLivroPorIsbn(item.exemplarLivro.livro.isbn);
+        return {
+          id: item.id,
+          exemplarId: item.exemplarId,
+          isbn: item.exemplarLivro.livro.isbn,
+          titulo: meta?.titulo || "Título Desconhecido",
+          autor: meta?.autor || "Autor Desconhecido",
+          capa: meta?.capa || "",
+          data_emprestimo: item.emprestimo.data_saida,
+          data_devolucao: item.data_devolucao,
+        };
+      }),
+    );
 
     response.status(200).json(resultado);
   } catch (error) {
