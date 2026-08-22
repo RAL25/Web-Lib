@@ -1,12 +1,18 @@
 # 📚 Web-Lib — Sistema de Gerenciamento de Biblioteca
 
-O **Web-Lib** é uma aplicação Full-Stack robusta desenvolvida para automatizar e gerenciar as rotas e operações do dia a dia de uma biblioteca, englobando o controle de acervo, empréstimos, gerenciamento de perfis de acesso e notificações automatizadas.
-
-O projeto foi construído seguindo as melhores práticas de Engenharia de Software, utilizando uma arquitetura desacoplada (Separation of Concerns) com um backend em API RESTful e um frontend SPA (Single Page Application).
+O **Web-Lib** é uma aplicação Full-Stack desenvolvida para modernizar e automatizar a gestão operacional de bibliotecas. O sistema abrange desde a consulta dinâmica do acervo enriquecida por APIs externas até o controle rigoroso de empréstimos, devoluções, renovações, avaliações com resenhas e painéis analíticos para administração.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
+
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+![Node.js](https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![ReactJS](https://img.shields.io/badge/-ReactJs-61DAFB?logo=react&logoColor=white&style=for-the-badge)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-257bd6?style=for-the-badge&logo=docker&logoColor=white)
 
 ### **Backend**
 
@@ -27,172 +33,213 @@ O projeto foi construído seguindo as melhores práticas de Engenharia de Softwa
 
 ---
 
+## 📂 Documentação do Projeto
+
+A documentação detalhada das regras e requisitos do sistema está centralizada na pasta [`/docs`](https://www.google.com/search?q=./docs/):
+
+- 📜 **[Casos de Uso (use_cases.md)](https://www.google.com/search?q=./docs/use_cases.md):** Especificação completa de todos os fluxos de uso por atores (`CLIENTE`, `ADMINISTRADOR` e `PÚBLICO`)[cite: 8].
+- 📑 **[Regras de Negócio (business_rules.md)](https://www.google.com/search?q=./docs/business_rules.md):** Diretivas de integridade, cálculo de prazos, controle de renovação e restrições de permissão[cite: 7].
+
+---
+
 ## 🚀 Principais Funcionalidades
 
-- **Autenticação e Controle de Acesso (RBAC):** Sistema com diferentes níveis de privilégios onde rotas sensíveis são protegidas de acordo com a função do usuário (Cliente, Funcionário ou Administrador).
-- **Fluxo de Verificação de E-mail:** Registro de novos clientes dispara um e-mail de confirmação dinâmico com um link contendo um token JWT de expiração curta (1 hora).
-- **Tratamento de Erros Semânticos:** Interceptação automatizada de falhas de concorrência e restrições únicas do banco de dados (como duplicidade de CPF ou e-mail), retornando códigos HTTP semânticos (ex: `409 Conflict`).
-- **Relações Complexas no Banco:** Controle de exemplares e empréstimos utilizando restrições de chaves e deleções em cascata.
-- **Catálogo de Livros Responsivo:** Exibição do acervo em tempo real consumindo a API por meio de cartões fluidos que se adaptam a computadores, tablets e smartphones.
+- **Tabela Única de Usuários e RBAC:** Autenticação unificada via `Usuario` (UUID) com perfil discriminado por roles (`ADMINISTRADOR` e `CLIENTE`) e controle de bloqueios operacionais[cite: 7, 9].
+- **Acervo Reduzido & Integração Google Books:** A base local armazena apenas o ISBN e a média de avaliações do livro[cite: 7, 9], consumindo dinamicamente metadados (Título, Autores, Editora, Categoria, Capa) via Google Books API[cite: 7, 8].
+- **Controle Físico de Exemplares:** Rastreamento individual do status de cada cópia física (`Disponivel` ou `Emprestado`)[cite: 7, 8, 9].
+- **Gestão de Empréstimos e Renovações:** Execução de retiradas limitadas pelos parâmetros globais (`limite_global`, `limite_por_titulo`, `prazo_padrao_dias`) e controle de até 5 adiamentos com trava de atraso[cite: 7, 8, 9].
+- **Comunidade e Avaliações:** Sistema de nota (1 a 5 estrelas) e resenhas por leitor, garantindo uma única avaliação por livro/cliente com recálculo automático da média do acervo[cite: 7, 8, 9].
+- **Dashboard Administrativo:** Monitoramento de KPIs (totais, atrasos, leitores), alertas operacionais e gráficos analíticos em tempo real[cite: 8].
 
 ---
 
-## 🗂️ Arquitetura das Rotas do Sistema
+## 🗂️ Arquitetura das Rotas do Backend
 
-A API está organizada sob os seguintes caminhos principais de endpoints:
-
-| Rota               | Tipo         | Middleware de Proteção | Descrição                                        |
-| :----------------- | :----------- | :--------------------- | :----------------------------------------------- |
-| `/login`           | `POST`       | Público                | Autentica o usuário e gera o token JWT Bearer.   |
-| `/livro`           | `GET`        | Público                | Lista todos os livros do acervo para o catálogo. |
-| `/usuario`         | `GET`        | Autenticado            | Controle geral de contas base.                   |
-| `/cliente`         | `GET`        | Autenticado            | Gerenciamento de dados específicos do leitor.    |
-| `/funcionario`     | `GET/POST`   | Funcionário / Admin    | Gestão de equipe interna da biblioteca.          |
-| `/funcionario/:id` | `PUT/DELETE` | Apenas Administrador   | Modificação ou desligamento de funcionários.     |
-| `/emprestimo`      | `GET`        | Autenticado            | Criação e encerramento de empréstimos de livros. |
-| `/configuracao`    | `GET`        | Apenas Administrador   | Ajustes globais do sistema de biblioteca.        |
+| Rota                       | Tipo          | Middleware de Proteção  | Descrição                                                                                 |
+| -------------------------- | ------------- | ----------------------- | ----------------------------------------------------------------------------------------- |
+| `/login`                   | `POST`        | Público                 | Autentica o usuário e gera o JWT Bearer[cite: 6, 7].                                      |
+| `/usuario`                 | `POST`        | Público                 | Cadastro público de novas contas de cliente[cite: 8].                                     |
+| `/usuario/perfil`          | `GET/PUT`     | Autenticado             | Leitura e atualização dos dados cadastrais do perfil logado[cite: 8].                     |
+| `/usuario/gerenciar`       | `GET/DELETE`  | Apenas Administrador    | Gestão de contas, alterações de status (`bloqueado`) e remoção[cite: 7, 8].               |
+| `/livro`                   | `GET`         | Público                 | Lista livros combinando ISBN local com metadados do Google Books[cite: 6, 7, 8].          |
+| `/livro`                   | `POST/DELETE` | Apenas Administrador    | Inclusão de obra via ISBN e remoção do acervo[cite: 7, 8].                                |
+| `/livro/:id/avaliacoes`    | `GET/POST`    | Público / Autenticado   | Lista e cadastra notas/resenhas associadas a uma obra[cite: 7, 8].                        |
+| `/avaliacao/:id`           | `DELETE`      | Autor ou Admin          | Exclusão de resenha e reajuste automático da média da obra[cite: 7, 8].                   |
+| `/emprestimo/realizar`     | `POST`        | Autenticado (`CLIENTE`) | Valida limites, retira exemplares e gera registro de prazo[cite: 7, 8].                   |
+| `/emprestimo/adiar/:id`    | `PUT`         | Autenticado (`CLIENTE`) | Renova o prazo de devolução caso respeite os pré-requisitos de dias e limite[cite: 7, 8]. |
+| `/emprestimo/devolver/:id` | `PUT`         | Apenas Administrador    | Finaliza o empréstimo e libera o exemplar para `Disponivel`[cite: 7, 8].                  |
+| `/dashboard/*`             | `GET`         | Apenas Administrador    | Fornece métricas agrupadas, alertas de atraso e séries históricas[cite: 8].               |
+| `/configuracao`            | `GET/PUT`     | Apenas Administrador    | Visualiza e atualiza os parâmetros globais da biblioteca[cite: 6, 7, 8].                  |
 
 ---
 
-## Arquitetura de Dados (Banco de Dados)
+## 📊 Arquitetura de Dados (Database ERD)
 
 ```mermaid
-
 erDiagram
-USUARIOS {
-    int id PK "AUTO_INCREMENT"
-    string nome "VARCHAR(50)"
-    string email UK "VARCHAR(100) - OPCIONAL"
-    string senha "VARCHAR(255) - OPCIONAL"
-    enum role "'Cliente', 'Funcionario', 'Admin' DEFAULT 'Cliente'"
-}
+    USUARIO {
+        string id PK "UUID"
+        string nome
+        string email UK
+        string senha_hash
+        string cpf UK
+        string telefone
+        boolean bloqueado "DEFAULT false"
+        enum role "ADMINISTRADOR | CLIENTE"
+    }
 
-CLIENTES {
-    int id PK,FK "INT (Chave herdada de USUARIOS.id)"
-    string cpf UK "VARCHAR(11) - OPCIONAL"
-    string telefone "VARCHAR(11) - OPCIONAL"
-    datetime data_penalidade "DATETIME - OPCIONAL"
-    boolean emailVerificado "DEFAULT false"
-}
+    LIVRO {
+        int id PK "AUTO_INCREMENT"
+        string isbn UK
+        float media_avaliacoes "DEFAULT 0.0"
+    }
 
-FUNCIONARIOS {
-    int id PK,FK "INT (Chave herdada de USUARIOS.id)"
-    decimal salario "DECIMAL(10,2)"
-    datetime data_contratacao "DATETIME"
-}
+    AVALIACAO {
+        int id PK "AUTO_INCREMENT"
+        int nota "1 a 5"
+        string comentario "TEXT (Opcional)"
+        datetime criado_em
+        datetime atualizado_em
+        string usuario_id FK "UUID"
+        int livro_id FK
+    }
 
-LIVROS {
-    int id PK "AUTO_INCREMENT"
-    string titulo "VARCHAR(50)"
-    string autor "VARCHAR(50) - OPCIONAL"
-}
+    EXEMPLAR_LIVRO {
+        int id PK "AUTO_INCREMENT"
+        int livroId FK
+        enum status "Disponivel | Emprestado"
+    }
 
-EXEMPLARES_LIVRO {
-    int id PK "AUTO_INCREMENT"
-    int livroId FK "INT"
-    enum status "'Disponivel', 'Emprestado' DEFAULT 'Disponivel'"
-}
+    EMPRESTIMO {
+        int id PK "AUTO_INCREMENT"
+        string usuario_id FK "UUID"
+        datetime data_saida "DEFAULT NOW()"
+    }
 
-EMPRESTIMOS {
-    int id PK "AUTO_INCREMENT"
-    int id_cliente FK "INT"
-    datetime data_saida "DEFAULT NOW()"
-}
+    ITEM_EMPRESTIMO {
+        int id PK "AUTO_INCREMENT"
+        int emprestimoId FK
+        int exemplarId FK
+        int count_adiar "DEFAULT 5"
+        datetime data_prazo
+        datetime data_devolucao "OPCIONAL"
+    }
 
-ITENS_EMPRESTIMO {
-    int id PK "AUTO_INCREMENT"
-    int emprestimoId FK "INT"
-    int exemplarId FK "INT"
-    int count_adiar "DEFAULT 5"
-    datetime data_prazo "DATETIME"
-    datetime data_devolucao "DATETIME - OPCIONAL"
-}
+    CONFIGURACAO {
+        int id PK "DEFAULT 1"
+        int limite_global "DEFAULT 5"
+        int limite_por_titulo "DEFAULT 2"
+        int prazo_padrao_dias "DEFAULT 7"
+        int dias_penalidade "DEFAULT 7"
+    }
 
-CONFIGURACOES {
-    int id PK "DEFAULT 1"
-    int limite_global "DEFAULT 5"
-    int limite_por_titulo "DEFAULT 2"
-    int prazo_padrao_dias "DEFAULT 7"
-    int dias_penalidade "DEFAULT 7"
-}
+    USUARIO ||--o{ EMPRESTIMO : "realiza"
+    USUARIO ||--o{ AVALIACAO : "escreve"
+    LIVRO ||--|{ EXEMPLAR_LIVRO : "possui"
+    LIVRO ||--o{ AVALIACAO : "recebe"
+    EMPRESTIMO ||--|{ ITEM_EMPRESTIMO : "contém"
+    EXEMPLAR_LIVRO ||--o{ ITEM_EMPRESTIMO : "vinculado"
 
-    USUARIOS ||--o| CLIENTES : "extende"
-    USUARIOS ||--o| FUNCIONARIOS : "extende"
-    LIVROS ||--|{ EXEMPLARES_LIVRO : "possui"
-    CLIENTES ||--o{ EMPRESTIMOS : "realiza"
-    EMPRESTIMOS ||--|{ ITENS_EMPRESTIMO : "contém"
-    EXEMPLARES_LIVRO ||--o{ ITENS_EMPRESTIMO : "incluído em"
 ```
 
-## 💻 Como Rodar o Projeto Localmente
+---
+
+## 💻 Como Executar o Projeto Localmente
 
 ### **Pré-requisitos**
 
-Antes de começar, certifique-se de ter instalado em sua máquina:
-
 - **Node.js** (v18 ou superior)
-- **MySQL Server** ativo
+- **Docker & Docker Compose** (para rodar a instância do MySQL em container) ou MySQL Server local.
 
-### **Configurando o Backend**
+### **Configuração do Backend**
 
-1. Navegue até a pasta do backend:
-   ```bash
-   cd Backend
-   ```
-2. Navegue até a pasta do backend:
-   ```bash
-   cd Backend
-   ```
-3. Instale todas as dependências:
+1. Navegue até o diretório do backend:
 
-   ```bash
-   npm install
+```bash
+cd Backend
 
-   ```
+```
 
-4. Crie um arquivo chamado `.env` na raiz da pasta `Backend` seguindo o modelo abaixo:
+2. Instale as dependências da aplicação:
 
-   ```env
-   DATABASE_URL="mysql://usuario:senha@localhost:3306/web_lib"
-   JWT_SECRET="sua_chave_secreta_jwt"
+```bash
+npm install
 
-   EMAIL_HOST="sandbox.smtp.mailtrap.io"
-   EMAIL_PORT="2525"
-   EMAIL_USER="seu_usuario_do_mailtrap"
-   EMAIL_PASS="sua_senha_do_mailtrap"
+```
 
-   ```
+3. Crie o arquivo `.env` na raiz do `Backend/` utilizando o modelo abaixo:
 
-5. Execute as Migrations do Prisma para estruturar as tabelas no seu MySQL:
+```env
+DATABASE_URL="mysql://root:rootpassword@localhost:3306/web_lib"
+JWT_SECRET="sua_chave_secreta_jwt_aqui"
+PORT=3000
 
-   ```bash
-   npx prisma migrate dev
+```
 
-   ```
+4. Suba o container do MySQL via Docker Compose:
 
-6. _(Opcional)_ Execute o script de Seed para povoar o banco com livros de teste:
+```bash
+docker-compose up -d
 
-   ```bash
-   npx prisma db seed
+```
 
-   ```
+5. Execute as migrations do Prisma para estruturar o banco de dados:
 
-7. Inicie o servidor do backend em modo de desenvolvimento:
+```bash
+npx prisma migrate dev
 
-   ```bash
-   npm run dev
+```
 
-   ```
+6. Povoa o banco de dados executando os scripts de Seed (Usuários e Livros por ISBN):
 
-_O servidor iniciará por padrão na porta `3000`._
+```bash
+npx prisma db seed
 
-### **Configurando o Frontend**
+```
 
-**AINDA EM DESENVOLVIMENTO!!!**
+7. Inicie o servidor em ambiente de desenvolvimento:
+
+```bash
+npm run dev
+
+```
+
+O servidor iniciará na porta `3000`.
+
+---
+
+### **Configuração do Frontend**
+
+1. Navegue até o diretório do frontend:
+
+```bash
+cd Frontend
+
+```
+
+2. Instale as dependências:
+
+```bash
+npm install
+
+```
+
+3. Inicie o servidor de desenvolvimento do Vite:
+
+```bash
+npm run dev
+
+```
+
+A aplicação web estará acessível no endereço exibido no terminal (geralmente `http://localhost:5173`).
+
+---
 
 ## 👤 Autor
 
-Desenvolvido por **Rian Alves Leal** Estudante de Ciência da Computação no IFNMG — Campus Montes Claros.
+Desenvolvido por **Rian Alves Leal**
 
-- **LinkedIn:** [rian-leal-659974374](https://www.linkedin.com/in/rian-leal-659974374/)
-- **GitHub:** [RAL25](https://github.com/RAL25)
+Estudante de Ciência da Computação no IFNMG — Campus Montes Claros.
+
+- **LinkedIn:** [rian-leal-659974374](https://www.google.com/search?q=https://www.linkedin.com/in/rian-leal-659974374/)
+- **GitHub:** [RAL25](https://www.google.com/search?q=https://github.com/RAL25)
