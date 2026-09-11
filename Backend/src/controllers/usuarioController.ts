@@ -1,7 +1,9 @@
 import { type Request, type Response } from "express";
 import { prisma } from "../config/prisma-configDB";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { Role } from "../database/generated/prisma";
+import { enviarEmailVerificacao } from "../utils/mailer";
 
 // Listar todos os usuários, com suporte a filtro por role (ADMINISTRADOR ou CLIENTE) e busca
 export async function index(
@@ -14,7 +16,10 @@ export async function index(
 
     const whereClause: any = {};
 
-    if (roleQuery && (roleQuery === "ADMINISTRADOR" || roleQuery === "CLIENTE")) {
+    if (
+      roleQuery &&
+      (roleQuery === "ADMINISTRADOR" || roleQuery === "CLIENTE")
+    ) {
       whereClause.role = roleQuery as Role;
     }
 
@@ -120,7 +125,7 @@ export async function buscarUsuario(
   }
 }
 
-// Cadastro público de usuário (Perfil CLIENTE por padrão)
+// Cadastro público de usuário (Perfil CLIENTE por padrão) com envio de e-mail de verificação via Mailtrap
 export async function createUsuarioPublico(
   request: Request,
   response: Response,
@@ -128,10 +133,10 @@ export async function createUsuarioPublico(
   try {
     const { nome, email, senha, cpf, telefone } = request.body;
 
-    if (!nome || !email || !senha || !cpf) {
-      response
-        .status(400)
-        .json({ erro: "Nome, e-mail, senha e CPF são obrigatórios." });
+    if (!nome || !email || !senha || !cpf || !telefone) {
+      response.status(400).json({
+        erro: "Nome, e-mail, senha, CPF e telefone são obrigatórios.",
+      });
       return;
     }
 
@@ -159,7 +164,7 @@ export async function createUsuarioPublico(
         email,
         senhaHash,
         cpf,
-        telefone: telefone || "",
+        telefone,
         bloqueado: false,
         role: Role.CLIENTE,
       },
@@ -174,8 +179,25 @@ export async function createUsuarioPublico(
       },
     });
 
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      response.status(500).json({ erro: "JWT_SECRET não configurado." });
+      return;
+    }
+
+    const tokenVerificacao = jwt.sign({ id: usuario.id }, secret, {
+      expiresIn: "1h",
+    });
+
+    const link = `http://localhost:3001/api/lib//usuario/verifica-email/${tokenVerificacao}`;
+
+    if (usuario.email) {
+      await enviarEmailVerificacao(usuario.email, link);
+    }
+
     response.status(201).json({
-      mensagem: "Cadastro realizado com sucesso! Você já pode fazer login.",
+      mensagem:
+        "Usuário criado! Por favor, verifique sua caixa de entrada para confirmar o e-mail.",
       usuario,
     });
   } catch (error: any) {
@@ -425,5 +447,38 @@ export async function deleteUsuario(
     response
       .status(400)
       .json({ erro: error.message || "Erro ao deletar usuário." });
+  }
+}
+
+// Verificação de e-mail a partir do token gerado
+export async function verificarEmail(
+  request: Request,
+  response: Response,
+): Promise<void> {
+  const { token } = request.params;
+
+  try {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      response.status(500).json({ erro: "JWT_SECRET não configurado." });
+      return;
+    }
+
+    const dados = jwt.verify(token as string, secret) as { id: string };
+
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: dados.id },
+    });
+
+    if (!usuario) {
+      response.status(404).json({ erro: "Usuário não encontrado." });
+      return;
+    }
+
+    response.status(200).json({
+      mensagem: "E-mail verificado com sucesso! Você já pode fazer login.",
+    });
+  } catch (error) {
+    response.status(400).json({ erro: "Link inválido ou expirado." });
   }
 }

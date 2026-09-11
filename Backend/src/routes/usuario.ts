@@ -13,6 +13,10 @@ const router = Router();
 // Cadastro público de novo usuário (Cliente)
 router.post("/", usuarioController.createUsuarioPublico);
 
+// Verificação de e-mail do usuário
+router.post("/verifica-email/:token", usuarioController.verificarEmail);
+router.get("/verifica-email/:token", usuarioController.verificarEmail);
+
 // 2. Rotas do Usuário Autenticado (Própria Conta)
 // Visualizar o próprio perfil
 router.get("/perfil", autorizar, usuarioController.findUsuario);
