@@ -2,6 +2,7 @@ import { type Request, type Response } from "express";
 import { prisma } from "../config/prisma-configDB";
 import { LivroStatus } from "../database/generated/prisma/client";
 import { buscarLivroPorIsbn } from "../services/googleBooksService";
+import { validarRenovacao } from "../rules/renovacaoRules";
 
 /**
  * GET /listar_itens
@@ -298,53 +299,56 @@ export async function realizarEmprestimo(req: Request, res: Response) {
  */
 export async function adiarEmprestimo(request: Request, response: Response) {
   const id_itemEmprestimo = Number(request.params.id);
+
+  // Valida o identificador recebido pela requisição
+  if (!Number.isInteger(id_itemEmprestimo) || id_itemEmprestimo <= 0) {
+    response.status(400).json({ erro: "ID do empréstimo inválido." });
+    return;
+  }
+
   try {
     const resultado = await prisma.$transaction(async (tx) => {
+      // Busca as configurações da biblioteca
       const config = await tx.configuracao.findFirst();
 
+      // Busca o item de empréstimo
       const itemEmprestimo = await tx.itemEmprestimo.findUnique({
         where: { id: id_itemEmprestimo },
       });
 
+      // Verifica se o empréstimo existe
       if (!itemEmprestimo) {
         throw new Error("Empréstimo não encontrado.");
-      } else if (itemEmprestimo.data_devolucao !== null) {
+      }
+
+      // Verifica se o livro já foi devolvido
+      if (itemEmprestimo.data_devolucao !== null) {
         throw new Error("Empréstimo finalizado, livro já devolvido.");
       }
 
-      const data_atual = new Date();
-      const data_prazo = new Date(itemEmprestimo.data_prazo);
-      const prazo_padrao = config?.prazo_padrao_dias ?? 7;
+      const dataAtual = new Date();
+      const prazoPadrao = config?.prazo_padrao_dias ?? 7;
 
-      // REGRA 2: Bloqueio caso esteja atrasado
-      if (data_atual > data_prazo) {
-        throw new Error(
-          "Não é possível renovar um empréstimo em atraso. Por favor, faça a devolução.",
-        );
+      // Valida as regras de negócio da renovação
+      const validacao = validarRenovacao({
+        dataPrazo: new Date(itemEmprestimo.data_prazo),
+        dataAtual,
+        renovacoesDisponiveis: itemEmprestimo.count_adiar,
+        prazoPadraoDias: prazoPadrao,
+      });
+
+      // Impede a renovação caso alguma regra não seja atendida
+      if (!validacao.permitido) {
+        throw new Error(validacao.motivo ?? "Renovação não permitida.");
       }
 
-      if (itemEmprestimo.count_adiar === 0) {
-        throw new Error("Limite de renovações para este item esgotado.");
-      }
-
-      // REGRA 1: Bloqueia a renovação se foi feita há menos de 3 dias
-      const diffTempoMs = data_prazo.getTime() - data_atual.getTime();
-      const diasRestantes = diffTempoMs / (1000 * 60 * 60 * 24);
-      const diasPassados = prazo_padrao - diasRestantes;
-
-      if (diasPassados < 3) {
-        const diasFaltantes = Math.ceil(3 - diasPassados);
-        throw new Error(
-          `Você deve aguardar pelo menos 3 dias após a renovação para adiar novamente. Tente em ${diasFaltantes} dia(s).`,
-        );
-      }
-
-      // Estendendo a data de entrega e decrementando o contador
+      // Calcula a nova data de devolução
       const novoPrazo = new Date(
-        Date.now() + prazo_padrao * 24 * 60 * 60 * 1000,
+        dataAtual.getTime() + prazoPadrao * 24 * 60 * 60 * 1000,
       );
 
-      const adiaEmprestimo = await tx.itemEmprestimo.update({
+      // Atualiza o empréstimo no banco de dados
+      const emprestimoAtualizado = await tx.itemEmprestimo.update({
         where: { id: id_itemEmprestimo },
         data: {
           data_prazo: novoPrazo,
@@ -352,12 +356,18 @@ export async function adiarEmprestimo(request: Request, response: Response) {
         },
       });
 
-      return adiaEmprestimo;
+      return emprestimoAtualizado;
     });
 
+    // Retorna o empréstimo atualizado
     response.status(200).json(resultado);
-  } catch (error: any) {
-    response.status(400).json({ erro: error.message });
+  } catch (error: unknown) {
+    const mensagem =
+      error instanceof Error
+        ? error.message
+        : "Erro interno ao renovar empréstimo.";
+
+    response.status(400).json({ erro: mensagem });
   }
 }
 
