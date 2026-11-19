@@ -2,7 +2,7 @@ import { type Request, type Response } from "express";
 import { prisma } from "../config/prisma-configDB";
 import { LivroStatus } from "../database/generated/prisma/client";
 import { buscarLivroPorIsbn } from "../services/googleBooksService";
-import { validarRenovacao } from "../rules/renovacaoRules";
+import { renovarEmprestimo } from "../services/emprestimoService";
 
 /**
  * GET /listar_itens
@@ -298,68 +298,30 @@ export async function realizarEmprestimo(req: Request, res: Response) {
  * PUT /adiar/:id
  */
 export async function adiarEmprestimo(request: Request, response: Response) {
-  const id_itemEmprestimo = Number(request.params.id);
+  const idItemEmprestimo = Number(request.params.id);
 
-  // Valida o identificador recebido pela requisição
-  if (!Number.isInteger(id_itemEmprestimo) || id_itemEmprestimo <= 0) {
-    response.status(400).json({ erro: "ID do empréstimo inválido." });
+  // Verifica se o ID é válido
+  if (!Number.isInteger(idItemEmprestimo) || idItemEmprestimo <= 0) {
+    response.status(400).json({
+      erro: "ID do empréstimo inválido.",
+    });
+    return;
+  }
+
+  // Identifica o usuário autenticado
+  const usuarioId = request.usuarioId || request.usuarioLogado?.id;
+
+  if (!usuarioId) {
+    response.status(401).json({
+      erro: "Usuário não autenticado.",
+    });
     return;
   }
 
   try {
-    const resultado = await prisma.$transaction(async (tx) => {
-      // Busca as configurações da biblioteca
-      const config = await tx.configuracao.findFirst();
+    // Chama o Service
+    const resultado = await renovarEmprestimo(idItemEmprestimo, usuarioId);
 
-      // Busca o item de empréstimo
-      const itemEmprestimo = await tx.itemEmprestimo.findUnique({
-        where: { id: id_itemEmprestimo },
-      });
-
-      // Verifica se o empréstimo existe
-      if (!itemEmprestimo) {
-        throw new Error("Empréstimo não encontrado.");
-      }
-
-      // Verifica se o livro já foi devolvido
-      if (itemEmprestimo.data_devolucao !== null) {
-        throw new Error("Empréstimo finalizado, livro já devolvido.");
-      }
-
-      const dataAtual = new Date();
-      const prazoPadrao = config?.prazo_padrao_dias ?? 7;
-
-      // Valida as regras de negócio da renovação
-      const validacao = validarRenovacao({
-        dataPrazo: new Date(itemEmprestimo.data_prazo),
-        dataAtual,
-        renovacoesDisponiveis: itemEmprestimo.count_adiar,
-        prazoPadraoDias: prazoPadrao,
-      });
-
-      // Impede a renovação caso alguma regra não seja atendida
-      if (!validacao.permitido) {
-        throw new Error(validacao.motivo ?? "Renovação não permitida.");
-      }
-
-      // Calcula a nova data de devolução
-      const novoPrazo = new Date(
-        dataAtual.getTime() + prazoPadrao * 24 * 60 * 60 * 1000,
-      );
-
-      // Atualiza o empréstimo no banco de dados
-      const emprestimoAtualizado = await tx.itemEmprestimo.update({
-        where: { id: id_itemEmprestimo },
-        data: {
-          data_prazo: novoPrazo,
-          count_adiar: itemEmprestimo.count_adiar - 1,
-        },
-      });
-
-      return emprestimoAtualizado;
-    });
-
-    // Retorna o empréstimo atualizado
     response.status(200).json(resultado);
   } catch (error: unknown) {
     const mensagem =
@@ -367,7 +329,9 @@ export async function adiarEmprestimo(request: Request, response: Response) {
         ? error.message
         : "Erro interno ao renovar empréstimo.";
 
-    response.status(400).json({ erro: mensagem });
+    response.status(400).json({
+      erro: mensagem,
+    });
   }
 }
 
