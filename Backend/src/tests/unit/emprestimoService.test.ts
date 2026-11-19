@@ -120,4 +120,80 @@ describe("EmprestimoService - Renovação", () => {
       },
     });
   });
+
+  // TESTE 4
+  it("deve impedir a renovação de um empréstimo já devolvido", async () => {
+    mocks.findUnique.mockResolvedValue({
+      id: 15,
+      emprestimo: {
+        usuarioId: "usuario-1",
+      },
+      data_devolucao: new Date("2026-11-18T12:00:00Z"),
+      data_prazo: new Date("2026-11-22T12:00:00Z"),
+      count_adiar: 3,
+    });
+
+    await expect(renovarEmprestimo(15, "usuario-1")).rejects.toThrow(
+      "Empréstimo finalizado, livro já devolvido.",
+    );
+
+    expect(mocks.update).not.toHaveBeenCalled();
+  });
+
+  // TESTE 5
+  it("deve impedir a renovação de um empréstimo atrasado", async () => {
+    mocks.findUnique.mockResolvedValue({
+      id: 15,
+      emprestimo: {
+        usuarioId: "usuario-1",
+      },
+      data_devolucao: null,
+      data_prazo: new Date("2026-11-18T12:00:00Z"),
+      count_adiar: 3,
+    });
+
+    await expect(renovarEmprestimo(15, "usuario-1")).rejects.toThrow(
+      "Não é possível renovar um empréstimo em atraso.",
+    );
+
+    expect(mocks.update).not.toHaveBeenCalled();
+  });
+
+  // TESTE 6
+  it("deve impedir renovação quando não existem renovações disponíveis", async () => {
+    mocks.findUnique.mockResolvedValue({
+      id: 15,
+      emprestimo: {
+        usuarioId: "usuario-1",
+      },
+      data_devolucao: null,
+      data_prazo: new Date("2026-11-22T12:00:00Z"),
+      count_adiar: 0,
+    });
+
+    await expect(renovarEmprestimo(15, "usuario-1")).rejects.toThrow(
+      "Limite de renovações esgotado.",
+    );
+
+    expect(mocks.update).not.toHaveBeenCalled();
+  });
+
+  // TESTE 7
+  it("deve impedir renovação antes do intervalo mínimo de três dias", async () => {
+    mocks.findUnique.mockResolvedValue({
+      id: 15,
+      emprestimo: {
+        usuarioId: "usuario-1",
+      },
+      data_devolucao: null,
+      data_prazo: new Date("2026-11-25T12:00:00Z"),
+      count_adiar: 3,
+    });
+
+    await expect(renovarEmprestimo(15, "usuario-1")).rejects.toThrow(
+      "É necessário aguardar pelo menos 3 dias para renovar.",
+    );
+
+    expect(mocks.update).not.toHaveBeenCalled();
+  });
 });
