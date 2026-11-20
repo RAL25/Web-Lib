@@ -13,6 +13,19 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    # Variáveis utilizadas durante os testes automatizados
+    env:
+      NODE_ENV: test
+
+      DATABASE_URL: mysql://test:test@127.0.0.1:3306/web_lib_test
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PORT: "3306"
+      DATABASE_USER: test
+      DATABASE_PASSWORD: test
+      DATABASE_NAME: web_lib_test
+
+      JWT_SECRET: github-actions-test-secret
+
     defaults:
       run:
         working-directory: Backend
