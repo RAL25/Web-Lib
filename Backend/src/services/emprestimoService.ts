@@ -1,5 +1,6 @@
 import { prisma } from "../config/prisma-configDB";
 import { validarRenovacao } from "../rules/renovacaoRules";
+import { AppError } from "../errors/AppError";
 
 export async function renovarEmprestimo(
   idItemEmprestimo: number,
@@ -23,17 +24,20 @@ export async function renovarEmprestimo(
 
     // Verifica se o empréstimo existe
     if (!itemEmprestimo) {
-      throw new Error("Empréstimo não encontrado.");
+      throw new AppError(404, "Empréstimo não encontrado.");
     }
 
     // Verifica se o empréstimo pertence ao usuário
     if (itemEmprestimo.emprestimo.usuarioId !== usuarioId) {
-      throw new Error("Você não tem permissão para renovar este empréstimo.");
+      throw new AppError(
+        403,
+        "Você não tem permissão para renovar este empréstimo.",
+      );
     }
 
     // Verifica se o livro já foi devolvido
     if (itemEmprestimo.data_devolucao !== null) {
-      throw new Error("Empréstimo finalizado, livro já devolvido.");
+      throw new AppError(409, "Empréstimo finalizado, livro já devolvido.");
     }
 
     const dataAtual = new Date();
@@ -48,7 +52,7 @@ export async function renovarEmprestimo(
     });
 
     if (!validacao.permitido) {
-      throw new Error(validacao.motivo ?? "Renovação não permitida.");
+      throw new AppError(409, validacao.motivo ?? "Renovação não permitida.");
     }
 
     // Calcula o novo prazo

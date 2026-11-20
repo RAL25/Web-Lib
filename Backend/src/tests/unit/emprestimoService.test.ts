@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-
 import { renovarEmprestimo } from "../../services/emprestimoService";
 
 // 1. Criamos os mocks das operações do Prisma
@@ -196,4 +195,6 @@ describe("EmprestimoService - Renovação", () => {
 
     expect(mocks.update).not.toHaveBeenCalled();
   });
+
+  // TESTE 8
 });

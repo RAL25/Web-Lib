@@ -300,39 +300,27 @@ export async function realizarEmprestimo(req: Request, res: Response) {
 export async function adiarEmprestimo(request: Request, response: Response) {
   const idItemEmprestimo = Number(request.params.id);
 
-  // Verifica se o ID é válido
   if (!Number.isInteger(idItemEmprestimo) || idItemEmprestimo <= 0) {
     response.status(400).json({
       erro: "ID do empréstimo inválido.",
     });
+
     return;
   }
 
-  // Identifica o usuário autenticado
   const usuarioId = request.usuarioId || request.usuarioLogado?.id;
 
   if (!usuarioId) {
     response.status(401).json({
       erro: "Usuário não autenticado.",
     });
+
     return;
   }
 
-  try {
-    // Chama o Service
-    const resultado = await renovarEmprestimo(idItemEmprestimo, usuarioId);
+  const resultado = await renovarEmprestimo(idItemEmprestimo, usuarioId);
 
-    response.status(200).json(resultado);
-  } catch (error: unknown) {
-    const mensagem =
-      error instanceof Error
-        ? error.message
-        : "Erro interno ao renovar empréstimo.";
-
-    response.status(400).json({
-      erro: mensagem,
-    });
-  }
+  response.status(200).json(resultado);
 }
 
 /**
