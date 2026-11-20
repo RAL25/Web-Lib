@@ -8,12 +8,15 @@ on:
     branches: [main]
 
 jobs:
+  # ==========================================
+  # JOB 1 - TESTES UNITÁRIOS E HTTP
+  # ==========================================
+
   unit-and-api-tests:
     name: Unit and API Tests
 
     runs-on: ubuntu-latest
 
-    # Variáveis utilizadas durante os testes automatizados
     env:
       NODE_ENV: test
 
@@ -32,10 +35,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "22"
           cache: "npm"
@@ -49,3 +52,86 @@ jobs:
 
       - name: Run automated tests
         run: npm test
+
+  # ==========================================
+  # JOB 2 - TESTES COM MYSQL REAL
+  # ==========================================
+
+  database-integration-tests:
+    name: Database Integration Tests
+
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: test
+
+      DATABASE_URL: mysql://web_lib_test:test_password@127.0.0.1:3308/web_lib_test_db
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PORT: "3308"
+      DATABASE_USER: web_lib_test
+      DATABASE_PASSWORD: test_password
+      DATABASE_NAME: web_lib_test_db
+
+      JWT_SECRET: github-actions-test-secret
+
+    # MySQL temporário
+    services:
+      mysql:
+        image: mysql:8.4
+
+        env:
+          MYSQL_ROOT_PASSWORD: test_root_password
+          MYSQL_DATABASE: web_lib_test_db
+          MYSQL_USER: web_lib_test
+          MYSQL_PASSWORD: test_password
+
+        ports:
+          - 3308:3306
+
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -ptest_root_password"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=15
+
+    defaults:
+      run:
+        working-directory: Backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: Backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      # Cria o arquivo de ambiente apenas no runner
+      - name: Create test environment file
+        run: |
+          cat > .env.test <<'EOF'
+          DATABASE_URL=mysql://web_lib_test:test_password@127.0.0.1:3308/web_lib_test_db
+          DATABASE_HOST=127.0.0.1
+          DATABASE_PORT=3308
+          DATABASE_USER=web_lib_test
+          DATABASE_PASSWORD=test_password
+          DATABASE_NAME=web_lib_test_db
+          JWT_SECRET=github-actions-test-secret
+          EOF
+
+      # Aplica as migrations no MySQL temporário
+      - name: Apply database migrations
+        run: npm run db:test:migrate
+
+      # Executa os testes de banco de dados
+      - name: Run database integration tests
+        run: npm run test:db
