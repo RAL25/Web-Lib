@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:db": "node --env-file=.env.test ./node_modules/vitest/vitest.mjs run --config vitest.database.config.ts"
+    "test:db": "node --env-file=.env.test ./node_modules/vitest/vitest.mjs run --config vitest.database.config.ts",
+    "db:test:migrate": "node --env-file=.env.test scripts/migrate-test.mjs"
   },
   "prisma": {
     "seed": "ts-node src/database/seeds/seed.ts"
