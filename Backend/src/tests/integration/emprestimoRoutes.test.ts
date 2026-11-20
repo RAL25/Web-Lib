@@ -214,4 +214,40 @@ describe("API - Rotas de Empréstimos", () => {
 
     expect(mocks.renovarEmprestimo).toHaveBeenCalledWith(15, "usuario-1");
   });
+
+  // TESTE 9
+  it("deve retornar 500 quando ocorrer um erro inesperado", async () => {
+    // Gera um token JWT válido
+    const token = jwt.sign(
+      {
+        id: "usuario-1",
+        role: "CLIENTE",
+      },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: "1h",
+      },
+    );
+
+    // Simula uma falha inesperada no Service
+    mocks.renovarEmprestimo.mockRejectedValue(
+      new Error("Falha interna na conexão com o banco de dados."),
+    );
+
+    // Executa a requisição HTTP
+    const response = await request(app)
+      .put("/api/lib/emprestimo/adiar/15")
+      .set("Authorization", `Bearer ${token}`);
+
+    // Verifica o status HTTP
+    expect(response.status).toBe(500);
+
+    // Verifica se a API não expõe detalhes internos
+    expect(response.body).toEqual({
+      erro: "Erro interno do servidor.",
+    });
+
+    // Verifica se o Service foi chamado corretamente
+    expect(mocks.renovarEmprestimo).toHaveBeenCalledWith(15, "usuario-1");
+  });
 });

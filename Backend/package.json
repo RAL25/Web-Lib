@@ -9,7 +9,8 @@
     "debug": "tsx watch --inspect src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:db": "node --env-file=.env.test ./node_modules/vitest/vitest.mjs run --config vitest.database.config.ts"
   },
   "prisma": {
     "seed": "ts-node src/database/seeds/seed.ts"

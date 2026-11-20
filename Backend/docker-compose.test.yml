@@ -1,0 +1,30 @@
+services:
+  db-test:
+    image: mysql:8.4
+
+    restart: "no"
+
+    environment:
+      MYSQL_ROOT_PASSWORD: test_root_password
+      MYSQL_DATABASE: web_lib_test_db
+      MYSQL_USER: web_lib_test
+      MYSQL_PASSWORD: test_password
+
+    ports:
+      - "127.0.0.1:3308:3306"
+
+    volumes:
+      - mysql_test_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  mysql_test_data:
+
+# iniciar o contêiner: docker compose -f docker-compose.test.yml up -d
